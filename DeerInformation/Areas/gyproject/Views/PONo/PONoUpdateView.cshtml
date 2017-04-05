@@ -1,0 +1,38 @@
+﻿@model DeerInformation.Models.T_GM_Project
+
+@{
+    ViewBag.Title = "修改客户订单";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+    @{
+        var first = X.FormPanel().ID("FormPanel1").Layout(LayoutType.Anchor).DefaultAnchor("100%").Items(
+                X.Container().Layout(LayoutType.Form).Items(
+                    X.TextFieldFor(m => m.CustomerNo).FieldLabel("客户订单号"),
+                    X.NumberFieldFor(m => m.PurchaseAmount).FieldLabel("订单金额"),
+                    X.DateFieldFor(m => m.ReciPODate).FieldLabel("收到订单日期").Flex(1),
+                    X.DateFieldFor(m => m.CusCmfDate).FieldLabel("客户订单确认日期").Flex(1),
+                    X.DateFieldFor(m => m.CusStart).FieldLabel("客户要求开工日期").Flex(1),
+                    X.DateFieldFor(m => m.CusEnd).FieldLabel("客户要求交货日期").Flex(1),
+                    X.TextAreaFor(m=>m.Extra).FieldLabel("备注"),
+                    X.TextFieldFor(m=>m.BudgetGID).Hidden(true),
+                    X.TextFieldFor(m => m.UID).Hidden(true),
+                    X.TextFieldFor(m => m.AgentMan).Hidden(true),
+                    X.DateFieldFor(m => m.AgentDate).Hidden(true),
+                    X.TextFieldFor(m => m.AttachmentPath).Hidden(true),
+                    X.TextFieldFor(m => m.OfferStatus).Hidden(true))
+            ).Buttons(
+                   X.Button().Icon(Icon.ApplicationGet).ID("add").Text("确认")
+                   .DirectEvents(de =>
+                   {
+                       de.Click.Url = Url.Action("PONoModify");
+                       de.Click.Success = "parent.App.win.close()";
+                       de.Click.EventMask.ShowMask = true;
+                       de.Click.FormID = "FormPanel1";
+                   }));
+    }
+
+    @(X.Viewport().Layout(LayoutType.Auto).Region(Region.Center).Items(first))
+}

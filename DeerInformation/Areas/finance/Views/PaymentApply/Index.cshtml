@@ -1,0 +1,169 @@
+﻿@model PaymentApply
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+    <script>
+        var detail=function(id,command) {
+            PaymentApply.finance.PaymentApply(id,command);
+        }
+        var select = function () {
+            var proxy = App.storedata.getProxy();
+            proxy.extraParams = {
+                "customername": App.FilterName1.getValue(),
+                "projectNo": App.FilterName2.getValue(),
+                "paymentstate": App.FilterName3.getValue(),
+                "date": App.FilterDate.getValue()
+            };
+            App.storedata.reload();
+        }
+    </script>
+}
+@section content
+{
+    @{
+
+        var head =
+            X.Toolbar().Layout(LayoutType.HBox)
+                .Shadow(true)
+                .LayoutConfig(new HBoxLayoutConfig {Align = HBoxAlign.Middle, Pack = BoxPack.End})
+                .Items(
+                    X.Toolbar().Border(false).Layout(LayoutType.HBox).Flex(1).Items(
+                        X.TextField().LabelWidth(60).Flex(1).ID("FilterName1").Name("ClientName").FieldLabel("客户名称"),
+                        X.TextField().LabelWidth(60).Flex(1).ID("FilterName2").Name("ProjectNo").FieldLabel("项目编号"),
+                        X.ComboBox().LabelWidth(60).Flex(1).ID("FilterName3").Name("PaymentState").Value("未收款").Items("未收款", "已收款").FieldLabel("收款状态"),
+                        X.DateField().LabelWidth(60).Flex(1).ID("FilterDate").Name("date").FieldLabel("截止日期"),
+                        X.Button().Text("查询").Icon(Icon.Magnifier).Handler("select();")
+                        ),
+
+                    X.Toolbar().Border(false).Items(
+                        X.Button().Icon(Icon.ApplicationFormAdd).Text("添加").Hidden(true).DirectEvents(ls =>
+                        {
+                            ls.Click.Action = "CreateAction";
+                        }),
+
+                        X.Button().Icon(Icon.ApplicationFormEdit).Text("修改").Hidden(true).DirectEvents(de =>
+                        {
+                            de.Click.Action = "EditAction";
+                            de.Click.ExtraParams.Add(new Parameter("id", "App.grid.getSelectionModel().getSelection()[0].data.ID", ParameterMode.Raw));
+
+                        }),
+                        X.Button().Icon(Icon.ApplicationFormDelete).Text("删除").Hidden(true).DirectEvents(de =>
+                        {
+
+                            de.Click.Action = "Remove";
+                            de.Click.ExtraParams.Add(new Parameter("id", "App.grid.getSelectionModel().getSelection()[0].data.ID", ParameterMode.Raw));
+                            de.Click.Success = "App.direct.finance.Reload();";
+                            de.Click.EventMask.ShowMask = true;
+                            de.Click.Confirmation.ConfirmRequest = true;
+                            de.Click.Confirmation.Message = "是否确定删除该项";
+
+                        })
+                        ));
+
+
+        var proxy = Html.X().AjaxProxy()
+            .ExtraParams(l => l.Add(new Parameter() { Name = "paymentstate",Value = "未收款",Mode = ParameterMode.Value}))
+            .Url(Url.Action("Fiter"))
+            .Reader(X.JsonReader().RootProperty("data"));
+
+        var content = X.GridPanel()
+            .ID("grid")
+            .AutoScroll(true)
+            .Store(X.StoreForModel()
+            .ID("storedata")
+            .PageSize(20)
+            .Proxy(proxy))
+            .ColumnModel(
+
+                //X.Column()
+                //    .Text("收款单编号")
+                //    .Flex(1)
+                //    .DataIndex("ID"),
+
+                X.Column()
+                    .Text("客户名称")
+                    .Flex(1)
+                    .DataIndex("CustomerName"),
+
+                X.Column()
+                    .Text("项目编号")
+                    .Flex(1)
+                    .DataIndex("ProjectID"),
+                    
+                X.Column()
+                    .Text("项目名称")
+                    .Flex(1)
+                    .DataIndex("ProjectName"),
+                    
+                X.Column()
+                    .Text("订单号")
+                    .Flex(1)
+                    .DataIndex("BudgetID"),
+                    
+                X.Column()
+                    .Text("应收金额")
+                    .Flex(1)
+                    .DataIndex("HaveReceive"),
+                    
+                X.Column()
+                    .Text("订单总金额")
+                    .Flex(1)
+                    .DataIndex("BudgetSum"),   
+
+                X.Column()
+                    .Text("创建人")
+                    .Flex(1)
+                    .DataIndex("Creator"),
+                    
+                X.DateColumn()
+                    .Text("创建日期")
+                    .DataIndex("CreateDate")
+                    .Resizable(false)
+                    .MenuDisabled(true)
+                    .Flex(1)
+                    .Format("yyyy-MM-dd"),
+
+                  X.Column()
+                    .Text("收款单状态")
+                    .Flex(1)
+                    .DataIndex("PaymentState"),   
+
+                 X.Column()
+                    .Text("备注")
+                    .Flex(1)
+                    .DataIndex("Remark"),
+                    
+                X.CommandColumn()
+                    .Width(140)
+                    .Text("操作")
+                    .Commands(
+                    X.GridCommand().Text("发票信息").CommandName("Invoice").Icon(Icon.ApplicationForm),
+                    X.GridCommand().Text("收款信息").CommandName("ReceiveMoney").Icon(Icon.ApplicationForm)
+                    
+                    ).Listeners(ls =>
+                    {
+                        ls.Command.Handler = "detail(record.data.ID,command);";
+                    })
+                    )
+                    .SelectionModel(X.CheckboxSelectionModel().Mode(SelectionMode.Multi))
+                    .BottomBar(
+                        Html.X().PagingToolbar()
+                                .DisplayInfo(true)
+                                .DisplayMsg("当前 {0} - {1} 总共： {2}")
+                                .EmptyMsg("没有数据可以显示")
+                    );
+    }
+    @(
+        X.Viewport().Layout(LayoutType.Border).Items(
+            X.FormPanel().ID("Filter").Region(Region.North).Border(false).PaddingSpec("1,2,1,2").Items(head),
+                content.Region(Region.Center)
+            )
+
+    )
+
+}

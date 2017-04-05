@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "CheckIM";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{}
+
+@section content
+{
+@{
+    var store = Html.X().Store().ID("ApplyStore")
+.AutoLoad(false)
+.Reader(Html.X().JsonReader().RootProperty("data"))
+.PageSize(10)
+.Model(
+    X.Model()
+    .IDProperty("MaterialID")
+    .Fields(
+    new ModelField("MaterialID", ModelFieldType.String),
+    new ModelField("MaterialName", ModelFieldType.String),
+    new ModelField("Size", ModelFieldType.String),
+    new ModelField("Unit", ModelFieldType.String),
+    new ModelField("Num", ModelFieldType.Float),
+    new ModelField("IMNum", ModelFieldType.Float),
+    new ModelField("UIMNum", ModelFieldType.Float),
+    new ModelField("ApplyNumber", ModelFieldType.Object)
+            )
+    ).Data(ViewBag.data);
+
+
+    var grid = X.GridPanel()
+        .ID("ApplyGrid")
+        .Store(store)
+        .ColumnModel(
+            X.Column()
+                .Text("物资编号")
+                .Width(100)
+                .DataIndex("MaterialID"),
+
+            X.Column()
+                .Text("物资名称")
+                .Flex(2)
+                .DataIndex("MaterialName"),
+
+            X.Column()
+                .Text("型号")
+                .Flex(1)
+                .DataIndex("Size"),
+
+            X.Column()
+                .Text("单位")
+                .Flex(1)
+                .DataIndex("Unit"),
+
+            X.Column()
+                .Text("出库申请数量")
+                .Flex(1)
+                .DataIndex("Num")
+        )
+        .BottomBar(
+            Html.X().PagingToolbar()
+                .HideRefresh(true)
+                .DisplayInfo(true)
+                .DisplayMsg("当前 {0} - {1} 总共： {2}")
+                .EmptyMsg("没有数据可以显示")
+        );
+
+    var check = X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(
+        X.ComboBox().ID("CheckState").FieldLabel("审核状态").LabelWidth(20).Value(ViewBag.CheckState).Items(ViewBag.CheckStateItems),
+        X.TextArea().ID("Remark").FieldLabel("备注").LabelWidth(20)
+        );
+
+    var content =
+            X.FormPanel()
+            .Layout(LayoutType.Column)
+            .BodyPadding(10)
+            .Frame(true)
+            .FieldDefaults(l =>
+            {
+                l.LabelWidth = 70; l.LabelAlign = LabelAlign.Right;
+            })
+            .Items(
+                X.Container().ColumnWidth(1).Layout(LayoutType.HBox).Items(
+                X.Container().Layout(LayoutType.Form).Flex(1).Items(X.TextField().FieldLabel("单号").LabelWidth(20).Value(ViewBag.No)),
+                X.Container().Layout(LayoutType.Form).Flex(1).Items(X.TextField().FieldLabel("日期").LabelWidth(20).Value(ViewBag.date))
+                    ),
+                X.Container().ColumnWidth(1).Layout(LayoutType.HBox).Items(
+                X.Container().Layout(LayoutType.Form).Flex(1).Items(X.TextField().FieldLabel("出/入库类型").LabelWidth(40).Value(ViewBag.EIType)),
+                X.Container().Layout(LayoutType.Form).Flex(1).Items(X.TextField().FieldLabel("项目编号").LabelWidth(40).Value(ViewBag.ProjectNo))),
+
+                X.Container().ColumnWidth(1).Layout(LayoutType.HBox).Items(
+                X.Container().Layout(LayoutType.Form).Flex(1).Items(X.TextField().ID("EXWarehouse").FieldLabel("出库仓库").LabelWidth(40).Value(ViewBag.EXWarehouse)),
+                X.Container().Layout(LayoutType.Form).Flex(1).Items(X.TextField().ID("IMWarehouse").FieldLabel("入库仓库").LabelWidth(40).Value(ViewBag.IMWarehouse))),
+                X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(grid),
+                X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(check),
+                X.Container().ColumnWidth(0.5).Layout(LayoutType.Form).Items(X.TextField().FieldLabel("操作人").LabelWidth(30).Value(ViewBag.Operator)),
+                X.Container().ColumnWidth(0.5).Layout(LayoutType.Form).Items(X.TextField().FieldLabel("操作时间").LabelWidth(30).Value(ViewBag.OperateTime))
+
+                )
+        .Buttons(
+            X.Button().Text("关闭").Handler("parent.App.win.close();"),
+            X.Button().Text("提交").FormBind(true).ID("Submit").DirectEvents(l =>
+            {
+                l.Click.Action = "SubmitCheckApply";
+                l.Click.ExtraParams.Add(X.Parameter().Mode(ParameterMode.Value).Name("id").Value(ViewBag.OperationId));
+            })
+        );
+
+}
+
+@(X.Viewport().Layout(LayoutType.Border).AutoRender(true).Items(
+        content.Region(Region.Center).AutoScroll(true))
+      )
+    
+
+}

@@ -1,0 +1,177 @@
+﻿@model System.Collections.IEnumerable
+@{
+    ViewBag.Title = "审核功能";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+    <script>
+        var addjs = function () {
+            Ext.USE_NATIVE_JSON = true;
+
+            var result = App.grid.getSelectionModel().getSelection();
+
+            var datas = new Array();
+
+            for (var i = 0; i < result.length; i++) {
+                datas[i] = Ext.encode(result[i].data);
+            }
+            return Ext.encode(datas);
+        };
+
+        var refresh = function () {
+            system_func.system.refresh();
+        }
+    </script>
+}
+
+@section content{
+    @{
+        var btn = X.Toolbar().Flex(1)
+            .Shadow(true)
+            .ID("pnlPackEnd")
+            .Layout(LayoutType.HBox)
+            .Defaults(X.Parameter().Name("margin").Value("0 5 0 0").Mode(ParameterMode.Value))
+            .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Middle, Pack = BoxPack.End })
+            .Items(
+                X.Button().Text("添加").Icon(Icon.GroupAdd)
+                .DirectEvents(de =>
+                {
+                    de.Click.Action = "Add";
+                    de.Click.EventMask.ShowMask = true;
+
+                })
+                ,
+                X.Button().Text("修改").Icon(Icon.GroupEdit).DirectEvents(de =>
+                {
+                    de.Click.Action = "Edits";
+                    de.Click.EventMask.ShowMask = true;
+                    de.Click.ExtraParams.Add(new Parameter()
+                    {
+                        Name = "id",
+                        Mode = ParameterMode.Raw,
+                        Value = "App.grid.getSelectionModel().getSelection()[0].data.ID"
+
+                    }
+                        );
+                }),
+                X.Button().Text("删除").Icon(Icon.GroupDelete).DirectEvents(de =>
+                {
+                    de.Click.Action = "delete";
+                    de.Click.Success = "refresh";
+                    de.Click.EventMask.ShowMask = true;
+                    de.Click.Confirmation.ConfirmRequest = true;
+                    de.Click.Confirmation.Message = "是否确定删除选择项！";
+                    de.Click.ExtraParams.Add(new Parameter()
+                    {
+                        Name = "selection",
+                        Mode = ParameterMode.Raw,
+                        Value = "addjs"
+
+                    }
+                        );
+                }),
+                X.Button().Text("更新").Icon(Icon.TableRefresh).DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("refresh");
+                })
+
+            );
+    }
+    @(X.Viewport().Layout(LayoutType.Border).Items(
+    X.Panel().Region(Region.North).Border(false).PaddingSpec("2 2 2 2").Items(btn),
+    X.Container().ID("system_main").Region(Region.Center).Layout(LayoutType.Anchor)
+            .Items(X.GridPanel()
+                .ID("grid")
+                .AnchorHorizontal("100%")
+                .Store(X.Store().PageSize(20)
+                .ID("storedata")
+                    //.PageSize(Model.pagenum)
+                    .Model(X.Model()
+                    .IDProperty("ID")
+                    .Fields("ID", "Description", "Name", "MenuID", "Disable")
+                    )
+                    .DataSource(Model)
+
+                )
+                .ColumnModel(
+
+                    X.Column()
+                        .Text("功能名称")
+                                .Flex(1)
+                        .DataIndex("Name"),
+
+                     X.Column()
+                        .Text("菜单ID")
+                                .Flex(1)
+                        .DataIndex("MenuID"),
+
+                     X.Column()
+                        .Text("禁用")
+                                .Flex(1)
+                                .DataIndex("Disable"),
+
+                    X.Column()
+                        .Text("功能描述")
+                        .DataIndex("Description")
+                        .Resizable(false)
+                        .MenuDisabled(true)
+                        .Flex(2),
+
+                     X.CommandColumn()
+                            .Text("操作")
+                            .Width(200)
+                            .Commands(
+                                Html.X().GridCommand()
+                                .CommandName("汇办")
+                                .Icon(Ext.Net.Icon.BookOpenMark)
+                                .Text("汇办成员"))
+                                .DirectEvents(de =>
+                                {
+                                    de.Command.Action = "Expand";
+                                    de.Command.ExtraParams.Add(new Ext.Net.Parameter()
+                                    {
+                                        Name = "funId",
+                                        Value = "record.data.ID",
+                                        Mode = Ext.Net.ParameterMode.Raw
+                                    });
+                                    de.Command.ExtraParams.Add(new Ext.Net.Parameter()
+                                    {
+                                        Name = "name",
+                                        Value = "record.data.Name",
+                                        Mode = Ext.Net.ParameterMode.Raw
+                                    }
+                                    );
+                                    de.Command.ExtraParams.Add(new Ext.Net.Parameter()
+                                    {
+                                        Name = "command",
+                                        Value = "command",
+                                        Mode = Ext.Net.ParameterMode.Raw
+                                    }
+                                                            );
+                                }
+                                )
+                            ).BottomBar(X.PagingToolbar()
+                        .DisplayInfo(false)
+                        .HideRefresh(true)).SelectionModel(X.CheckboxSelectionModel().Mode(SelectionMode.Multi))
+                //.DirectEvents(de =>
+                //{
+                //    de.Command.Action = "authority";
+                //    de.Command.ExtraParams.Add(new Ext.Net.Parameter()
+                //    {
+                //        Name = "roleid",
+                //        Value = "record.data.RoleID",
+                //        Mode = Ext.Net.ParameterMode.Raw
+                //    });
+                //}
+                //)
+                )
+
+
+
+    )
+    )
+
+
+}

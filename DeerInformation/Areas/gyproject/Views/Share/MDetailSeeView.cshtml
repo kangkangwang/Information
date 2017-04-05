@@ -1,0 +1,61 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+
+    @( 
+        X.FormPanel().Layout(LayoutType.Auto).AutoScroll(true).Title(ViewBag.tit)
+            .Items(
+                 X.GridPanel().AutoScroll(true).ID("GridPanel1")
+                  .BottomBar(X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true)).Store(
+                        X.Store().ID("MaterialSelected").DataSource(Model).PageSize(10).Model(
+                        X.Model().IDProperty("MaterialID").Fields(
+                            new ModelField("MaterialID", ModelFieldType.String),
+                            new ModelField("MaterialName", ModelFieldType.String),
+                            new ModelField("Num", ModelFieldType.String),
+                            new ModelField("Size", ModelFieldType.String),
+                            new ModelField("Unit", ModelFieldType.String),
+                            new ModelField("Price", ModelFieldType.String)))    
+                            .Reader(X.JsonReader().RootProperty("data")))               
+                 .ColumnModel(
+                        X.Column()
+                        .Text("物料编号")
+                        .Flex(1)
+                        .DataIndex("MaterialID"),
+
+                       X.Column()
+                        .Text("物料名称")
+                        .Flex(1)
+                        .DataIndex("MaterialName"),
+
+                        X.Column()
+                    .Text("数量")
+                    .Flex(1)
+                    .DataIndex("Num"),
+                       
+
+                       X.Column()
+                        .Text("型号")
+                        .Flex(1)
+                        .DataIndex("Size"),
+
+                       X.Column()
+                        .Text("单位")
+                        .Flex(1)
+                        .DataIndex("Unit"),
+
+                       X.Column()
+                        .Text("价格")
+                        .Flex(1)
+                        .DataIndex("Price")) 
+                            .Buttons(
+                            X.Button().Icon(Icon.ApplicationGet).ID("cancel").Text("确定")
+                    .Listeners(l => l.Click.Handler = "parent.App.window3.close()"))
+                            
+))
+    @*@(X.FormPanel().Layout(LayoutType.Auto).AutoScroll(true).ID("form1").Title(ViewBag.tit))*@
+}

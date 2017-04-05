@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "TaskCheck";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+
+
+@section content
+{
+   @{
+       var content = X.Panel()
+           .Title("审核任务")
+           .Closable(false)
+           .Layout(LayoutType.Fit)
+           .Height(350)
+           .TopBar(new Toolbar
+           {
+               Items =
+               {
+                   new Button
+                   {
+                       Text = "Reload",
+                       Icon = Icon.ArrowRefresh,
+                       OnClientClick = "App.StoreTask.load();"
+                   }
+               }
+           })
+           .Items(
+               X.GridPanel()
+                   .Header(false)
+                   .Border(false)
+                   .Store(X.Store()
+                       .ID("StoreTask")
+                       .AutoLoad(true)
+                       .PageSize(20)
+                       .Proxy(
+                           X.AjaxProxy()
+                               .Url(Url.Action("GetTask"))
+                               .ActionMethods(actions =>
+                               {
+                                   actions.Read = HttpMethod.POST;
+                               })
+                               .Reader(
+                                   X.JsonReader().RootProperty("data")
+                               )
+                       )
+                       .Model(X.Model()
+                           .Fields(
+                               new ModelField("title"),
+                               new ModelField("type"),
+                               new ModelField("createtime"),
+                               new ModelField("url")
+                           )
+                       )
+
+                   )
+                   .ColumnModel(
+                       X.Column().Text("类型").DataIndex("type").Flex(1),
+                       X.DateColumn().Text("开始时间").DataIndex("createtime").Format("yyyy-MM-dd HH:mm:ss").Width(200),
+                       X.DateColumn().Text("截止时间").DataIndex("endtime").Format("yyyy-MM-dd HH:mm:ss").Width(200),
+                       X.CommandColumn().Text("操作").Commands(
+                           X.GridCommand().CommandName("Delete").Icon(Icon.Attach).Text("前往处理").ToolTip(tt => tt.Text = "前往处理")
+                           ).Listeners(ls => ls.Command.Handler = "location.href=record.data.url;")
+                   ).BottomBar(
+                X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示")
+                )
+           );
+      
+   }
+
+    @X.Viewport().Layout(LayoutType.Border).Items(content.Region(Region.Center))
+}

@@ -1,0 +1,5 @@
+task1:organize the code
+task2:run the simulation code 
+task3:write the paper
+task4:familiar with the eclipse IDE and write some java program
+task5:put file in order

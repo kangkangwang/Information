@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "MaterialApply";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+    <script>
+
+        var getdate = function () {
+
+            var date = App.selectdate.getValue();
+            return date.format('yyyy-MM-dd hh:mm:ss');
+        }
+    </script>
+}
+@section content
+{
+    @(X.Viewport().Layout(LayoutType.Border).Items(
+
+        X.Toolbar().Region(Region.North).Items(
+                        X.DateField().ID("selectdate").FieldLabel("月份"),
+                X.Button().Icon(Icon.Magnifier).DirectEvents(l =>
+                {
+                    l.Click.Action = "MaterialSelect";
+                }),
+                X.ToolbarFill().Flex(1),
+                    X.Button().Icon(Icon.PageExcel).DirectEvents(l =>
+                    {
+                        l.Click.Action = "MaterialResult";
+
+                        l.Click.ExtraParams.Add(new Parameter("format", "Excel", ParameterMode.Value));
+                        l.Click.ExtraParams.Add(new Parameter("id", "getdate", ParameterMode.Raw));
+                        l.Click.IsUpload = true;
+                    }),
+                    X.Button().Icon(Icon.PageWord).DirectEvents(l =>
+                    {
+                        l.Click.Action = "MaterialResult";
+
+                        l.Click.ExtraParams.Add(new Parameter("format", "Word", ParameterMode.Value));
+                        l.Click.ExtraParams.Add(new Parameter("id", "getdate", ParameterMode.Raw));
+                        l.Click.IsUpload = true;
+                    })
+            ),
+        X.Panel()
+            .Region(Region.Center)
+            .AutoRender(true)
+            .Items(X.Image().ID("reportform"))
+        ))
+}

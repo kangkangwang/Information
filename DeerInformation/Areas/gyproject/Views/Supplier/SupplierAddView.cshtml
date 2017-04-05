@@ -1,0 +1,34 @@
+﻿@using InputType = Ext.Net.InputType
+@model DeerInformation.Models.T_GM_SupplierInfo
+
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+    @(X.FormPanel().Frame(true).ID("FormPanel1").Listeners(l => l.ValidityChange.Handler = "#{add}.setDisabled(!valid);")
+          .Layout(LayoutType.Form).Items(  
+              X.TextFieldFor(m=>m.SupplierID).FieldLabel("供应商编号").AllowBlank(false).EmptyText("此项为必须填写项"),
+              X.TextFieldFor(m=>m.SupplierName).FieldLabel("供应商名称").AllowBlank(false).EmptyText("此项为必须填写项"),
+              X.TextFieldFor(m=>m.Contact).FieldLabel("联系人"),
+              X.TextFieldFor(m=>m.Tel).FieldLabel("电话"),
+              X.TextFieldFor(m=>m.Fax).FieldLabel("传真"),
+              X.TextFieldFor(m=>m.Email).FieldLabel("邮箱"),
+              X.TextFieldFor(m=>m.Address).FieldLabel("地址"),
+              X.TextFieldFor(m => m.Tax).FieldLabel("税率").Regex(@"/^\d+\.?\d{0,2}%$/"),
+              X.TextFieldFor(m => m.Bank).FieldLabel("开户银行"),
+              X.TextFieldFor(m => m.BankAccount).FieldLabel("银行账户"),
+              X.TextFieldFor(m => m.PaymentCycle).FieldLabel("结算周期"),
+              X.TextFieldFor(m => m.MainProduct).FieldLabel("主营产品"),
+              X.TextFieldFor(m=>m.CompanyProperity).FieldLabel("公司性质"),
+              X.TextAreaFor(m => m.Remark).FieldLabel("备注"))
+          .Buttons(
+              X.Button().Icon(Icon.ApplicationGet).ID("add").Text("确认").Disabled(true).DirectEvents(de =>
+              {
+                  de.Click.Url = Url.Action("SupplierAdd");
+                  de.Click.Success = "parent.App.window1.close()";
+                  de.Click.EventMask.ShowMask = true;
+                  de.Click.FormID = "FormPanel1";
+              })))
+}

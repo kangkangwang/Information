@@ -1,0 +1,14 @@
+﻿@model DeerInformation.Models.MainMenu
+
+@(
+                    Html.X()
+                    .Panel()
+                    .AutoRender(true)
+                    .Loader(
+                    Html.X().ComponentLoader()
+                    .ID("tab")
+                    .Url(Model.currenturl)
+                    .Mode(LoadMode.Frame)
+                    .LoadMask(lm => lm.ShowMask = true)
+                )
+)

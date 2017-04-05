@@ -1,0 +1,174 @@
+﻿@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var closewindow = function () {
+        parent.App.windowStaffVacation.close()
+    };
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>StaffVacationAndHour</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                   X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                           X.GridPanel().ID("VacationGridPanal").AutoScroll(true).ColumnLines(true).Flex(1)
+                                              .Store(
+                                                 X.Store().ID("VacationStore").PageSize(20)
+                                                          .AutoLoad(true)
+                                                          .DataSource(Model)
+                                                   .Model(
+                                                                     X.Model().IDProperty("ID").Fields("ID", "StaffID", "Name", "Department", "VPType"
+                                      , "StartTime", "EndTime", "TimeSpan", "Valid", "Remark", "CreaterName", "CreateTime", "EditorName", "EditeTime", "OperationListID", "LastID", "VPEdit", "VPDelete", "EditOrDelete")
+                                                          )
+                                                  .Reader(
+                                                              X.JsonReader().RootProperty("data")
+                                                              )
+
+                                          )
+                                              .SelectionModel(
+                                                  X.CheckboxSelectionModel().Mode(SelectionMode.Multi)
+                                               )
+                                                .ViewConfig(X.GridView().TrackOver(false))
+                                                .BottomBar(
+                                                        Html.X().PagingToolbar().HideRefresh(true)
+                                                    )
+                                        .ColumnModel(
+                                               X.Column()
+                                               .Text("ID")
+                                               .Width(155)
+                                               .DataIndex("ID").Hidden(true),
+
+                                               X.Column()
+                                               .Text("工号")
+                                               .Width(155)
+                                               .DataIndex("StaffID"),
+
+                                               X.Column()
+                                               .Text("姓名")
+                                               .Width(155)
+                                               .DataIndex("Name"),
+
+                                               X.Column()
+                                               .Text("部门")
+                                               .Width(155)
+                                               .DataIndex("Department"),
+
+                                               X.Column()
+                                               .Text("请假类型")
+                                               .Width(155)
+                                               .DataIndex("VPType"),
+
+                                               X.DateColumn()
+                                               .Text("请假开始时间")
+                                               .Width(155)
+                                               .Format("yyyy-MM-dd HH:mm:ss")
+                                               .DataIndex("StartTime"),
+
+                                               X.DateColumn()
+                                               .Text("请假结束时间")
+                                               .Width(155)
+                                               .Format("yyyy-MM-dd HH:mm:ss")
+                                               .DataIndex("EndTime"),
+
+                                               X.Column()
+                                               .Text("总请假时长")
+                                               .Width(155)
+                                               .DataIndex("TimeSpan"),
+
+                                               X.Column()
+                                              .Text("请假事由")
+                                              .Width(155)
+                                              .DataIndex("VPReason"),
+
+                                               X.Column()
+                                               .Text("有效")
+                                               .Width(155)
+                                               .Renderer(RendererFormat.Checkbox)
+                                               .DataIndex("Valid").Hidden(true),
+
+                                              X.Column()
+                                              .Text("备注")
+                                              .Width(155)
+                                              .DataIndex("Remark"),
+
+                                              X.Column()
+                                              .Text("创建人")
+                                              .Width(155)
+                                              .DataIndex("CreaterName"),
+
+                                              X.DateColumn()
+                                               .Text("创建时间")
+                                               .Width(155)
+                                               .Format("yyyy-MM-dd HH:mm:ss")
+                                               .DataIndex("CreateTime"),
+
+                                              X.Column()
+                                              .Text("修改人")
+                                              .Width(155)
+                                              .DataIndex("EditorName"),
+
+                                              X.DateColumn()
+                                               .Text("修改时间")
+                                               .Width(155)
+                                               .Format("yyyy-MM-dd HH:mm:ss")
+                                               .DataIndex("EditeTime"),
+
+                                              X.Column()
+                                              .Text("审核ID")
+                                              .Width(80)
+                                              .DataIndex("OperationListID").Hidden(true),
+
+                                              X.Column()
+                                              .Text("原记录ID")
+                                              .Width(80)
+                                              .DataIndex("LastID").Hidden(true),
+
+                                              X.Column()
+                                               .Text("修改")
+                                               .Width(155)
+                                               .Renderer(RendererFormat.Checkbox)
+                                               .DataIndex("VPEdit").Hidden(true),
+
+                                               X.Column()
+                                               .Text("删除")
+                                               .Width(155)
+                                               .Renderer(RendererFormat.Checkbox)
+                                               .DataIndex("VPDelete").Hidden(true),
+
+                                              X.Column()
+                                              .Text("是修改还是删除")
+                                              .Width(80)
+                                              .DataIndex("EditOrDelete").Hidden(true)
+                                        )
+                   )
+
+       ),
+        X.Button().Text("确定").Icon(Icon.Accept).ID("save")
+                    .Listeners(l =>
+                        {
+                            l.Click.Handler = "closewindow();";
+                        })
+    )
+</body>
+
+</html>
+
+
+
+

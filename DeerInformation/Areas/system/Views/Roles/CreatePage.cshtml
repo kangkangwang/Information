@@ -1,0 +1,39 @@
+﻿@model DeerInformation.Models.T_PE_Roles
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+    <script src="~/Scripts/base/system.js"></script>
+}
+
+
+@section content{
+    @{var con = X.FormPanelFor(m => m)
+    .Frame(true).Layout(LayoutType.Form)
+    .Region(Region.Center)
+    .ModelValidation(true)
+    .Flex(1)
+    .Buttons(
+    Html.X().Button()
+        .Text("Cancel")
+        .Handler(string.Format("parent.App.{0}.close()", ViewBag.winname))
+        ,
+    Html.X().Button()
+        .Text("Submit")
+        .DirectEvents(de =>
+        {
+            de.Click.Action = "Create";
+            de.Click.Success = string.Format("parent.refresh();parent.App.{0}.close();", ViewBag.winname);
+            de.Click.EventMask.ShowMask = true;
+        }
+        )
+    );
+    }
+
+    @(X.Viewport().Layout(LayoutType.Border).Items(con))
+    
+}

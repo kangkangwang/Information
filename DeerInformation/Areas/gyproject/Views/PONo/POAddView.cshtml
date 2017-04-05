@@ -1,0 +1,47 @@
+﻿@model DeerInformation.Models.T_GM_Project
+
+@{
+    ViewBag.Title = "添加客户订单";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+    @{
+        var first = X.FormPanel().ID("FormPanel1").Layout(LayoutType.Anchor).DefaultAnchor("100%")
+            .Listeners(l => l.ValidityChange.Handler = "#{add}.setDisabled(!valid);").Items(
+                X.FormPanel().ID("container").Listeners(l => l.ValidityChange.Handler = "#{see}.setDisabled(!valid);").Layout(LayoutType.HBox).Items(
+                    X.ComboBox().ID("prono").Flex(3).FieldLabel("项目编号").AllowBlank(false).LabelWidth(60).Items(ViewBag.prono),
+                    X.Button().ID("see").Text("查看明细").Disabled(true).Flex(1).DirectEvents(
+                    de =>
+                    {
+                        de.Click.Url = Url.Action("BudgetSee");
+                        de.Click.ExtraParams.Add(new Parameter("prono", "App.prono.getValue()", ParameterMode.Raw));
+                        de.Click.Success = "App.see.setDisabled(true);";
+                        de.Click.FormID = "container";
+                    })),
+                X.Panel().ID("con").Layout(LayoutType.Form).Collapsible(true),
+                X.Container().Layout(LayoutType.Form).Items(
+                    X.TextFieldFor(m=>m.CustomerNo).FieldLabel("客户订单号").ID("cno"),
+                    X.NumberFieldFor(m=>m.PurchaseAmount).FieldLabel("订单金额"),
+                    X.DateFieldFor(m => m.ReciPODate).FieldLabel("收到订单日期").Flex(1),
+                    X.DateFieldFor(m => m.CusCmfDate).FieldLabel("客户订单确认日期").Flex(1),
+                    X.DateFieldFor(m=>m.CusStart).FieldLabel("客户要求开工日期").Flex(1),
+                    X.DateFieldFor(m => m.CusEnd).FieldLabel("客户要求交货日期").Flex(1),
+                    X.FileUploadField().ID("AttachmentPath").EmptyText("附件大小请不要超过20M").Icon(Icon.Attach).LabelWidth(60).FieldLabel("附件").ButtonText("选择文件"),
+                    X.TextAreaFor(m => m.Extra).FieldLabel("备注").ID("extra"))           
+            ).Buttons(
+                   X.Button().Icon(Icon.ApplicationGet).ID("add").Text("确认").Disable(true).Region(Region.East)
+                   .DirectEvents(de =>
+                   {
+                       de.Click.Url = Url.Action("PONoAdd");
+                       de.Click.ExtraParams.Add(new Parameter("prono", "App.prono.getValue()", ParameterMode.Raw));
+                       //de.Click.ExtraParams.Add(new Parameter("cno", "App.cno.getValue()", ParameterMode.Raw));
+                       de.Click.Success = "parent.App.window1.close()";
+                       de.Click.EventMask.ShowMask = true;
+                       de.Click.FormID = "FormPanel1";
+                   }));
+    }
+
+    @(X.Viewport().Layout(LayoutType.Auto).Region(Region.Center).Items(first))
+}

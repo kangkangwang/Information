@@ -1,0 +1,62 @@
+﻿@model DeerInformation.Areas.person.Models.SchListModel
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var closewindow = function () {
+        parent.App.window.close()
+    };
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddWorkTime</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.HBox)
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                   X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                      X.TextFieldFor(m => m.ID).FieldLabel("ID").Hidden(true),
+                      X.TextFieldFor(m => m.Name).FieldLabel("系列名称").AllowBlank(false),
+                      X.TextFieldFor(m => m.AMTime).FieldLabel("上午上下班时间").AllowBlank(false).EmptyText("例：08:00-12:00").Regex("^(([0-1]{1}[0-9]{1})|([2]{1}[0-4]{1}))([:])(([0-5]{1}[0-9]{1}))-(([0-1]{1}[0-9]{1})|([2]{1}[0-4]{1}))([:])(([0-5]{1}[0-9]{1}))$"),
+                      X.TextFieldFor(m => m.AMValidGoTime).FieldLabel("上午上班有效打卡时间").AllowBlank(false).EmptyText("例：07:30-08:00").Regex("^(([0-1]{1}[0-9]{1})|([2]{1}[0-4]{1}))([:])(([0-5]{1}[0-9]{1}))-(([0-1]{1}[0-9]{1})|([2]{1}[0-4]{1}))([:])(([0-5]{1}[0-9]{1}))$"),
+                      X.TextFieldFor(m => m.AMValidOffTime).FieldLabel("上午下班有效打卡时间").AllowBlank(false).EmptyText("例：12:00-13:00").Regex("^(([0-1]{1}[0-9]{1})|([2]{1}[0-4]{1}))([:])(([0-5]{1}[0-9]{1}))-(([0-1]{1}[0-9]{1})|([2]{1}[0-4]{1}))([:])(([0-5]{1}[0-9]{1}))$"),
+                      X.TextFieldFor(m => m.PMTime).FieldLabel("下午下班时间").AllowBlank(false).EmptyText("例：13:30-17:30").Regex("^(([0-1]{1}[0-9]{1})|([2]{1}[0-4]{1}))([:])(([0-5]{1}[0-9]{1}))-(([0-1]{1}[0-9]{1})|([2]{1}[0-4]{1}))([:])(([0-5]{1}[0-9]{1}))$"),
+                      X.TextFieldFor(m => m.PMValidGoTime).FieldLabel("下午上班有效打卡时间").AllowBlank(false).EmptyText("例：13:00-13:30").Regex("^(([0-1]{1}[0-9]{1})|([2]{1}[0-4]{1}))([:])(([0-5]{1}[0-9]{1}))-(([0-1]{1}[0-9]{1})|([2]{1}[0-4]{1}))([:])(([0-5]{1}[0-9]{1}))$"),
+                      X.TextFieldFor(m => m.PMValidOffTime).FieldLabel("下午下班有效打卡时间").AllowBlank(false).EmptyText("例：17:30-18:00").Regex("^(([0-1]{1}[0-9]{1})|([2]{1}[0-4]{1}))([:])(([0-5]{1}[0-9]{1}))-(([0-1]{1}[0-9]{1})|([2]{1}[0-4]{1}))([:])(([0-5]{1}[0-9]{1}))$"),
+                      //X.RadioFor(m=>m.t).FieldLabel("2次卡").InputValue("2").Name("fav-color").Checked(true),
+                      X.ComboBoxFor(m => m.AttNum).FieldLabel("打卡次数").Editable(false).Items(new ListItem("2次卡"), new ListItem("4次卡")).AllowBlank(false),
+                      X.HiddenFor(m => m.CreaterName),
+                      X.HiddenFor(m => m.CreateTime),
+                      X.HiddenFor(m => m.EditorName),
+                      X.HiddenFor(m => m.EditeTime)
+                   )
+                   //X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                   //   X.TextFieldFor(m => m.EarlistTimeACG).LabelWidth(145).FieldLabel("上午上班最早打卡时间").AllowBlank(false).EmptyText("例：07:00").Regex("^(([1-9]{1})|([0-1][0-9])|([1-2][0-3])):([0-5][0-9])$"),
+                   //   X.TextFieldFor(m => m.LatestTimeACO).LabelWidth(145).FieldLabel("上午下班最晚打卡时间").AllowBlank(false).EmptyText("例：12:30").Regex("^(([1-9]{1})|([0-1][0-9])|([1-2][0-3])):([0-5][0-9])$"),
+                   //   X.TextFieldFor(m => m.EarlistTimePCG).LabelWidth(145).FieldLabel("下午上班最早打卡时间").AllowBlank(false).EmptyText("例：12:31").Regex("^(([1-9]{1})|([0-1][0-9])|([1-2][0-3])):([0-5][0-9])$"),
+                   //   X.TextFieldFor(m => m.LatestTimePCO).LabelWidth(145).FieldLabel("下午下班最晚打卡时间").AllowBlank(true).EmptyText("例：17:30，留空即为：实际下班时间").Regex("^(([1-9]{1})|([0-1][0-9])|([1-2][0-3])):([0-5][0-9])$"),
+                   //   X.TextFieldFor(m => m.Remark).LabelWidth(145).FieldLabel("备注").AllowBlank(true)
+                   //)
+       ),
+        X.Button().Text("保存").Icon(Icon.Accept).ID("save").FormBind(true).Disable(true)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("AddOrEditTime");
+                        de.Click.EventMask.ShowMask = true;
+                    })
+    )
+</body>
+
+</html>

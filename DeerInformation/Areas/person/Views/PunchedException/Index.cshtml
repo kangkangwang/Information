@@ -1,0 +1,139 @@
+﻿@model DeerInformation.Areas.person.Models.PunchedExceptionModle
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+    <script>
+        var select = function () {
+            var proxy = App.storedata.getProxy();
+            proxy.extraParams = {
+                "date": App.FilterDate.getValue(),
+                "name": App.FilterName.getValue(),
+                "state": App.FilterState.getValue(),
+                "solved": App.FilterSolved.getValue()
+            };
+            App.storedata.reload();
+        }
+        var getItemId = function () {
+            var report = App.grid.getSelectionModel().getSelection();
+            if (report.length > 0) {
+                return report[0].data.ID;
+            } else {
+                return null;
+            }
+        }
+        var getItemUserId = function () {
+            var report = App.grid.getSelectionModel().getSelection();
+            if (report.length > 0) {
+                return report[0].data.UserId;
+            } else {
+                return null;
+            }
+        }
+
+</script>
+
+}
+
+@section content
+{
+    @{
+        var head =
+            X.Toolbar().Layout(LayoutType.HBox)
+                .Shadow(true)
+                .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Middle, Pack = BoxPack.End })
+                .Items(
+                    X.Toolbar().Border(false).Layout(LayoutType.HBox).Flex(1).Items(
+                        X.TextField().LabelAlign(LabelAlign.Right).ID("FilterName").Name("name").FieldLabel("工号或姓名"),
+                        X.ComboBox().LabelAlign(LabelAlign.Right).ID("FilterState").Name("state").FieldLabel("考勤状态").Items(Model.ExceptionTypesItems),
+                        X.Checkbox().LabelAlign(LabelAlign.Right).ID("FilterSolved").Name("solved").Value(false).FieldLabel("已处理处理"),
+                        X.DateField().LabelAlign(LabelAlign.Right).ID("FilterDate").Name("date").FieldLabel("日期"),
+                        X.Button().Text("查询").Icon(Icon.Magnifier).Handler("select();")
+                        ),
+
+                    X.Toolbar().Border(false).Items(
+                        X.Button().Icon(Icon.Application).Text("处理").DirectEvents(ls =>
+                        {
+                            ls.Click.Action = "Deal";
+                            ls.Click.ExtraParams.Add(new Parameter() { Name = "Id", Value = "getItemId()", Mode = ParameterMode.Raw });
+                            ls.Click.ExtraParams.Add(new Parameter() { Name = "UserId", Value = "getItemUserId()", Mode = ParameterMode.Raw });
+                        }),
+                        X.Button().Text("补签").Icon(Icon.Application)
+                            .DirectEvents(de =>
+                              {
+                                  de.Click.Url = Url.Action("Add");
+                              })
+                        ));
+
+
+        var proxy = Html.X().AjaxProxy()
+            .Url(Url.Action("Fiter"))
+            .Reader(X.JsonReader().RootProperty("data"));
+
+        var content = X.GridPanel()
+            .ID("grid")
+            .AutoScroll(true)
+            .Store(X.StoreForModel()
+                .ID("storedata")
+                .PageSize(20)
+                .Proxy(proxy)
+                )
+            .ColumnModel(
+
+
+                X.Column()
+                    .Text("工号")
+                    .Flex(1)
+                    .DataIndex("UserId"),
+                    
+                X.Column()
+                    .Text("姓名")
+                    .Flex(1)
+                    .DataIndex("Name"),
+                    
+                X.Column()
+                    .Text("异常类型")
+                    .Flex(1)
+                    .DataIndex("StateName"),
+
+
+                X.DateColumn()
+                    .Text("日期")
+                    .Flex(1)
+                    .DataIndex("AttendTime")
+                    .Format("yyyy-MM-dd"),
+
+                X.DateColumn()
+                    .Text("打卡时间")
+                    .Flex(1)
+                    .DataIndex("AttendTime")
+                    .Format("HH:mm:ss"),
+
+                X.Column()
+                    .Text("卡次")
+                    .Flex(1)
+                    .DataIndex("PunchedOrder")
+                    )
+                    .SelectionModel(X.CheckboxSelectionModel().Mode(SelectionMode.Single))
+                    .BottomBar(
+                        Html.X().PagingToolbar()
+                                .DisplayInfo(true)
+                                .DisplayMsg("当前 {0} - {1} 总共： {2}")
+                                .EmptyMsg("没有数据可以显示")
+                    );
+
+    }
+
+    @(
+ X.Viewport().Layout(LayoutType.Border).Items(
+                X.FormPanel().Region(Region.North).Border(false).PaddingSpec("1,2,1,2").Items(head),
+                    content.Region(Region.Center)
+                )
+)
+}
+
+

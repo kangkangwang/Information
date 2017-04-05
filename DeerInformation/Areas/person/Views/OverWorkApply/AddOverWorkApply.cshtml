@@ -1,0 +1,90 @@
+﻿@model DeerInformation.Areas.person.Models.OWApply
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var closewindow = function () {
+        parent.App.windowOWApply.close()
+    };
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddOverWorkApply</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.HBox)
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                   X.Panel().Flex(7).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                   X.TextFieldFor(m => m.StaffID).ID("StaffID").FieldLabel("工号").AllowBlank(false).Editable(false),
+                   X.TextFieldFor(m => m.Department).ID("Department").FieldLabel("部门").AllowBlank(false).Editable(false),
+                   X.TextFieldFor(m => m.StartTimeStr).FieldLabel("调休加班开始时间").AllowBlank(false).EmptyText("例：2012-02-05 19:50").Regex(@"^\d{4}[-]([0][1-9]|(1[0-2]))[-]([0][1-9]|([12]\d)|(3[01]))([ \t\n\x0B\f\r])(([0-1]{1}[0-9]{1})|([2]{1}[0-4]{1}))([:])(([0-5]{1}[0-9]{1}))$"),
+                   X.TextFieldFor(m => m.Remark).FieldLabel("备注").AllowBlank(true),
+                   //X.TextFieldFor(m => m.CreaterName).FieldLabel("申请人").AllowBlank(true).Editable(false),
+                   X.HiddenFor(m => m.ID),
+                   X.HiddenFor(m => m.Valid),
+                   X.HiddenFor(m => m.EndTime),
+                   X.HiddenFor(m => m.StartTime),
+                   X.HiddenFor(m => m.CheckTimeSpan),
+                   X.HiddenFor(m => m.CreaterName),
+                      X.HiddenFor(m => m.CreateTime),
+                      X.HiddenFor(m => m.EditorName),
+                      X.HiddenFor(m => m.EditeTime)
+                   ),
+                   X.Panel().Flex(7).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                   X.TextFieldFor(m => m.Name).ID("Name").FieldLabel("姓名").AllowBlank(false).Editable(false),
+                   X.TextFieldFor(m => m.TimeSpan).FieldLabel("可调休加班时数").AllowBlank(false).Regex(@"^(\d{1,18}|\d{1,15}\.\d{1,2})$"),
+                   X.TextFieldFor(m => m.EndTimeStr).FieldLabel("调休加班结束时间").AllowBlank(false).EmptyText("例：2012-02-05 19:50").Regex(@"^\d{4}[-]([0][1-9]|(1[0-2]))[-]([0][1-9]|([12]\d)|(3[01]))([ \t\n\x0B\f\r])(([0-1]{1}[0-9]{1})|([2]{1}[0-4]{1}))([:])(([0-5]{1}[0-9]{1}))$"),
+                   
+                   X.ComboBoxFor(m => m.CheckFlowId).ID("checkflow").FieldLabel("审核流程").AllowBlank(false).Editable(false)
+                      .DisplayField("name")
+                      .ValueField("id")
+                      .EmptyText("请选择...")
+                      .Store(X.Store()
+                      .AutoLoad(true)
+                      .Model(X.Model()
+                      .IDProperty("Id")
+                      .Fields(
+                              new ModelField("id", ModelFieldType.String) { Mapping = "ID" },
+                              new ModelField("name", ModelFieldType.String) { Mapping = "Name" }
+                      )
+                      )
+                      .Proxy(X.AjaxProxy().Url(Url.Action("CheckFlowItems")).Reader(X.JsonReader().RootProperty("data")))
+                      )
+                      //X.TextFieldFor(m => m.CreateTime).FieldLabel("申请时间").AllowBlank(true).Editable(false)
+                   ),
+                   X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+            //X.Panel().Border(false).Height(0),
+                        X.Button().Text("选择员工").ID("select")
+                            .DirectEvents(de =>
+                            {
+                                de.Click.Url = Url.Action("SelectStaff");
+                                //de.Click.EventMask.ShowMask = true;
+                            })
+                      )
+       ),
+        X.Button().Text("保存").Icon(Icon.Accept).ID("save").FormBind(true).Disable(true)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("AddOrEditOWApply");
+                        de.Click.EventMask.ShowMask = true;
+                    })
+    )
+</body>
+
+</html>
+
+
+
+

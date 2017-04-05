@@ -1,0 +1,88 @@
+﻿@model CollectionPlan
+
+@{
+    ViewBag.Title = "CreateView";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+
+    <script>
+        var set = function (com) {
+            CPlan.finance._SetPoInfo(com.getValue());
+        };
+    </script>
+}
+
+@section content
+{
+    @{
+        var content =
+                X.FormPanel()
+                .ID("form1")
+                .Layout(LayoutType.Column)
+                .BodyPadding(10)
+                .Frame(true)
+                .FieldDefaults(l =>
+                {
+                    l.LabelWidth = 70; 
+                    l.LabelAlign = LabelAlign.Right;
+                    l.ReadOnly = true;
+                })
+                .Items(
+                X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(
+                X.ComboBoxFor(m => m.ProjectID).ID("ProjectID").AllowBlank(false).Editable(false).PageSize(5)
+                .DisplayField("no")
+                .ValueField("no")
+                .EmptyText("请选择...")
+                .Store(X.Store()
+                .AutoLoad(true)
+                .Model(X.Model()
+                .IDProperty("Id")
+                .Fields(
+                   new ModelField("id", ModelFieldType.String) { Mapping = "UID" },
+                   new ModelField("no", ModelFieldType.String) { Mapping = "ProjectNo" }))
+                   .Proxy(X.AjaxProxy().Url(Url.Action("GetProject")).Reader(X.JsonReader().RootProperty("data"))))
+                   .Listeners(l => l.Select.Handler = "set(App.ProjectID);")),
+
+                X.Container().ColumnWidth(0.5).Layout(LayoutType.Form).Items(X.TextFieldFor(m => m.ProjectName).ID("ProjectName").Editable(false)),
+                X.Container().ColumnWidth(0.5).Layout(LayoutType.Form).Items(X.TextFieldFor(m => m.CustomerNo).ID("CustomerNo").Editable(false)),
+                X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(X.TextFieldFor(m => m.CustomerName).ID("ClientName").Editable(false)),
+                X.Container().ColumnWidth(0.5).Layout(LayoutType.Form).Items(X.TextFieldFor(m => m.ContactSum).ID("OfferMoney").Editable(false)),
+                X.Container().ColumnWidth(0.5).Layout(LayoutType.Form).Items(X.DateFieldFor(m => m.CreateTime)),
+                X.Container().ColumnWidth(1).Layout(LayoutType.Column).Items(
+                X.Container().ColumnWidth(1).Layout(LayoutType.Column).Items(
+                X.TextField().Name("plan").Editable(false).Hidden(true).ID("collectionplan").ColumnWidth(0.1).Value(Model.DetailPlans.Count - 1),
+
+                X.Button().Text("添加收款计划").Icon(Icon.Add).Hidden(true).ColumnWidth(1).DirectEvents(l =>
+                { l.Click.Action = "AddPlan"; l.Click.ExtraParams.Add(new Parameter() { Name = "plan", Value = "App.collectionplan.getValue()", Mode = ParameterMode.Raw }); })),
+                X.Container().ID("plans").ColumnWidth(1).Layout(LayoutType.Column).Items(
+                X.Container().ColumnWidth(1).Layout(LayoutType.Column).Items(l =>
+                {
+                    for (int i = 0; i < Model.DetailPlans.Count; i++)
+                    {
+                        l.Add(X.ComboBox().FieldLabel("收款类型").Name("DetailPlans[" + i + "].CollectionType").Value(Model.DetailPlans[i].CollectionType).Items(Model.PlanTypeItems).ColumnWidth(0.25));
+                        l.Add(X.TextField().FieldLabel("项目进度").Name("DetailPlans[" + i + "].ProjectSchedule").Value(Model.DetailPlans[i].ProjectSchedule).ColumnWidth(0.25));
+                        l.Add(X.NumberField().FieldLabel("收款比例").Name("DetailPlans[" + i + "].CollectionRatio").Value(Model.DetailPlans[i].CollectionRatio).AllowBlank(false).ColumnWidth(0.25));
+                        l.Add(X.NumberField().FieldLabel("金额").Name("DetailPlans[" + i + "].CollectionAmount").Value(Model.DetailPlans[i].CollectionAmount).AllowBlank(false).ColumnWidth(0.25));
+                    }
+                })),
+                X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(l => { if (Model.Attachment != null)l.Add(X.HyperlinkButton().Text("附件").Icon(Icon.Attach).HrefTarget("_blank").Href(Url.Content(Model.Attachment))); }),
+                X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(X.TextAreaFor(m => m.Remark)))
+                )
+                .Items(l =>
+                {
+                    if (Model.Attachment != null)
+                        l.Add(X.Container().ColumnWidth(1).Items());
+                })
+                .Buttons(
+                X.Button().Text("关闭").Handler("parent.App.win.close();")
+            );
+    }
+
+    @(X.Viewport().Layout(LayoutType.Border).Items(
+        content.Region(Region.Center).AutoScroll(true))
+    )
+}

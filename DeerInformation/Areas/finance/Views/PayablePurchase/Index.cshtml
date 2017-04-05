@@ -1,0 +1,145 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+    <script>
+        var select = function () {
+            var proxy = App.storedata.getProxy();
+            proxy.extraParams = {
+                "suppliername": App.FilterName1.getValue(),
+                "projectno": App.FilterName2.getValue(),
+                "paymentstate": App.FilterName3.getValue(),
+                "invoicestate": App.FilterName4.getValue(),
+                "confirmtime": App.FilterDate.getValue()
+            };
+            App.storedata.reload();
+
+        }
+    </script>
+
+}
+
+@section content
+{
+    @{
+
+        var head =
+            X.FormPanel().Layout(LayoutType.HBox)
+                .Shadow(true).FieldDefaults(l=>l.LabelWidth=60)
+                .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Middle, Pack = BoxPack.End })
+                .Items(
+                    X.Toolbar().Border(false).Layout(LayoutType.HBox).Flex(1).Items(
+                        //X.TextField().Name("ProjectNo").FieldLabel("项目名称"),
+                        X.TextField().ID("FilterName1").Name("SupplierName").FieldLabel("供应商名称"),
+                        X.DateField().ID("FilterDate").Name("ConfirmTime").FieldLabel("日期"),
+                        X.TextField().ID("FilterName2").Name("ProjectNo").FieldLabel("项目编号"),
+                        X.ComboBox().ID("FilterName3").Name("paymentstate").Value("未付款").FieldLabel("付款状态").Items("已付款", "未付款"),
+                        X.ComboBox().ID("FilterName4").Name("invoicestate").Value("未收发票").FieldLabel("发票状态").Items("已收发票", "未收发票"),
+                        X.Button().Text("查询").Icon(Icon.Magnifier).Handler("select();"))
+                        );
+
+        var proxy = Html.X().AjaxProxy()
+            .ExtraParams(l => l.Add(new Parameter()))
+            .Url(Url.Action("Fiter"))
+            .Reader(X.JsonReader().RootProperty("data"));
+
+        var content = X.GridPanel()
+            .ID("grid")
+            .AnchorHorizontal("100%")
+            .Store(X.Store().AutoLoad(true)
+                .ID("storedata")
+                .Proxy(proxy)
+                .Model(X.Model()
+                    .IDProperty("ID")
+                    .Fields("PurchaseMaterialNo","InvoiceState", "ReceivePMNo", "ProjectID", "ProjectName","PayAmount", "PayState", "ConfirmTime", "SupplierName")
+                ))
+                .ColumnModel(
+                X.Column()
+                    .Text("采购单号")
+                    .Flex(1)
+                    .DataIndex("PurchaseMaterialNo"),
+
+                    X.Column()
+                    .Text("收货单号")
+                    .Flex(1)
+                    .DataIndex("ReceivePMNo"),
+
+                X.Column()
+                    .Text("项目编号")
+                    .Flex(1)
+                    .DataIndex("ProjectID"),
+
+                X.Column()
+                .Text("项目名称")
+                .Flex(1)
+                .DataIndex("ProjectName"),
+
+                X.Column()
+                    .Text("供应商名称")
+                    .Flex(1)
+                    .DataIndex("SupplierName"),
+
+                X.Column()
+                    .Text("结算周期")
+                    .Flex(1)
+                    .DataIndex("PaymentCycle"),
+
+                X.Column()
+                    .Text("应付金额")
+                    .Flex(1)
+                    .DataIndex("PayAmount"),
+
+                    X.Column()
+                    .Text("付款状态")
+                    .Flex(1)
+                    .DataIndex("PayState"),
+                    
+                    X.Column()
+                    .Text("发票状态")
+                    .Flex(1)
+                    .DataIndex("InvoiceState"),
+                    
+                    X.DateColumn()
+                    .Text("日期")
+                    .Flex(1)
+                    .DataIndex("ConfirmTime"),
+
+                    X.Column()
+                    .Text("备注")
+                    .Flex(1)
+                    .DataIndex("Remark"),
+
+                    X.CommandColumn()
+                    .Text("操作")
+                    .Flex(2)
+                    .Commands(
+                    X.GridCommand().Text("发票信息").CommandName("invoiceinfoAdd").Icon(Icon.ApplicationAdd),
+                    X.GridCommand().Text("付款信息").CommandName("PaymentinfoAdd").Icon(Icon.ApplicationAdd))
+                    .DirectEvents(l => {
+                        l.Command.Action = "EditOperation";
+                        l.Command.ExtraParams.Add(new Parameter() { Name = "command", Value = "command", Mode = ParameterMode.Raw });
+                        l.Command.ExtraParams.Add(new Parameter() {Name = "id",Value = "record.data.ReceivePMNo", Mode = ParameterMode.Raw});
+                    })
+                    )
+                    .SelectionModel(X.CheckboxSelectionModel().Mode(SelectionMode.Multi))
+                    .BottomBar(
+                        Html.X().PagingToolbar()
+                            .DisplayInfo(true)
+                            .DisplayMsg("当前 {0} - {1} 总共： {2}")
+                            .EmptyMsg("没有数据可以显示")
+                    );
+    }
+    @(
+ X.Viewport().Layout(LayoutType.Border).Items(
+    X.Panel().Region(Region.Center).Frame(true).Items(content),
+    X.FormPanel().Region(Region.North).Border(false).Frame(true).Items(head)
+    )
+
+    )
+}

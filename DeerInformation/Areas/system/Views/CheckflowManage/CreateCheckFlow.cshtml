@@ -1,0 +1,98 @@
+﻿@model CheckFlow
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+
+
+@section headtag
+{
+
+
+}
+
+
+
+@section content
+{
+    @{
+        var store = Html.X().Store().ID("CheckerStore")
+                    .AutoLoad(false)
+                    .Proxy(Html.X().AjaxProxy()
+                        .Url(Url.Action("GetCheckers"))
+                        .ActionMethods(am => am.Read = HttpMethod.POST)
+                        .ExtraParams(l =>
+                        {
+
+                            l.Add(new Parameter() { Name = "checkers", Value = JSON.Serialize(Model.Checkers), Mode = ParameterMode.Auto });
+
+                        })
+                        .Reader(Html.X().JsonReader().RootProperty("data"))
+                    ).Model(Html.X().Model()
+                        .Fields(
+                            Html.X().ModelField().Name("Name"),
+                            Html.X().ModelField().Name("ID")
+                        )
+                    );
+        var Frame = X.FormPanel()
+            .Region(Region.Center)
+            .Frame(true)
+            .BodyPadding(10)
+            .ModelValidation(true)
+            .Layout(LayoutType.Form)
+            .Items(
+            X.Container().Layout(LayoutType.HBox).Items(X.TextFieldFor(m => m.Name).Flex(1), X.NumberFieldFor(m => m.TimeLimit).Flex(1)),
+            X.Container().ID("form").Items(
+
+
+                         X.Container().MarginSpec("5 0 5 0").Layout(LayoutType.HBox).Items(X.Label("审核人").Flex(1), X.Label("审核级别1").Flex(1), X.Label("审核级别2").Flex(1)),
+
+
+                         X.Container().MarginSpec("5 0 0 0").Layout(LayoutType.HBox).Items(X.ComboBox().Flex(1).AllowBlank(false)
+                         .TypeAhead(true).MinChars(0).HideTrigger(false).Name("[0].ID")
+                         .TriggerAction(TriggerAction.Query).DisplayField("Name").ValueField("ID")
+                         .ListConfig(X.BoundList().LoadingText("查找中...").ItemTpl(X.XTemplate()
+                         .Html(@<text>
+                                    <div class="search-item">
+                                        <h3><span>姓名：{Name}</span> 工号：{ID}</h3>
+                                    </div>
+                                            </text>)))
+                                                    .Store(store)
+                            ,
+                                X.NumberField().Name("[0].lvl1").AllowBlank(false).MinValue(1).Flex(1),
+                                X.NumberField().Name("[0].lvl2").AllowBlank(false).MinValue(1).Flex(1))),
+
+
+                        X.Container().MarginSpec("5 0 5 0").Layout(LayoutType.HBox).LayoutConfig(new HBoxLayoutConfig() { Align = HBoxAlign.Middle }).Items(X.Button().Icon(Icon.Add).Text("新增审核人").DirectEvents(de => { de.Click.Action = "PlusCheckPerson"; }), X.Component().Flex(1), X.CheckboxFor(m => m.Disable)),
+                        
+                        X.Container().MarginSpec("5 0 5 0").Layout(LayoutType.HBox).Items(X.TextFieldFor(m => m.Creator).Flex(1), X.DateFieldFor(m => m.CreatTime).Flex(1)),
+                              
+                        X.Container().MarginSpec("5 0 5 0").Layout(LayoutType.HBox).Items(X.TextAreaFor(m => m.Description).Flex(1))
+            )
+                 .Buttons(
+                 Html.X().Button()
+                     .Text("Cancel")
+                     .DirectEvents(de =>
+                     {
+                         de.Click.Action = "Cancel";
+                         de.Click.Success = string.Format("parent.App.{0}.close()", ViewBag.winname);
+                         de.Click.EventMask.ShowMask = true;
+                     }
+                     ),
+                 Html.X().Button()
+                 .FormBind(true)
+                     .Text("Submit")
+                     .DirectEvents(de =>
+                     {
+                         de.Click.Action = "Submit";
+                         de.Click.Success = string.Format("parent.App.{0}.close()", ViewBag.winname);
+                         de.Click.Failure = "Ext.Msg.alert('页面信息', '输入的审核人信息有误！').Show();";
+                         de.Click.EventMask.ShowMask = true;
+                     }
+                     )
+                 );
+}
+    @(X.Viewport().Layout(LayoutType.Border).Items(Frame))
+}

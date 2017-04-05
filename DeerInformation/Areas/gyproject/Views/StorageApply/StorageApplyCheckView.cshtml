@@ -1,0 +1,148 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+
+    var onSuccess = function (grid, data) {
+
+        grid.show();
+        grid.getStore().loadData(data);
+
+    };
+
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>MaterialInfo</title>
+</head>
+
+<body>
+    <div>
+       @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default) 
+
+       @(X.Panel().Layout(LayoutType.Table).Title("材料入库信息").Items(
+       
+           X.FormPanel().Height(530).Items(
+           X.FormPanel().Layout(LayoutType.Column).Region(Region.Center).Items(
+           
+                  X.ComboBox().ID("Status").Editable(false).FieldLabel("审核状态").Items(new ListItem("未审核"),new ListItem("审核通过"),new ListItem("审核未通过")).Value("").EmptyText ("点击选择审核状态"),
+           
+                 X.Button().Icon(Icon.ApplicationGo).Text("查询").DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("Select");
+                    de.Click.Success = "onSuccess(App.GridPanel1, result.data);";
+                    de.Click.ExtraParams.Add(new Parameter("status", "App.Status.getValue()", ParameterMode.Raw));
+                    de.Click.EventMask.ShowMask = true;
+                })
+      ),
+         X.FormPanel().Items( 
+         X.GridPanel()
+         .ID("GridPanel1")
+         .Collapsible(true)
+         .Store(
+            X.Store().ID ("StorageApplySelect")
+             .DataSource(Model)
+             .PageSize(10)
+          
+             .Model(
+                 X.Model()
+                  .IDProperty("ApplyNo")
+                  .Fields(
+                    new ModelField("ApplyNo", ModelFieldType.String ),
+                    new ModelField("ApplyMan", ModelFieldType.String ),
+                    new ModelField("ApplyDate", ModelFieldType.String),
+                    new ModelField("CheckMan", ModelFieldType.String),
+                    new ModelField("CheckDate", ModelFieldType.String),
+                    new ModelField("CheckStatus", ModelFieldType.String),
+                    new ModelField("Extra", ModelFieldType.String)
+                          )
+                   )
+             .Reader(
+                    X.JsonReader().RootProperty("data")
+                   )
+           )
+         .ColumnModel(
+               X.Column()
+                .Text("申请单编号")
+                .Width(138)
+                .DataIndex("ApplyNo"),
+
+               X.Column()
+                .Text("申请人")
+                .Width(138)
+                .DataIndex("ApplyMan"),
+
+               X.Column()
+                .Text("申请日期")
+                .Width(138)
+                .Renderer(RendererFormat.Date, new string[] { "'Y-n-j'" })
+                .DataIndex("ApplyDate"),
+                
+               X.Column()
+                .Text("复核人")
+                .Width(138)
+                .DataIndex("CheckMan"),
+                
+               X.Column()
+                .Text("复核日期")
+                .Width(138)
+                .Renderer(RendererFormat.Date, new string[] { "'Y-n-j'" })
+                .DataIndex("CheckDate"),
+                
+               X.Column()
+                .Text("复核状态")
+                .Width(138)
+                .DataIndex("CheckStatus"),
+                
+               X.Column()
+                .Text("备注")
+                .Width(150)
+                .DataIndex("Extra"),
+                
+                
+                Html.X().CommandColumn()
+                                            .Width(103)
+                                            .Commands(
+                                                 Html.X().GridCommand()
+                                                .CommandName("edit")
+                                                .Icon(Icon.CommentEdit)
+                                                .MinWidth(103)
+                                                .Text("审核")
+                                            )
+                                           .DirectEvents(de => {
+                                               de.Command.Url = Url.Action("ClickEdit", "StorageApply");
+                                               de.Command.ExtraParams.Add(new Parameter("id", "record.data.ApplyNo", ParameterMode.Raw));
+                                           })                                                                      
+        )
+       
+        
+          .SelectionModel(
+                                          X.SpreadsheetSelectionModel()
+                                           .ID("SpreadsheetSelectionModel1")
+                                           .ColumnSelect(true)
+                                           .CheckboxSelect(true)
+                                           .PruneRemoved(false)
+                                           .Extensible(SpreadsheetExtensible.Y)
+
+                             )                                    
+                                                      
+                         )
+     
+                    )
+      
+              )
+        )
+    
+   
+
+
+    </div>
+</body>
+</html>

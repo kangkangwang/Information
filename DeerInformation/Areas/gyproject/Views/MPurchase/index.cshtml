@@ -1,0 +1,205 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    ViewBag.Title = "采购单管理界面";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+    <script>
+        var deletempurchase = function (id) {
+            Ext.MessageBox.confirm("提示", "确认删除该项？", function (but) {
+                if (but == "yes") {
+                    App.direct.gyproject.DeleteMPurchase(id);
+                    App.direct.gyproject.MPurchaseReload();
+                }
+            });
+        };
+       
+        var onSuccess = function (grid, data) {
+            grid.show();
+            grid.getStore().loadData(data);
+        };
+    </script>
+}
+
+@section content{
+@X.Window().ID("deleteType").Layout(LayoutType.HBox).Title("页面消息").Hidden(true).Width(200).Height(70).LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Middle, Pack = BoxPack.Center }).BodyPadding(5).Defaults(X.Parameter().Name("margin").Value("0 5 0 0").Mode(ParameterMode.Value)).Items(
+                X.Button().Text("退回到请购").DirectEvents(l =>
+                    {
+                        l.Click.Action = "DelPurOpr";
+                        l.Click.After = "this.up('window').close();";
+                        l.Click.ExtraParams.Add(new Parameter() { Name = "back", Value = "yes", Mode = ParameterMode.Value });
+                    })
+,
+                X.Button().Text("不退回请购").DirectEvents(l =>
+                {
+                    l.Click.Action = "DelPurOpr";
+                    l.Click.After = "this.up('window').close();";
+                    l.Click.ExtraParams.Add(new Parameter() { Name = "back", Value = "no", Mode = ParameterMode.Value });
+                })
+)
+        @(X.Viewport().Layout(LayoutType.Auto).Items(
+        X.Toolbar().Frame(true).Border(false).Layout(LayoutType.HBox).Items(
+            X.TextField().FieldLabel("项目编号").LabelWidth(60).ID("no").Flex(3),
+            X.TextField().FieldLabel("采购单号").LabelWidth(60).ID("field").Flex(3),
+            X.TextField().FieldLabel("经办人").LabelWidth(60).ID("operatorname").Flex(3),
+            X.DateField().FieldLabel("开始时间").LabelWidth(60).ID("start").Flex(3),
+            X.DateField().FieldLabel("结束时间").LabelWidth(60).ID("end").Flex(3),
+            X.Button().Text("查询").ID("btninquire").Icon(Icon.ApplicationGo).Flex(1).DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("MPurchaseQuery");
+                        de.Click.Success = "onSuccess(App.GridPanel1, result.data);";
+                        de.Click.ExtraParams.Add(new Parameter("addno", "App.no.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("addfield", "App.field.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("start", "App.start.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("end", "App.end.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("operatorname", "App.operatorname.getValue()", ParameterMode.Raw));
+                        de.Click.EventMask.ShowMask = true;
+                    }),
+                    X.ToolbarFill().Flex(1),
+                    X.Button().Text("录入客户回复日期").Flex(1).MinWidth(80).Icon(Icon.Add).DirectEvents(de =>
+                            {
+                                de.Click.Url = Url.Action("MPurSupAckDate");
+                                de.Click.EventMask.ShowMask = true;
+                            }),
+            X.Button().Text("配置供货商").Flex(1).MinWidth(80).Icon(Icon.Add).DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("MDeploy");
+                        de.Click.EventMask.ShowMask = true;
+                    }),
+            X.Button().Text("仓库调拨").Flex(1).Icon(Icon.Add).DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("MEXWarehouse");
+                        de.Click.EventMask.ShowMask = true;
+                    })
+
+    ),
+            X.FormPanel().Layout(LayoutType.Auto).Region(Region.Center).Items(
+            X.GridPanel().ID("GridPanel1").Border(false)
+            .BottomBar(X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true)).Store(
+                        X.Store().ID("MPurchaseStore").DataSource(Model).PageSize(20).Model(
+                                X.Model().IDProperty("GID").Fields(
+                                            new ModelField("GID", ModelFieldType.String),
+                                            new ModelField("PurchaseMNo", ModelFieldType.String),
+                                            new ModelField("SupplierName", ModelFieldType.String),
+                                            new ModelField("ProjectNo", ModelFieldType.String),
+                                            new ModelField("ProjectName", ModelFieldType.String),
+                                            new ModelField("ApplyMaterialNo", ModelFieldType.String),
+                                            new ModelField("OrderType", ModelFieldType.String),
+                                            new ModelField("PrepaidDay", ModelFieldType.String),
+                                            new ModelField("Remark", ModelFieldType.String),
+                                            new ModelField("Name", ModelFieldType.String),
+                                            new ModelField("OperateTime", ModelFieldType.String),
+                                            new ModelField("OrderStatu", ModelFieldType.String),
+                                            new ModelField("IsEnableNo", ModelFieldType.String),
+                                            new ModelField("ReceiptMethod", ModelFieldType.String),
+                                            new ModelField("CheckProcess", ModelFieldType.String)
+                                    )).Reader(X.JsonReader().RootProperty("data"))
+                                    )
+                                    .ColumnModel(
+                                     X.Column().Hidden(true)
+                                    .DataIndex("GID"),
+
+                                    X.Column()
+                                    .Text("采购单号").Flex(3)
+                                    .DataIndex("PurchaseMNo"),
+
+                                    X.Column()
+                                    .Text("供货商").Flex(2)
+                                    .DataIndex("SupplierName"),
+
+                                    X.Column()
+                                    .Text("项目编号").Flex(3)
+                                    .DataIndex("ProjectNo"),
+
+                                     X.Column()
+                                    .Text("项目名称").Flex(3)
+                                    .DataIndex("ProjectName").Hidden(true),
+
+                                    X.Column()
+                                    .Text("申请单号")
+                                    .Flex(3)
+                                    .DataIndex("ApplyMaterialNo"),
+
+                                     X.Column()
+                                    .Text("审核状态")
+                                    .Flex(2)
+                                    .DataIndex("IsEnableNo"),
+
+                                     X.Column()
+                                    .Text("采购单状态")
+                                    .Flex(2)
+                                    .DataIndex("OrderStatu"),
+
+                                     X.Column()
+                                    .Text("收货方式")
+                                    .Flex(2)
+                                    .DataIndex("ReceiptMethod"),
+
+                                     X.Column()
+                                    .Text("订单类型")
+                                    .Flex(2)
+                                    .DataIndex("OrderType"),
+
+                                    X.Column()
+                                    .Text("经办人")
+                                    .Flex(2)
+                                    .DataIndex("Name"),
+
+                                    X.Column()
+                                    .Text("经办时间")
+                                    .Flex(2).Renderer(RendererFormat.Date, new string[] { "'Y-n-j'" })
+                                    .DataIndex("OperateTime"),
+
+                                    X.Column()
+                                    .Text("预交日")
+                                    .Flex(3).Renderer(RendererFormat.Date, new string[] { "'Y-n-j'" })
+                                    .DataIndex("PrepaidDay").Hidden(true),
+
+                                    X.CommandColumn().Region(Region.Center).Text("查看采购单详情").Flex(3).Commands(
+                                                    X.GridCommand().CommandName("detail").Icon(Icon.ApplicationCascade).Text("明细"))
+                                                        .DirectEvents(de =>
+                                                        {
+                                                            de.Command.Url = Url.Action("MDetail", "Share");
+                                                            de.Command.ExtraParams.Add(new Parameter("gid", "record.data.GID", ParameterMode.Raw));
+                                                            de.Command.ExtraParams.Add(new Parameter("title", "采购单物料明细", ParameterMode.Value));
+                                                        }),
+
+                                    X.CommandColumn().Text("导出采购单").Flex(3).Commands(
+                                                    X.GridCommand().CommandName("detail").Icon(Icon.ApplicationCascade).Text("导出"))
+                                                        .DirectEvents(de =>
+                                                        {
+                                                            de.Command.Url = Url.Action("PurchaseM", "Purchase", new { area = "reportforms" });
+                                                            de.Command.ExtraParams.Add(new Parameter("id", "record.data.GID", ParameterMode.Raw));
+                                                            de.Command.ExtraParams.Add(new Parameter("format", "Excel", ParameterMode.Value));
+                                                            de.Command.IsUpload = true;
+                                                        }),
+
+                                  X.CommandColumn().Text("修改采购单").Hidden(true).Region(Region.Center).Flex(3).Commands(
+                                                            X.GridCommand().CommandName("modify")
+                                                        .Icon(Icon.ApplicationEdit).Text("修改"))
+                                                                .DirectEvents(de =>
+                                                                {
+                                                                    de.Command.Url = Url.Action("ShareModify", "Share");
+                                                                    de.Command.ExtraParams.Add(new Parameter("gid", "record.data.GID", ParameterMode.Raw));
+                                                                    de.Command.ExtraParams.Add(new Parameter("controllername", "MPurchase", ParameterMode.Value));
+                                                                }),
+
+                                 X.CommandColumn().Region(Region.Center).Text("取消采购单").Flex(3).Commands(
+                                                    X.GridCommand().CommandName("delete").Icon(Icon.ApplicationDelete).Text("取消"))
+                                                    .DirectEvents(de =>
+                                                    {
+                                                        de.Command.Action = "DeletePurchase";
+                                                        de.Command.ExtraParams.Add(new Parameter("id", "record.data.GID", ParameterMode.Raw));
+                                                        de.Command.Success = "App.deleteType.show();";
+                                                        de.Command.Confirmation.ConfirmRequest = true;
+                                                        de.Command.Confirmation.Title = "警告";
+                                                        de.Command.Confirmation.Message = "是否确认取消本采购单！取消后系统将永久删除采购单所以内容";
+                                                    })
+                                                )
+                            )
+                            )
+    )
+}

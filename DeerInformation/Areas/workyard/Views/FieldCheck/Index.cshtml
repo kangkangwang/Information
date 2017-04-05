@@ -1,0 +1,117 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    ViewBag.Title = "FieldCheckAuditView";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+<script>
+
+    var onSuccess = function (grid, data) {
+        grid.show();
+        grid.getStore().loadData(data);
+    };
+
+</script>    
+}
+
+@section content{
+
+    @{
+    var panel1=X.Container().Layout(LayoutType.HBox).AutoScroll(true).Items(
+                X.TextField().ID("MaterialName").FieldLabel("项目编号"),
+                //X.ComboBox().ID("Size").FieldLabel("审核状态").Items("审核通过","审核驳回","未审核"),
+                X.ComboBox().ID("handle").FieldLabel("处理结果").Items("已处理", "未处理"),
+
+                X.Button().Icon(Icon.ApplicationGo).Text("查询").DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("Search");
+                    de.Click.Success = "onSuccess(App.GridPanel1, result.data);";
+                    de.Click.ExtraParams.Add(new Parameter("materialname", "App.MaterialName.getValue()", ParameterMode.Raw));
+                    //de.Click.ExtraParams.Add(new Parameter("size", "App.Size.getValue()", ParameterMode.Raw));
+                    de.Click.ExtraParams.Add(new Parameter("handle", "App.handle.getValue()", ParameterMode.Raw));
+                    de.Click.EventMask.ShowMask = true;
+                })
+        );
+
+    var panel2 = X.FormPanel().Layout(LayoutType.Auto).AutoScroll(true).Items(
+            X.GridPanel().ID("GridPanel1")
+            .BottomBar(X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true)).Store(
+                    X.Store().ID("AuditMarkTable").DataSource(Model).PageSize(10).Model(
+                           X.Model().IDProperty("ID").Fields(
+                                            new ModelField("ID", ModelFieldType.String),
+                                            new ModelField("Xaxes", ModelFieldType.Int),
+                                            new ModelField("Yaxes", ModelFieldType.Int),
+                                            new ModelField("ProjectNo", ModelFieldType.String),
+                                            new ModelField("WorkPlace", ModelFieldType.String),
+                                            new ModelField("IsHandled", ModelFieldType.String),
+                                            new ModelField("HandleDes", ModelFieldType.String),
+                                            new ModelField("WarnLevel", ModelFieldType.String),
+                                            new ModelField("Mark", ModelFieldType.String),
+                                            new ModelField("HandlePicPath", ModelFieldType.String),
+                                            new ModelField("ExcPicPath", ModelFieldType.String),
+                                            new ModelField("ExceptionDes", ModelFieldType.String),
+                                            new ModelField("ExceptionHandleSug", ModelFieldType.String),
+                                            new ModelField("AuditResult", ModelFieldType.String),
+                                            new ModelField("Remark", ModelFieldType.String),
+                                            new ModelField("ReportMan", ModelFieldType.String),
+                                            new ModelField("ReportTime", ModelFieldType.Date),
+                                            new ModelField("HandleMan", ModelFieldType.String),
+                                            new ModelField("HandleTime", ModelFieldType.Date),
+                                            new ModelField("AuditMan", ModelFieldType.String),
+                                            new ModelField("AuditTime", ModelFieldType.Date)))
+                             .Reader(X.JsonReader().RootProperty("data")))
+                                            .ColumnModel(
+                                                X.Column().DataIndex("ID").Hidden(true),
+                                                   X.Column()
+                                                    .Text("项目编号")
+                                                    .Flex(1)
+                                                    .DataIndex("ProjectNo"),
+
+                                                    X.Column()
+                                                    .Text("现场")
+                                                    .Flex(1)
+                                                    .DataIndex("WorkPlace"),
+ 
+                                                   X.Column()
+                                                    .Text("异常编号")
+                                                    .Flex(1)
+                                                    .DataIndex("WarnLevel"),
+
+                                                   //X.Column()
+                                                   // .Text("异常类型")
+                                                   // .Flex(1)
+                                                   // .DataIndex("Mark"),
+
+                                                    X.Column().DataIndex("ReportMan").Text("上传人").Flex(1),
+                                                    X.Column().DataIndex("ReportTime").Text("上传时间").Flex(1),
+                                                    
+                                                     X.Column()
+                                                    .Text("是否改正")
+                                                    .Flex(1)
+                                                    .DataIndex("IsHandled"),
+                                                    
+                                                //     X.Column()
+                                                //.Text("处理结果")
+                                                //.Flex(1)
+                                                //.DataIndex("HandleDes"),
+
+                                                 X.Column().DataIndex("HandleMan").Text("处理人").Flex(1),
+                                                 X.Column().DataIndex("HandleTime").Text("处理时间").Flex(1),
+
+                                                X.Column()
+                                                .Text("审核结果")
+                                                .Flex(1)
+                                                .DataIndex("AuditResult"),
+
+                                                X.HyperlinkColumn().Flex(2).DataIndex("HandleDes").DataIndexHref("HandlePicPath").Text("异常处理附件").HrefTarget("_blank"),
+                                                X.HyperlinkColumn().Flex(2).DataIndex("Mark").DataIndexHref("ExcPicPath").Text("异常标记附件").HrefTarget("_blank")
+
+    ));
+    }
+
+    @(X.Viewport().Layout(LayoutType.Auto).Region(Region.Center).Items(panel1, panel2))
+
+}

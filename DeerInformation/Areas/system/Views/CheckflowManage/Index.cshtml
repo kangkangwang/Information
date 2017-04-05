@@ -1,0 +1,165 @@
+﻿@model CheckflowManage
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+    <script>
+        var addjs = function () {
+            Ext.USE_NATIVE_JSON = true;
+
+            var result = App.grid.getSelectionModel().getSelection();
+
+            var datas = new Array();
+
+            for (var i = 0; i < result.length; i++) {
+                datas[i] = Ext.encode(result[i].data);
+            }
+            return Ext.encode(datas);
+        };
+    </script>
+}
+
+@section content
+{
+    @{var btn = X.Toolbar().Flex(1)
+                .Shadow(true)
+                .ID("pnlPackEnd")
+                .Layout(LayoutType.HBox)
+                .Defaults(X.Parameter().Name("margin").Value("0 5 0 0").Mode(ParameterMode.Value))
+                .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Middle, Pack = BoxPack.End })
+                .Items(
+                    X.Toolbar().Border(false).Flex(1).Layout(LayoutType.HBox).Items(
+                    X.ComboBox()
+                    .ID("checkfuncs")
+                    .FieldLabel("审核功能")
+                    .DisplayField("Name")
+                    .ValueField("ID")
+                    .Store(
+                    X.Store().ID("functions").Fields("Name", "ID").DataSource(Model.checkfuncs)
+                    ),
+                    X.Button().Text("查询").Icon(Icon.Find)
+                    .DirectEvents(de => {
+                        de.Click.Action = "Select";
+                        de.Click.ExtraParams.Add(new Parameter() { Name = "checkfunc", Value = "App.checkfuncs.getValue()", Mode = ParameterMode.Raw });
+                        de.Click.EventMask.ShowMask = false;
+                    })
+                    ),
+                    X.Button().Text("添加").Icon(Icon.GroupAdd)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Action = "Create";
+                        de.Click.ExtraParams.Add(new Parameter() { Name = "checkfunc", Value = "App.checkfuncs.getValue()", Mode = ParameterMode.Raw });
+                        de.Click.EventMask.ShowMask = true;
+
+                    })
+                    ,
+                    X.Button().Text("修改").Icon(Icon.GroupEdit).DirectEvents(de =>
+                    {
+                        de.Click.Action = "Update";
+                        de.Click.EventMask.ShowMask = true;
+                        de.Click.ExtraParams.Add(new Parameter()
+                        {
+                            Name = "id",
+                            Mode = ParameterMode.Raw,
+                            Value = "App.grid.getSelectionModel().getSelection()[0].data.ID"
+
+                        }
+                            );
+                    }),
+                    X.Button().Text("删除").Icon(Icon.GroupDelete).DirectEvents(de =>
+                    {
+                        de.Click.Action = "Delete";
+                        de.Click.EventMask.ShowMask = true;
+                        de.Click.Confirmation.ConfirmRequest = true;
+                        de.Click.Confirmation.Message = "是否确定删除选择项！";
+                        de.Click.ExtraParams.Add(new Parameter()
+                        {
+                            Name = "selection",
+                            Mode = ParameterMode.Raw,
+                            Value = "addjs"
+
+                        }
+                            );
+                    }),
+                    X.Button().Text("更新").Icon(Icon.TableRefresh).DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("Select");
+                        de.Click.ExtraParams.Add(new Parameter() { Name = "checkfunc", Value = "App.checkfuncs.getValue()", Mode = ParameterMode.Raw });
+                        de.Click.EventMask.ShowMask = false;
+                    })
+
+                );
+}
+@(X.Viewport().AutoRender(true).Layout(LayoutType.Border).Items(
+    X.Panel().Region(Region.North).Border(false).PaddingSpec("2 2 2 2").Items(btn),
+    X.Container().ID("system_main").Region(Region.Center).Layout(LayoutType.Anchor)
+            .Items(X.GridPanel()
+                .ID("grid")
+                .AnchorHorizontal("100%")
+                .Store(X.Store()
+                .ID("storedata")
+                //.PageSize(Model.pagenum)
+                    .Model(X.Model()
+                    .IDProperty("ID")
+                        .Fields("ID", "CheckfuncName", "Name", "Time_limit", "Disable", "Creator", "CreatorTime", "Description")
+                    )
+                    .DataSource(Model.checkflows)
+
+                )
+                .ColumnModel(
+                         X.Column()
+                        .Text("ID")
+                        .Flex(1)
+                        .DataIndex("ID"),
+                            
+                        X.Column()
+                        .Text("功能名称")
+                        .Flex(1)
+                        .DataIndex("CheckfuncName"),
+
+                        X.Column()
+                        .Text("名称")
+                        .Flex(1)
+                        .DataIndex("Name"),
+                                    
+                        X.Column()
+                        .Text("过期时长")
+                        .Flex(1)
+                        .DataIndex("Time_limit"),
+                        
+                        X.Column()
+                        .Text("禁用")
+                        .Flex(1)
+                        .DataIndex("Disable"),
+                        
+                        X.Column()
+                        .Text("创建人")
+                        .Flex(1)
+                        .DataIndex("Creator"),
+                        
+                        X.DateColumn()
+                        .Text("创建时间")
+                        .Flex(1).Format("yyyy/MM/dd HH:mm:ss")
+                        .DataIndex("CreatorTime"),
+                        
+                        X.Column()
+                        .Text("功能描述")
+                        .DataIndex("Description")
+                        .Resizable(false)
+                        .MenuDisabled(true)
+                        .Flex(2)
+
+                    )
+                    .SelectionModel(X.CheckboxSelectionModel().Mode(SelectionMode.Multi))
+
+
+
+    )
+)
+)
+}
+

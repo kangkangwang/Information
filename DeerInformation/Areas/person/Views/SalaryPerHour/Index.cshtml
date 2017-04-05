@@ -1,0 +1,187 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var reload = function () {
+        App.direct.person.SalaryPerHourReload();
+    };
+    var onSuccess = function (grid, data) {
+        grid.show();
+        grid.getStore().loadData(data);
+    };
+    var toggleRowSelect = function () {
+        App.SpreadsheetSelectionModel1.setRowSelect(false);
+        App.SpreadsheetSelectionModel1.setRowSelect(true);
+    };
+    var deletejs = function (selecteddata) {
+        if (selecteddata != "") {
+            Ext.MessageBox.confirm("提示", "确认删除该项？", function (but) {
+                if (but == "yes") {
+                    App.direct.person.JSDeleteSalaryPerHour(selecteddata);
+                    App.SpreadsheetSelectionModel1.setRowSelect(false);
+                    App.SpreadsheetSelectionModel1.setRowSelect(true);
+                    App.direct.person.SalaryPerHourReload();
+                    App.SalaryPerHourGridPanal.show();
+                    App.SalaryPerHourGridPanal.getStore().loadData(result.data);
+                }
+            });
+        }
+        else {
+            Ext.Msg.alert("提示", "未选择任何列！");
+        }
+    }
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SalaryPerHour</title>
+</head>
+
+<body>
+    <div>
+        @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+
+        @(X.Viewport().ID("BackViewPort")
+        .Layout(LayoutType.Border)
+        .Items(
+      X.Panel().AutoScroll(true).Region(Region.Center).Title("薪资结构").Items(
+       X.FormPanel().Layout(LayoutType.Column).Items(
+                   X.DateField().ID("ValidTime")
+                   .FieldLabel("生效时间"),
+                   X.ComboBox().ID("StaffType")
+                   .FieldLabel("员工类型").Items(new ListItem("间接员工"), new ListItem("直接员工")),
+           X.Button().Text("查询").DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("Getalldata");
+                    de.Click.Success = "onSuccess(App.SalaryPerHourGridPanal, result.data);";
+                    de.Click.ExtraParams.Add(new Parameter("validtime", "App.ValidTime.getValue()", ParameterMode.Raw));
+                    de.Click.ExtraParams.Add(new Parameter("stafftype", "App.StaffType.getValue()", ParameterMode.Raw));
+                    de.Click.EventMask.ShowMask = true;
+                }),
+                   X.Button().Text("添加")
+                            .DirectEvents(de =>
+                              {
+                                  de.Click.Url = Url.Action("Add");
+                              }),
+                            X.Button().Text("删除").Listeners(l =>
+                        {
+                            l.Click.Handler = "deletejs(App.SpreadsheetSelectionModel1.getSubmitData());";
+                        })
+       ),
+                       X.GridPanel().ID("SalaryPerHourGridPanal").AutoScroll(true).ColumnLines(true)
+                                      .Store(
+                                         X.Store().ID("SalaryPerHourStore")
+                                                  .AutoLoad(true)
+                                                  .DataSource(Model)
+                                           .Model(
+                                                     X.Model().Fields(
+                                                             new ModelField("ID", ModelFieldType.String),
+                                                             new ModelField("SalaryPerTime", ModelFieldType.Float),
+                                                             new ModelField("StaffStype", ModelFieldType.String),
+                                                             new ModelField("IsValid", ModelFieldType.Boolean),
+                                                             new ModelField("ValidTime", ModelFieldType.Date),
+                                                             new ModelField("Remark", ModelFieldType.String),
+                                                             new ModelField("CreaterName", ModelFieldType.String),
+                                                             new ModelField("CreateTime", ModelFieldType.Date),
+                                                             new ModelField("EditorName", ModelFieldType.String),
+                                                             new ModelField("EditorTime", ModelFieldType.Date)
+                                                     )
+                                                  )
+                                          .Reader(
+                                                      X.JsonReader().RootProperty("data")
+                                                      )
+
+                                  )
+                                      .SelectionModel(
+                                          X.SpreadsheetSelectionModel()
+                                           .ID("SpreadsheetSelectionModel1")
+                                           .CheckboxSelect(true)
+                                           .PruneRemoved(false)
+                                           .Extensible(SpreadsheetExtensible.Y)
+                                           .CellSelect(false)
+                                           .ColumnSelect(false)
+                                       )
+                                        .ViewConfig(X.GridView().TrackOver(false))
+                                .ColumnModel(
+                                        X.Column()
+                                        .Text("ID")
+                                        .Width(80)
+                                        .DataIndex("ID").Hidden(true),
+
+                                        X.Column()
+                                       .Text("员工类型")
+                                       .Width(155)
+                                       .DataIndex("StaffStype"),
+
+                                       X.Column()
+                                       .Text("工资(元)")
+                                       .Width(155)
+                                       .DataIndex("SalaryPerTime"),
+
+                                       X.Column()
+                                       .Text("是否生效")
+                                       .Width(155)
+                                       .DataIndex("IsValid").Hidden(true),
+                                       
+                                       X.Column()
+                                      .Text("生效时间")
+                                      .Width(155)
+                                      .Renderer(RendererFormat.Date, new string[] { "'Y-m-d'" })
+                                      .DataIndex("ValidTime"),
+
+                                      X.Column()
+                                      .Text("备注")
+                                      .Width(155)
+                                      .DataIndex("Remark"),
+
+                                      X.Column()
+                                      .Text("创建人")
+                                      .Width(155)
+                                      .DataIndex("CreaterName"),
+
+                                      X.Column()
+                                      .Text("创建时间")
+                                      .Width(155)
+                                      .Renderer(RendererFormat.Date, new string[] { "'Y-m-d H:m:s'" })
+                                      .DataIndex("CreateTime"),
+
+                                      X.Column()
+                                      .Text("修改人")
+                                      .Width(155)
+                                      .DataIndex("EditorName"),
+
+                                      X.Column()
+                                      .Text("修改时间")
+                                      .Width(155)
+                                      .Renderer(RendererFormat.Date, new string[] { "'Y-m-d H:m:s'" })
+                                      .DataIndex("EditorTime"),
+
+                                      X.CommandColumn()
+                                      .Width(80)
+                                      .Commands(
+                                                 Html.X().GridCommand()
+                                                .CommandName("update")
+                                                .Icon(Icon.UserEdit)
+                                                .Text("修改")
+                                            )
+                                           .DirectEvents(de =>
+                                           {
+                                               de.Command.Url = Url.Action("Update");
+                                               de.Command.ExtraParams.Add(new Parameter("id", "record.data.ID", ParameterMode.Raw));
+                                           })
+
+                                )
+         )
+        )
+        )
+
+
+    </div>
+</body>
+</html>

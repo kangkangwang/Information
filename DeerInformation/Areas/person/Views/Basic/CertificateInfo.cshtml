@@ -1,0 +1,127 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CertificateInfo</title>
+</head>
+
+<body>
+    <div>
+        @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+
+        @(X.Viewport().ID("BackViewPort")
+        .Layout(LayoutType.Border)
+        .Items(
+      X.Panel().Region(Region.Center).AutoScroll(true).Items(
+                       X.GridPanel().ID("CertificateGridPanel").AutoScroll(true).ColumnLines(true)
+                                      .Store(
+                                         X.Store().ID("CertificateStore").PageSize(3)
+                                                  .AutoLoad(true)
+                                                  .DataSource(Model)
+                                           .Model(
+                                                     X.Model().IDProperty("ID").Fields("ID", "StaffID", "Name", "CertificateName", "CertificateNum"
+                              , "Deadline", "CerImage", "Remark", "CreaterName", "CreateTime", "EditorName", "EditeTime")
+                                                  )
+
+                                                  .Reader(
+                                                              X.JsonReader().RootProperty("data")
+                                                              )
+
+                                  )
+                                      .SelectionModel(
+                                          X.SpreadsheetSelectionModel()
+                                           .ID("SpreadsheetSelectionModel1")
+                                           .CheckboxSelect(true)
+                                           .PruneRemoved(false)
+                                           .Extensible(SpreadsheetExtensible.Y)
+                                           .CellSelect(false)
+                                           .ColumnSelect(false)
+                                       )
+                                        .ViewConfig(X.GridView().TrackOver(false))
+                                                 .BottomBar(
+                                Html.X().PagingToolbar().HideRefresh(true)
+                            )
+                                .ColumnModel(
+                                               X.Column()
+                                               .Text("ID")
+                                               .Width(55)
+                                               .DataIndex("ID").Hidden(true),
+
+                                               X.Column()
+                                               .Text("工号")
+                                               .Width(55)
+                                               .DataIndex("StaffID").Hidden(true),
+
+                                               X.Column()
+                                               .Text("姓名")
+                                               .Width(55)
+                                               .DataIndex("Name").Hidden(true),
+
+                                               X.Column()
+                                               .Text("证书名称")
+                                               .Width(55)
+                                               .DataIndex("CertificateName"),
+
+                                               X.Column()
+                                               .Text("证书编号")
+                                               .Width(55)
+                                               .DataIndex("CertificateNum"),
+
+                                               X.DateColumn()
+                                              .Text("截止日期")
+                                              .Width(55)
+                                              .Format("yyyy-MM-dd")
+                                              .DataIndex("Deadline"),
+
+                                             X.HyperlinkColumn().DataIndex("CertificateName").DataIndexHref("CerImage").Text("附件").HrefTarget("_blank"),
+
+                                               X.Column()
+                                               .Text("备注")
+                                               .Width(55)
+                                               .DataIndex("Remark"),
+
+                                                      X.Column()
+                                                      .Text("创建人")
+                                                      .Width(55)
+                                                      .DataIndex("CreaterName").Hidden(true),
+
+                                                      X.DateColumn()
+                                                      .Text("创建时间")
+                                                      .Width(55)
+                                                      .Format("yyyy-MM-dd HH:mm:ss")
+                                                      .DataIndex("CreateTime").Hidden(true),
+
+                                                      X.Column()
+                                                      .Text("修改人")
+                                                      .Width(55)
+                                                      .DataIndex("EditorName").Hidden(true),
+
+                                                      X.DateColumn()
+                                                       .Text("修改时间")
+                                                       .Width(55)
+                                                       .Format("yyyy-MM-dd HH:mm:ss")
+                                                       .DataIndex("EditeTime").Hidden(true)
+                                )
+                  )
+        )
+        )
+
+
+    </div>
+</body>
+</html>
+
+
+
+

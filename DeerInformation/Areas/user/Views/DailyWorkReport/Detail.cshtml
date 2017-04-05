@@ -1,0 +1,84 @@
+﻿@model DeerInformation.Areas.user.Models.DailyWorkReportModel
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+}
+
+@section content
+{
+    @{
+        var store = Html.X().Store().ID("CheckerStore")
+            .AutoLoad(false)
+            .Proxy(Html.X().AjaxProxy()
+                .Url(Url.Action("GetEmployee"))
+                .ActionMethods(am => am.Read = HttpMethod.POST)
+                .Reader(Html.X().JsonReader().RootProperty("data"))
+            ).Model(Html.X().Model()
+                .Fields(
+                    Html.X().ModelField().Name("Name"),
+                    Html.X().ModelField().Name("ID")
+                )
+            );
+
+        var content =
+                X.FormPanel()
+                .Layout(LayoutType.Column)
+                .BodyPadding(10)
+                .Frame(true)
+                .FieldDefaults(l =>
+                {
+                    l.LabelWidth = 70; l.LabelAlign = LabelAlign.Right;
+                    l.ReadOnly = true;
+                })
+                .Items(l =>
+                {
+                    l.Add(X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(X.TextFieldFor(m => m.ProjectNo).Editable(true)));
+                    l.Add(X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(X.TextFieldFor(m => m.ProjectName).Editable(true)));
+                    l.Add(X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(X.TextFieldFor(m => m.ProjectSite).Editable(true)));
+                    l.Add(X.Container().ColumnWidth(1).Layout(LayoutType.Column).Items(X.Container().ColumnWidth(0.5).Layout(LayoutType.Form).Items(X.DateFieldFor(m => m.Date)),
+                        X.Container().ColumnWidth(0.5).Layout(LayoutType.Form).Items(X.ComboBoxFor(m => m.CheckFlowId).Items(Model.CheckFlowItems))));
+                    l.Add(X.Container().ColumnWidth(1).Layout(LayoutType.Column).Items(
+                        X.Container().ColumnWidth(0.75).Layout(LayoutType.Form).Items(X.SliderFor(m => m.ProgressPercentage)),
+                        X.TextField().Name("num").Editable(false).Hidden(true).ID("EmployeeNum").ColumnWidth(0.1).Value(0)
+
+                        ));
+
+                    int i = 0;
+                    foreach (var item in Model.WorkHourses)
+                    {
+                        l.Add(X.Container().ID("Employees"+i++).ColumnWidth(1).Layout(LayoutType.Column)
+                          .Items(
+                              X.Container().ColumnWidth(1).Layout(LayoutType.Column)
+                                  .Items(
+                                      X.TextField().FieldLabel("工号").ColumnWidth(0.25).Value(item.EmployeeID),
+                                      X.TextField().FieldLabel("姓名").ColumnWidth(0.25).Value(item.EmployeeName),
+                                      X.NumberField().FieldLabel("正班工时").AllowBlank(false).ColumnWidth(0.25).Value(item.DutyHours),
+                                      X.NumberField().FieldLabel("加班工时").AllowBlank(false).ColumnWidth(0.25).Value(item.ExtraHours)
+                                  )));
+                    }
+
+                    l.Add(X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(X.TextAreaFor(m => m.Remark)));
+                    l.Add(X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(X.ComboBoxFor(m => m.CheckResult.State).Items(Model.CheckStateItems)));
+                    l.Add(X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(X.TextAreaFor(m => m.CheckResult.Description)));
+
+                }
+                    )
+            .Items(l =>
+            {
+                if (Model.AttachFile != null)
+                    l.Add(X.Container().ColumnWidth(1).Items(X.HyperlinkButton().Text("附件").Icon(Icon.Attach).HrefTarget("_blank").Href(Url.Content(Model.AttachFile))));
+            })
+            .Buttons(
+            X.Button().Text("关闭").Handler("parent.App.win.close();")
+            );
+    }
+
+    @(X.Viewport().Layout(LayoutType.Border).Items(
+        content.Region(Region.Center).AutoScroll(true))
+    )
+}

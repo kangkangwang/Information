@@ -1,0 +1,26 @@
+﻿@model DeerInformation.Models.T_GW_FieldImportantAttach
+
+@{
+    ViewBag.Title = "现场资料添加";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+        @( X.FormPanel().Layout(LayoutType.Auto).ID("BasicForm").Listeners(l => l.ValidityChange.Handler = "#{add}.setDisabled(!valid);").Items(
+                X.Container().ID("cc").Layout(LayoutType.Form).Items(
+                            X.ComboBoxFor(m => m.ProjectNo).LabelWidth(80).Items(ViewBag.prono).FieldLabel("项目编号").AllowBlank(false)))
+                            .Buttons(
+                                    X.Button().Icon(Icon.ApplicationGet).ID("add").Text("提交").Disabled(true)
+                                        .DirectEvents(de =>
+                                        {
+                                            de.Click.Url = Url.Action("FieldDataAdd");
+                                            de.Click.Success = "parent.App.window2.close()";
+                                            de.Click.EventMask.ShowMask = true;
+                                            de.Click.FormID = "FormPanel1";
+                                        }),
+
+                                      X.Button().Icon(Icon.ApplicationGet).ID("cancel").Text("取消")
+                                              .Listeners(l =>l.Click.Handler = "parent.App.window2.close()")
+                            ))
+}

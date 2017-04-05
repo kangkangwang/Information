@@ -1,0 +1,31 @@
+﻿@model DeerInformation.Models.V_GM_MPurchase
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+   @(
+        X.Panel().Title("物料采购单明细").Layout(LayoutType.HBox).AutoScroll(true).Items
+            (
+                X.Container().Layout(LayoutType.Anchor).Flex(2).DefaultAnchor("100%").MarginSpec("0 5 0 5").Items(
+                        X.TextFieldFor(m => m.PurchaseMNo).FieldLabel("采购单号").ReadOnly(true).Flex(1).LabelWidth(60),
+                        X.TextFieldFor(m => m.SupplierName).FieldLabel("供应商").ReadOnly(true).Flex(1).LabelWidth(60),
+                        X.TextFieldFor(m => m.ApplyMaterialNo).FieldLabel("申请单号").ReadOnly(true).Flex(1).LabelWidth(60),
+                        X.TextFieldFor(m => m.Tel).FieldLabel("联系电话").ReadOnly(true).Flex(1).LabelWidth(60),                       
+                        X.TextFieldFor(m => m.PrepaidDay).FieldLabel("预交日").ReadOnly(true).Flex(1).LabelWidth(60)
+                ),
+                X.Container().Layout(LayoutType.Anchor).Flex(2).DefaultAnchor("100%").MarginSpec("0 5 0 5").Items(
+                        X.TextFieldFor(m => m.ReceiptMethod).FieldLabel("收货方式").ReadOnly(true).Flex(1).LabelWidth(60),
+                        X.TextFieldFor(m => m.CheckProcess).FieldLabel("审核流程").ReadOnly(true).Flex(1).LabelWidth(60),
+                        X.TextFieldFor(m => m.OrderType).FieldLabel("订单类型").ReadOnly(true).Flex(1).LabelWidth(60),
+                        X.TextFieldFor(m => m.Name).FieldLabel("经办人").ReadOnly(true).Flex(1).LabelWidth(60),
+                        X.TextFieldFor(m => m.Remark).FieldLabel("备注").ReadOnly(true).Flex(1).LabelWidth(60)
+                )
+            )      
+    )
+    @(X.Panel().ID("panel"))
+}
+
+
+    

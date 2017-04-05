@@ -1,0 +1,84 @@
+﻿@model PaymentApply
+
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+    <script>
+        function fill(data) {
+            Ext.getCmp('CustomerName').setValue(data.ClientName);
+            Ext.getCmp('BudgetSum').setValue(data.OfferMoney);
+            Ext.getCmp('BudgetID').setValue(data.CustomerNo);
+            Ext.getCmp('ProjectID').setValue(data.ProjectNo);
+            Ext.getCmp('ProjectName').setValue(data.ProjectName);
+            PaymentApply.finance.GetPaidAmount(data.ProjectNo, {
+            success: function (result) {
+            Ext.getCmp('HaveReceive').setValue(result);
+            Ext.getCmp('RestAmount').setValue(data.OfferMoney - result);
+            
+            } });
+            App.Window1.hide();
+        }
+    </script>
+}
+@section content
+{
+    @(X.Window()
+          .ID("Window1")
+          .Loader(X.ComponentLoader()
+              .Url(Url.Action("Index", "ProjectSelection"))
+              .Mode(LoadMode.Frame)
+              .LoadMask(lm => lm.ShowMask = true)
+          )
+          .Icon(Icon.Application)
+          .Title("客户列表")
+          .Width(500)
+          .Height(500)
+          .CloseAction(CloseAction.Hide)
+          .Hidden(true))
+
+    @{
+        var content = Html.X().FormPanel().ID("form1")
+                .Layout(LayoutType.Form)
+                .Frame(true)
+                .BodyPadding(10)
+                .Items(
+                   X.TextFieldFor(m => m.CustomerName).Listeners(l => { l.Focus.Handler = "App.Window1.show();Ext.getCmp('CreateDate').focus();"; }),
+                   X.TextFieldFor(m => m.BudgetID).Editable(false),
+                   X.TextFieldFor(m => m.ProjectID).Editable(false),
+                   X.TextFieldFor(m => m.ProjectName).Editable(false),
+                   X.TextFieldFor(m => m.CompletionPercent).Editable(false),
+                   X.CheckboxFor(m => m.InvoiceOrnot),
+                   X.TextFieldFor(m => m.InvoiceNum),
+                   X.ComboBoxFor(m => m.InvoiceType).Items(Model.InvoiceTypeItems),
+                   X.TextFieldFor(m => m.InvoiceAmount),
+                   X.TextFieldFor(m => m.BudgetSum).Editable(false),
+                   X.TextFieldFor(m => m.HaveReceive).Editable(false),
+                   X.TextFieldFor(m => m.RestAmount).Editable(false),
+                   X.TextFieldFor(m => m.Creator),
+                   X.DateFieldFor(m => m.CreateDate),
+                   X.ComboBoxFor(m => m.PaymentState).Items("未收款", "已收款"),
+                   X.TextAreaFor(m => m.Remark),
+                   X.FileUploadField().ID("AnnetPath").Name("AnnetPath").Icon(Icon.Attach).Width(260).FieldLabel("附件").Text("选择文件")
+                )
+                    .Buttons(X.Button()
+                    .Text("添加")
+                            .DirectEvents(de =>
+                            {
+                                de.Click.Action = "Create";
+                                de.Click.Before = @"if (!#{form1}.getForm().isValid()) { return false; }
+                                Ext.Msg.wait('正在提交...', '上传中');";
+                                de.Click.FormID = "form1";
+                            })
+                    );
+    }
+
+    @(X.Viewport().Layout(LayoutType.Border).Items(
+                    content.Region(Region.Center).AutoScroll(true))
+    )
+
+}

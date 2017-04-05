@@ -1,0 +1,66 @@
+﻿@model DeerInformation.Models.V_HR_Fund
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var closewindow = function () {
+        parent.App.windowFund.close()
+    };
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddFund</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.HBox)
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                   X.Panel().Flex(9).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Border(false).Items(
+                      X.TextFieldFor(m => m.StaffID).ID("StaffID").FieldLabel("工号").AllowBlank(false).Editable(false),
+                      X.DateFieldFor(m => m.StartDate).FieldLabel("开始购买日期").Editable(false).AllowBlank(false).Format("Y-n-j"),
+                      X.TextFieldFor(m => m.Remark).FieldLabel("备注"),
+                      //X.TextFieldFor(m => m.Months).FieldLabel("已存月份").AllowBlank(true).Regex(@"^(\d{1,18}|\d{1,15})$"),
+                      X.TextFieldFor(m => m.ID).FieldLabel("ID").Hidden(true),
+                      X.HiddenFor(m => m.CreaterName),
+                      X.HiddenFor(m => m.Months),
+                      X.HiddenFor(m => m.CreateTime),
+                      X.HiddenFor(m => m.Department),
+                      X.HiddenFor(m => m.Valid),
+                      X.HiddenFor(m => m.EditorName),
+                      X.HiddenFor(m => m.EditeTime)
+                   ),
+                      X.Panel().Flex(9).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Border(false).Items(
+                      X.TextFieldFor(m => m.Name).ID("Name").FieldLabel("姓名").AllowBlank(false).Editable(false),
+                      X.DateFieldFor(m => m.EndDate).FieldLabel("结束购买日期").Editable(false).AllowBlank(true).Format("Y-n-j")
+                   ),
+                      X.Panel().Flex(2).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Border(false).Items(
+                        X.Button().Text("选择员工").ID("select")
+                            .DirectEvents(de =>
+                            {
+                                de.Click.Url = Url.Action("SelectStaff");
+                            })
+                      )
+       ),
+        X.Button().Text("保存").Icon(Icon.Accept).ID("save").FormBind(true).Disable(true)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("AddOrEditFund");
+                        de.Click.EventMask.ShowMask = true;
+                    })
+    )
+</body>
+
+</html>
+
+

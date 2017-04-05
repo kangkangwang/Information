@@ -1,0 +1,70 @@
+﻿@model DeerInformation.Areas.gyproject.Models.Warehouse
+@{
+    ViewBag.Title = "WarehouseEdit";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+
+}
+
+@section content
+{
+    @{
+        var store = Html.X().Store().ID("CheckerStore")
+            .AutoLoad(true)
+            .Proxy(Html.X().AjaxProxy()
+                .Url(Url.Action("GetManager"))
+                .ActionMethods(am => am.Read = HttpMethod.POST)
+                .Reader(Html.X().JsonReader().RootProperty("data"))
+            ).Model(Html.X().Model()
+                .Fields(
+                    Html.X().ModelField().Name("Name"),
+                    Html.X().ModelField().Name("Manager")
+                )
+            );
+    
+        var content =
+            X.FormPanel()
+                .Layout(LayoutType.Column)
+                .BodyPadding(10)
+                .Frame(true)
+                .FieldDefaults(l =>
+                {
+                    l.LabelWidth = 70;
+                    l.LabelAlign = LabelAlign.Right;
+                })
+                .Items(
+                X.Container().MarginSpec("2 0 2 0").ColumnWidth(1).Layout(LayoutType.HBox).Items(X.TextFieldFor(m => m.UID).Hidden(true).Flex(1)),
+                X.Container().MarginSpec("2 0 2 0").ColumnWidth(1).Layout(LayoutType.HBox).Items(X.TextFieldFor(m => m.WarehouseID).Editable(ViewBag.action == "create").Flex(1)),
+                X.Container().MarginSpec("2 0 2 0").ColumnWidth(1).Layout(LayoutType.HBox).Items(X.TextFieldFor(m => m.WarehouseName).Flex(1)),
+                X.Container().MarginSpec("2 0 2 0").ColumnWidth(1).Layout(LayoutType.HBox).Items(X.ComboBoxFor(m=>m.Manager).Flex(1).PageSize(5)
+                            .TriggerAction(TriggerAction.Query).ValueField("Manager").DisplayField("Name").AllowBlank(false).TypeAhead(true).MinChars(0)
+                         .ListConfig(X.BoundList().LoadingText("查找中...").ItemTpl(X.XTemplate()
+                         .Html(@<text>
+                            <div class="search-item">
+                                <h5><span>姓名：{Name}</span> 工号：{Manager}</h5>
+                            </div>
+                        </text>))).Store(store)
+                ),
+                X.Container().MarginSpec("2 0 2 0").ColumnWidth(1).Layout(LayoutType.HBox).Items(X.TextAreaFor(m => m.Location).Flex(1))
+
+                )
+                .Buttons(
+                X.Button().Text("关闭").Handler("parent.App.win.close();"),
+                X.Button().Text("提交").FormBind(true).ID("Submit").DirectEvents(l =>
+                {
+                    l.Click.Action = "WarehouseSubmit";
+                    l.Click.ExtraParams.Add(new Parameter() { Name = "id", Value = ViewBag.id, Mode = ParameterMode.Value });
+                    l.Click.ExtraParams.Add(X.Parameter().Mode(ParameterMode.Value).Name("actiontype").Value(ViewBag.action));
+                })
+                );
+    }
+
+
+    @(X.Viewport().Layout(LayoutType.Border).AutoRender(true).Items(
+        content.Region(Region.Center).AutoScroll(true))
+    )
+}

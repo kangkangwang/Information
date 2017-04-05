@@ -1,0 +1,144 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    ViewBag.Title = "现场信息管理";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+    <script>
+        var onSuccess = function (grid, data) {
+            grid.show();
+            grid.getStore().loadData(data);
+        };
+
+    </script>
+}
+
+@section content{
+    <div>
+    @(X.Toolbar().Frame(true).Border(false ).PaddingSpec("3 2 3 2").Layout(LayoutType.HBox).Items(
+            X.TextField().FieldLabel("项目编号").ID("no1"),
+            X.TextField().FieldLabel("现场").ID("field1"),
+            X.Button().Text("查询").ID("btninquire").Icon(Icon.ApplicationGo).DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("FieldInfoInquire");
+                        de.Click.Success = "onSuccess(App.GridPanel1, result.data);";
+                        de.Click.ExtraParams.Add(new Parameter("addno", "App.no1.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("addfield", "App.field1.getValue()", ParameterMode.Raw));
+                        de.Click.EventMask.ShowMask = true;
+                    }),
+                    X.ToolbarFill().Flex(1),
+                     X.Button().Icon(Icon.ApplicationAdd).Text("添加").DirectEvents(de =>
+                        {
+                            de.Click.Url = Url.Action("FieldInfoAddButton");
+                            de.Click.EventMask.ShowMask = true;
+                        }))  
+    )
+</div>
+    @(X.FormPanel().AutoScroll(true).Layout(LayoutType.Auto).Region(Region.Center).Items(
+                            X.GridPanel().ID("GridPanel1").Border(false)
+                            .BottomBar(X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true)).Store(
+                                X.Store().ID("FieldInfoManagement").DataSource(Model).PageSize(10).Model(
+                                        X.Model().IDProperty("ID").Fields(
+                                                    new ModelField("ID", ModelFieldType.String),
+                                                    new ModelField("ProjectNo", ModelFieldType.String),
+                                                    new ModelField("ProjectName", ModelFieldType.String),
+                                                    new ModelField("FieldName", ModelFieldType.String),
+                                                    new ModelField("WarehouseID", ModelFieldType.String),
+                                                    new ModelField("FieldPrincipal", ModelFieldType.String),
+                                                    new ModelField("FieldMapName", ModelFieldType.String),
+                                                    new ModelField("FieldMapPath", ModelFieldType.String),
+                                                    new ModelField("InputMan", ModelFieldType.String),
+                                                    new ModelField("InputTime", ModelFieldType.Date),
+                                                    new ModelField("Remark", ModelFieldType.String),
+                                                    new ModelField("CustomRating", ModelFieldType.Float),
+                                                    new ModelField("CusEnd", ModelFieldType.Date)
+
+                                                    )).Reader(X.JsonReader().RootProperty("data"))
+                                            ).ColumnModel(
+                                                    X.Column().DataIndex("ID").Hidden(true),
+                                                    X.Column()
+                                                    .Text("项目编号")
+                                                    .Flex(1)
+                                                    .DataIndex("ProjectNo"),
+
+                                                    X.Column()
+                                                    .Text("项目名称")
+                                                    .Flex(1)
+                                                    .DataIndex("ProjectName").Hidden(true),
+
+                                                   X.Column()
+                                                    .Text("现场名称")
+                                                    .Flex(1)
+                                                    .DataIndex("FieldName"),
+
+                                                    //X.Column()
+                                                    //.Text("仓库")
+                                                    //.Flex(1)
+                                                    //.DataIndex("WarehouseID"),
+
+                                                    X.Column()
+                                                    .Text("项目负责人")
+                                                    .Flex(1)
+                                                    .DataIndex("FieldPrincipal"),
+
+                                                   //X.Column()
+                                                   // .Text("创建办人")
+                                                   // .Flex(1)
+                                                   // .DataIndex("InputMan"),
+
+                                                   //X.Column()
+                                                   // .Text("创建时间")
+                                                   // .Flex(1)
+                                                   // .DataIndex("InputTime"),
+
+                                                    X.DateColumn()
+                                                    .Text("客户要求完工日期")
+                                                    .Flex(1).Format("yyyy-MM-dd")
+                                                    .DataIndex("CusEnd"),
+
+                                                   X.RatingColumn().Text("客户总体评分").RoundToTick(false).Editable(false).DataIndex("CustomRating").Flex(1),
+
+                                                    X.CommandColumn().Text("查看项目计划进度表").Flex(1).Commands(
+                                                                 X.GridCommand().CommandName("schedule").Icon(Icon.ApplicationCascade).Text("查看")).DirectEvents(de =>
+                                                                        {
+                                                                            de.Command.Url = Url.Action("FieldScheduleSee");
+                                                                            de.Command.ExtraParams.Add(new Parameter("id", "record.data.ProjectNo", ParameterMode.Raw));
+                                                                        }),
+
+                                                    X.CommandColumn().Flex(1).Text("修改项目计划进度表").Commands(
+                                                            X.GridCommand().CommandName("update").Icon(Icon.ApplicationEdit).Text("修改")).DirectEvents(de =>
+                                                            {
+                                                                de.Command.Url = Url.Action("FieldScheduleAddButton");
+                                                                de.Command.ExtraParams.Add(new Parameter("id", "record.data.ProjectNo", ParameterMode.Raw));
+                                                            }),
+
+                                                    X.CommandColumn().Text("添加现场异常标记").Flex(1).Commands(
+                                                                X.GridCommand().CommandName("markadd").Icon(Icon.ApplicationCascade).Text("添加")).DirectEvents(de =>
+                                                                            {
+                                                                                de.Command.Url = Url.Action("FieldCheckAdd");
+                                                                                de.Command.ExtraParams.Add(new Parameter("id", "record.data.ProjectNo", ParameterMode.Raw));
+                                                                                de.Command.ExtraParams.Add(new Parameter("id2", "record.data.FieldName", ParameterMode.Raw));
+                                                                            }),
+
+                                                   X.CommandColumn().Text("现场异常处理").Flex(1).Commands(
+                                                            X.GridCommand().CommandName("markhandle").Icon(Icon.ApplicationCascade).Text("处理")).DirectEvents(de =>
+                                                                {
+                                                                    de.Command.Url = Url.Action("FieldCheckHandleBtn");
+                                                                    de.Command.ExtraParams.Add(new Parameter("id", "record.data.ProjectNo", ParameterMode.Raw));
+                                                                } ),
+
+                                                   X.CommandColumn().Text("现场异常审核").Flex(1).Commands(
+                                                            X.GridCommand().CommandName("markaudit").Icon(Icon.ApplicationCascade).Text("审核")).DirectEvents(de =>
+                                                                {
+                                                                    de.Command.Url = Url.Action("FieldCheckAuditBtn");
+                                                                    de.Command.ExtraParams.Add(new Parameter("id", "record.data.ProjectNo", ParameterMode.Raw));
+                                                                })
+                                            )
+                                         )
+)
+
+    }
+    

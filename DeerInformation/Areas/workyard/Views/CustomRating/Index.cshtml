@@ -1,0 +1,45 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content
+{
+<div>
+    @(X.Container().Layout(LayoutType.HBox).Items(
+                     X.Button().Icon(Icon.ApplicationAdd).Text("添加").DirectEvents(de =>
+                        {
+                            de.Click.Url = Url.Action("AddButton");
+                            de.Click.EventMask.ShowMask = true;
+                        }))
+    )
+</div>
+    @(X.Panel().Items(
+            X.FormPanel().Layout(LayoutType.Auto).Region(Region.Center).Items(
+
+                        X.GridPanel().ID("GridPanel1").Title("客户评价")
+                            .BottomBar(X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true)).Store(
+                            X.Store().ID("FixedAssetSelected").DataSource(Model)
+                            .Model(
+                                    X.Model().IDProperty("AppNo")
+                                    .Fields(
+                                                new ModelField("AppNo", ModelFieldType.String),
+                                                new ModelField("ServiceQuality", ModelFieldType.Float),
+                                                new ModelField("ServiceSpeed", ModelFieldType.Float),
+                                                new ModelField("ServiceAttitude", ModelFieldType.Float),
+                                                new ModelField("ServiceAdvice", ModelFieldType.String)
+                                                )).Reader(X.JsonReader().RootProperty("data")))     
+                                        .ColumnModel(
+                                                X.Column().DataIndex("AppNo").Text("客户订单号").Flex(1),
+                                                X.RatingColumn().Text("服务质量").RoundToTick(false).DataIndex("ServiceQuality").Flex(1),
+                                                X.RatingColumn().Text("服务速度").RoundToTick(false).DataIndex("ServiceSpeed").Flex(1),
+                                                X.RatingColumn().Text("服务态度").RoundToTick(false).DataIndex("ServiceAttitude").Flex(1),
+                                                X.Column().DataIndex("ServiceAdvice").Text("服务建议").Flex(2)  
+                                        )
+                                     ) 
+
+    )
+    )
+ }   

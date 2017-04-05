@@ -1,0 +1,210 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+<script>
+
+    var getGridValueArr = function (gridname, mem) {
+    var grid_data = Ext.getStore(gridname);
+    var count = grid_data.getCount();
+    var arr = new Array(count);
+    for (var i = 0 ; i < count ; i++) {
+        arr[i] = grid_data.getAt(i).data[mem];
+    }
+    return arr;
+};
+
+    var re = function () {
+    var url = window.location.href;
+    var parm = parseInt(Math.random() * 10);
+    if (url.lastIndexOf('?') > -1) {
+        url = url + parm;
+    } else {
+        url = url + "?" + parm;
+    }
+    window.location.href = url;
+    }
+
+    var Judge = function (gridname) {
+        var count = Ext.getStore(gridname).getCount();
+        var x = true;
+        var y = true;
+        if (count == 0) {
+            Ext.Msg.alert("温馨提示", "您还没选择任何物料!!");
+            return false;
+        };
+
+        var arr1 = new Array(count);
+        arr1 = getGridValueArr(gridname, "Num2");
+        var arr2 = new Array(count);
+        arr2 = getGridValueArr(gridname, "Pri");
+        for (var i = 0; i < count; i++) {
+            if (arr1[i] == null || arr1[i] == "") {
+                x = false;
+                break;
+            }
+        };
+        for (var i = 0; i < count; i++) {
+            if (arr2[i] == null || arr2[i] == "") {
+                y = false;
+                break;
+            }
+        };
+
+        if (!x) {
+            Ext.Msg.alert("温馨提示", "数量不能为空!!");
+            return false;
+        };
+        if (!y) {
+            Ext.Msg.alert("温馨提示", "价格不能为空!!");
+            return false;
+        };
+        if (x && y) {
+            parent.App.winmodify.close();
+        };
+
+    };
+
+
+
+</script>
+}
+
+@section content{
+@(
+ X.Viewport().Layout(LayoutType.Auto).Items(
+        X.TextField().ID("gid").Hidden(true).Value(ViewBag.gid),
+        X.FormPanel().Layout(LayoutType.Auto).AutoScroll(true).Title(ViewBag.title)
+            .Items(
+                 X.GridPanel().ID("GridPanel1")
+                 .BottomBar(X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true)).Store(
+                        X.Store().ID("AppliedMaterial").DataSource(Model)
+                        .PageSize(10).Model(X.Model()
+                        .IDProperty("MaterialID")
+                        .Fields(
+                            new ModelField("NO", ModelFieldType.String),
+                            new ModelField("MaterialID", ModelFieldType.String),
+                            new ModelField("MaterialName", ModelFieldType.String),
+                            new ModelField("Num", ModelFieldType.String),
+                            new ModelField("Size", ModelFieldType.String),
+                            new ModelField("Unit", ModelFieldType.String),
+                            new ModelField("Price", ModelFieldType.String))
+                            ).Reader(X.JsonReader().RootProperty("data"))
+                           )
+                         .ColumnModel(
+                         X.Column()
+                        .Text("申请单号")
+                        .Flex(1)
+                        .DataIndex("NO").Hidden(true),
+
+                        X.Column()
+                        .Text("物料编号")
+                        .Flex(1)
+                        .DataIndex("MaterialID"),
+
+                       X.Column()
+                        .Text("物料名称")
+                        .Flex(1)
+                        .DataIndex("MaterialName"),
+
+                       X.Column().Text("数量").Flex(1).DataIndex("Num"),
+
+                       X.Column()
+                        .Text("型号")
+                        .Flex(1)
+                        .DataIndex("Size"),
+
+                       X.Column()
+                        .Text("单位")
+                        .Flex(1)
+                        .DataIndex("Unit"),
+
+                       X.Column()
+                        .Text("价格")
+                        .Flex(1)
+                        .DataIndex("Price"),
+                        
+                        X.CommandColumn().Flex(1).Commands(
+                                    Html.X().GridCommand().CommandName("select").Icon(Icon.Add).Text("确认选择"))
+                                    .Listeners(l =>l.Command.Handler = "App.DeployedMaterial.insert(0,record);"))),
+
+                        X.FormPanel().Layout(LayoutType.Auto).AutoScroll(true).Title("待修改物料")
+                                .Items(
+                                     X.GridPanel().ID("GridPanel2")
+                                     .BottomBar(X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true)).Store(
+                                            X.Store().ID("DeployedMaterial").AutoLoad(false)
+                                            .PageSize(10).Model(X.Model()
+                                            .IDProperty("MaterialID")
+                                            .Fields(
+                                                new ModelField("MaterialID", ModelFieldType.String),
+                                                new ModelField("MaterialName", ModelFieldType.String),
+                                                new ModelField("Num2", ModelFieldType.String),
+                                                new ModelField("Size", ModelFieldType.String),
+                                                new ModelField("Unit", ModelFieldType.String),
+                                                new ModelField("Price", ModelFieldType.String),
+                                                new ModelField("Pri", ModelFieldType.String))
+                                                ).Reader(X.JsonReader().RootProperty("data")))
+                                             .ColumnModel(
+
+                                            X.Column()
+                                            .Text("物料编号")
+                                            .Flex(1)
+                                            .DataIndex("MaterialID"),
+
+                                           X.Column()
+                                            .Text("物料名称")
+                                            .Flex(1)
+                                            .DataIndex("MaterialName"),
+
+                                            Html.X().ComponentColumn()
+                                            .Editor(true)
+                                            .DataIndex("Num2")
+                                            .Text("数量")
+                                            .Flex(1)
+                                            .Component(X.NumberField().AllowBlank(false).EmptyText("此项为必须填写项")),
+
+                                           X.Column()
+                                            .Text("型号")
+                                            .Flex(1)
+                                            .DataIndex("Size"),
+
+                                           X.Column()
+                                            .Text("单位")
+                                            .Flex(1)
+                                            .DataIndex("Unit"),
+
+                                            X.ComponentColumn()
+                                            .Editor(true)
+                                            .DataIndex("Pri")
+                                            .Text("价格")
+                                            .Flex(1)
+                                            .Component(X.NumberField().AllowBlank(false).EmptyText("此项为必须填写项")),
+
+                                          Html.X().CommandColumn().Flex(1).Commands(
+                                                   Html.X().GridCommand().CommandName("selected").Icon(Icon.Delete).Text("取消选择"))
+                                                        .Listeners(l => l.Command.Handler = "App.DeployedMaterial.remove(record);"))
+                                          ).Buttons(
+                                          X.Button().Icon(Icon.ApplicationGet).ID("save").Text("保存").Flex(1)
+                                                .DirectEvents(de =>
+                                                {
+                                                    de.Click.Url = Url.Action("ModifySubmit", ViewBag.name);
+                                                    de.Click.ExtraParams.Add(new Parameter("list", "App.DeployedMaterial.collect('MaterialID')", ParameterMode.Raw));
+                                                    de.Click.ExtraParams.Add(new Parameter("record", "getGridValueArr('DeployedMaterial','Num2')", ParameterMode.Raw));
+                                                    de.Click.ExtraParams.Add(new Parameter("price", "getGridValueArr('DeployedMaterial','Pri')", ParameterMode.Raw));
+                                                    de.Click.ExtraParams.Add(new Parameter("gid", "App.gid.getValue()", ParameterMode.Raw));
+                                                    //de.Click.Success = "history.go(-1);setTimeout('location.reload()',5000);";
+                                                    //de.Click.Success = "history.go(-1);parent.location.reload();";
+                                                    de.Click.Success = "Judge('DeployedMaterial');";
+                                                    de.Click.EventMask.ShowMask = true;
+                                                })
+                                            )
+                                     )
+     )
+    
+    }
+
+ 

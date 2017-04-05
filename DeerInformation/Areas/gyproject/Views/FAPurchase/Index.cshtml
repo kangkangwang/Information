@@ -1,0 +1,107 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    ViewBag.Title = "采购单管理界面";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+    <script>
+        var deletefapurchase = function (id) {
+            Ext.MessageBox.confirm("提示", "确认删除该项？", function (but) {
+                if (but == "yes") {
+                    App.direct.gyproject.DeleteFAPurchase(id);
+                    App.direct.gyproject.FAPurchaseReload();
+                }
+            });
+        };
+
+        var onSuccess = function (grid, data) {
+            grid.show();
+            grid.getStore().loadData(data);
+        };
+    </script>
+}
+
+@section content{
+    @(X.Viewport().Layout(LayoutType.Auto).AutoScroll(true).Items(
+                   X.Container().Layout(LayoutType.HBox).Items(
+                     X.TextField().ID("PurchaseFNo").FieldLabel("采购单号"),
+                     X.Button().Icon(Icon.ApplicationGo).Text("查询").DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("Select");
+                        de.Click.Success = "onSuccess(App.GridPanel1, result.data);";
+                        de.Click.ExtraParams.Add(new Parameter("start", "App.PurchaseFNo.getValue()", ParameterMode.Raw));
+                        de.Click.EventMask.ShowMask = true;
+                    }),
+                    X.Button().Text("配置").Icon(Icon.Add).DirectEvents(de=>
+                    {
+                        de.Click.Url=Url.Action("FADeploy","FAPurchase");
+                        de.Click.EventMask.ShowMask = true;
+                    })         
+                    ),
+
+                 X.FormPanel().Layout(LayoutType.Auto).Items(
+                    X.GridPanel().ID("GridPanel1")
+                    .BottomBar(X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true)).Store(
+                        X.Store().ID("PurchaseFixedAsset").DataSource(Model).PageSize(20).Model(
+                             X.Model().IDProperty("GID").Fields(
+                                        new ModelField("GID", ModelFieldType.String),
+                                        new ModelField("PurchaseFNo", ModelFieldType.String),
+                                        new ModelField("ApplyNo", ModelFieldType.String),
+                                        new ModelField("OrderType", ModelFieldType.String),
+                                        new ModelField("Description", ModelFieldType.String),
+                                        new ModelField("Status", ModelFieldType.String),
+                                        new ModelField("No_Date", ModelFieldType.String),
+                                        new ModelField("SupplierName", ModelFieldType.String),
+                                        new ModelField("Name", ModelFieldType.String),
+                                        new ModelField("OperateTime", ModelFieldType.String),
+                                        new ModelField("AuditProcess", ModelFieldType.String)
+                                      ))
+                         .Reader(X.JsonReader().RootProperty("data")))
+                     .ColumnModel(
+                           X.Column().DataIndex("GID").Hidden(true),
+                           X.Column().Text("采购单号").Flex(1).DataIndex("PurchaseFNo"),
+                           X.Column().Text("申请单号").Flex(1).DataIndex("ApplyNo"),
+
+                           X.Column().Text("订单状态").Flex(1).DataIndex("Status"),
+                           X.Column().Text("审核状态").Flex(1).DataIndex("Description"),
+                           X.Column().Text("订单类型").Flex(1).DataIndex("OrderType"),
+
+                           X.Column().Text("预交日期").Flex(1).Renderer(RendererFormat.Date, new string[] { "'Y-n-j'" }).DataIndex("No_Date"),
+
+                           X.Column().Text("供应商").Flex(1).DataIndex("SupplierName"),
+
+                           X.Column().Text("经办人").Flex(1).DataIndex("Name"),
+
+                           X.Column().Text("经办日期").Flex(1).Renderer(RendererFormat.Date, new string[] { "'Y-n-j'" }).DataIndex("OperateTime"),
+
+                           X.Column().Text("审核流程").Flex(1).DataIndex("AuditProcess"),
+
+                           X.CommandColumn().Region(Region.Center).Text("查看采购单详情").Flex(3).Commands(
+                                  X.GridCommand().CommandName("detail").Icon(Icon.ApplicationCascade).Text("明细"))
+                                            .DirectEvents(de =>
+                                            {
+                                                de.Command.Url = Url.Action("MDetail", "Share");
+                                                de.Command.ExtraParams.Add(new Parameter("gid", "record.data.GID", ParameterMode.Raw));
+                                                de.Command.ExtraParams.Add(new Parameter("title", "采购单物料明细", ParameterMode.Value));  
+                                            }),
+
+                          X.CommandColumn().Text("修改采购单").Region(Region.Center).Flex(3).Commands(
+                                    X.GridCommand().CommandName("modify").Icon(Icon.ApplicationEdit).Text("修改"))
+                                            .DirectEvents(de =>
+                                            {
+                                                de.Command.Url = Url.Action("ShareModify", "Share");
+                                                de.Command.ExtraParams.Add(new Parameter("gid", "record.data.GID", ParameterMode.Raw));
+                                                de.Command.ExtraParams.Add(new Parameter("controllername", "FAPurchase", ParameterMode.Value));
+                                            }),
+
+                        X.CommandColumn().Region(Region.Center).Text("删除采购单").Flex(3).Hidden(true).Commands(
+                                        X.GridCommand().CommandName("delete").Icon(Icon.ApplicationDelete).Text("删除"))
+                                        .Listeners(l =>l.Command.Handler = "deletefapurchase(record.data.GID);")
+                            )
+                            )
+                            )
+    )
+}

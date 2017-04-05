@@ -1,0 +1,40 @@
+﻿@using DeerInformation.BaseType
+@model DeerInformation.Models.MainMenu
+
+@(           Html.X().Panel()
+                .Region(Region.West)
+                .ID("left_main")
+                .MinWidth(175)
+                .MaxWidth(400)
+                .Layout(LayoutType.Accordion)
+                .Items(lm =>
+                {
+                    var menu1 = Model.GetReadMainMenuItems;
+                    menu1 =menu1.OrderBy(l=>l.index).ToList();
+
+                    for (int i = 0; i < menu1.Count; i++)
+                    {
+
+                        MenuPanel item = new MenuPanel();
+                        item.Icon = Icon.Note;
+                        item.Title = menu1[i].name;
+                        var menu2 = Model.usermenu.FindAll(m => m.pid == menu1[i].id&&m.permission.Contains(PermissionType.Read));
+                        menu2 = menu2.OrderBy(l=>l.index).ToList();
+
+                        for (int j = 0; j < menu2.Count; j++)
+                        {
+                            MenuItem item_ = new MenuItem();
+                            item_.Icon = Icon.ApplicationViewList;
+                            item_.Text = menu2[j].name;
+                            item_.DirectEvents.Click.Url = Url.Action("Load");
+                            item_.DirectEvents.Click.ExtraParams.Add(new
+                            {
+                                url = menu2[j].url
+                            });
+                            item.Menu.Add(item_);
+                        }
+                        lm.Add(item);
+                    }
+
+                })
+)

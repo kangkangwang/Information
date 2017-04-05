@@ -1,0 +1,36 @@
+﻿@model DeerInformation.Models.T_GM_InfoMaterial
+
+@{
+    ViewBag.Title = "物料信息";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+    @(
+    X.Viewport().Layout(LayoutType.Fit).Items(
+    X.FormPanel().ID("FormPanel1").Layout(LayoutType.Form).Items(
+                X.TextFieldFor(m=>m.MaterialID).Hidden(true),
+                X.TextFieldFor(m => m.PicturePath).Hidden(true),
+                X.TextFieldFor(m=>m.UID).Hidden(true),
+                X.TextFieldFor(m => m.MaterialName).FieldLabel("物资名称").ReadOnly(true),
+                X.TextFieldFor(m => m.Size).FieldLabel("规格型号").ReadOnly(true),
+                X.TextFieldFor(m => m.Brand).FieldLabel("品牌").ReadOnly(true),
+                X.TextFieldFor(m => m.Unit).FieldLabel("单位").ReadOnly(true),
+                    X.ComboBoxFor(m => m.Type).Items(new ListItem("项目物资", "M"), new ListItem("固定资产", "FA"), new ListItem("辅料", "A"), new ListItem("差额", "BA")).FieldLabel("物资类型").ReadOnly(true),
+                X.TextFieldFor(m => m.PurchaseCycle).FieldLabel("采购周期").ReadOnly(true),
+                X.TextFieldFor(m => m.MinPurchase).FieldLabel("最小采购量").ReadOnly(true),
+                X.CheckboxFor(m => m.IsEnable).FieldLabel("是否启用"),
+                        X.TextFieldFor(m => m.Price).FieldLabel("标准价"),
+                           X.ComboBoxFor(m => m.CostType).FieldLabel("成本类型").Items("材料成本", "人工成本", "其他费用成本"),
+                       X.FileUploadField().ID("AttachmentPath").EmptyText("附件大小请不要超过20M").Icon(Icon.Attach).FieldLabel("技术规格书").ButtonText("选择文件"),
+                X.TextAreaFor(m => m.Extra).FieldLabel("备注"))
+      .Buttons(X.Button().Icon(Icon.ApplicationGet).ID("add").Text("确认")
+                            .DirectEvents(de =>
+                            {
+                                de.Click.Url = Url.Action("MaterialInfoEdit");
+                                de.Click.Success = "parent.App.window1.close()";
+                                de.Click.EventMask.ShowMask = true;
+                            }))
+    ))
+}

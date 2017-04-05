@@ -1,0 +1,55 @@
+﻿@model DeerInformation.Models.T_HR_Scheduling
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var closewindow = function () {
+        parent.App.window.close()
+    };
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddScheduling</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.HBox)
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                   X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                      X.TextFieldFor(m => m.ID).FieldLabel("ID").Hidden(true),
+                      X.DateFieldFor(m=>m.StartTime).FieldLabel("开始日期").AllowBlank(false).Editable(false),
+                      X.DateFieldFor(m=>m.EndTime).FieldLabel("结束日期").AllowBlank(false).Editable(false),
+                      X.TextFieldFor(m => m.Remark).FieldLabel("备注").AllowBlank(true),
+                      X.HiddenFor(m => m.HolidayType1),
+                      X.HiddenFor(m => m.HolidayType2),
+                      X.HiddenFor(m => m.CreaterName),
+                      X.HiddenFor(m => m.CreateTime),
+                      X.HiddenFor(m => m.EditorName),
+                      X.HiddenFor(m => m.EditeTime)
+                   )
+                   //X.Panel().Items(
+                   //   X.ComboBoxFor(m => m.HolidayType1).FieldLabel("开始时间").Items(new ListItem("上午"), new ListItem("下午")).EmptyText("请选择...").AllowBlank(false).Editable(false),
+                   //   X.ComboBoxFor(m => m.HolidayType2).FieldLabel("结束时间").Items(new ListItem("上午"), new ListItem("下午")).EmptyText("请选择...").AllowBlank(false).Editable(false)
+                   //)
+       ),
+        X.Button().Text("保存").Icon(Icon.Accept).ID("save").FormBind(true).Disable(true)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("AddOrEditScheduling");
+                        de.Click.EventMask.ShowMask = true;
+                    })
+    )
+</body>
+
+</html>

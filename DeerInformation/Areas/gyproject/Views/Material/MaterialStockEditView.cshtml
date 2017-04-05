@@ -1,0 +1,61 @@
+﻿@model DeerInformation.Models.T_PM_MaterialStock
+
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+
+    var success = function () {
+        parent.App.window3.close();
+    }
+
+</script>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+      @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+     @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.Column)
+       .Loader(
+             X.ComponentLoader().AutoLoad(true)
+             .DisableCaching(true)
+             .LoadMask(m => m.ShowMask = true)
+             .Mode(LoadMode.Frame)
+          )
+          
+       .Items(
+       
+       X.FormPanel().Items(
+       X.HiddenFor(m=>m.MaterialStockID),
+       X.TextFieldFor(m=>m.MaterialID).FieldLabel("物资编号").Editable(false),
+       X.TextFieldFor(m=>m.MaterialName).FieldLabel("物资名称").Editable(false),
+       X.TextFieldFor(m=>m.Size).FieldLabel("型号").Editable(false),
+        X.TextFieldFor(m=>m.Warehouse).FieldLabel("仓库").Editable(false),
+       X.TextFieldFor(m=>m.Number).FieldLabel("当前库存").IndicatorText("请输入修改库存"),
+       X.TextFieldFor(m=>m.Unit).FieldLabel("单位").Editable(false),
+       X.TextFieldFor(m=>m.Price).FieldLabel("预算价").Editable(false),
+       X.TextFieldFor(m=>m.Extra).FieldLabel("备注").Editable(false)
+
+                        )
+              
+       ),
+        X.Button().Text("确认").Icon(Icon.ApplicationGet)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("MaterialStockEditMain", "Material");
+                        
+                        de.Click.Success = "parent.App.window3.close()";
+                        de.Click.EventMask.ShowMask = true;
+                        de.Click.FormID = "FormPanel1";
+                        
+                    })
+     )
+                
+</body>
+</html>

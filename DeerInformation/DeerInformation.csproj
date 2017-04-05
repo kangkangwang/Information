@@ -1,0 +1,1344 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F1B2A94A-BF7E-4767-A761-D2DF3CA4A1BD}</ProjectGuid>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DeerInformation</RootNamespace>
+    <AssemblyName>DeerInformation</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPPlus, Version=4.0.5.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.0.5\lib\net20\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ext.Net, Version=3.2.1.19858, Culture=neutral, PublicKeyToken=2e12ce3d0176cd87, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ext\Ext.Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ext.Net.Utilities, Version=2.5.0.0, Culture=neutral, PublicKeyToken=2c34ac34702a3c23, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ext\Ext.Net.Utilities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ext\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.Entity">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.Linq">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.DynamicData">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Entity">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.ApplicationServices">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Abstractions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Extensions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\web.mvc\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Routing">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Configuration">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Services">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.EnterpriseServices">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.0\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.30506.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.30506.0\lib\net40\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.30506.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.30506.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Transformer.NET, Version=2.1.1.22883, Culture=neutral, PublicKeyToken=e274d618e7c603a7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ext\Transformer.NET.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Areas\finance\Controllers\CollectionPlanController.cs" />
+    <Compile Include="Areas\finance\Controllers\InvoiceController.cs" />
+    <Compile Include="Areas\finance\Controllers\PayablePurchaseController.cs" />
+    <Compile Include="Areas\finance\Controllers\PaymentApplyController.cs" />
+    <Compile Include="Areas\finance\Controllers\ProjectSelectionController.cs" />
+    <Compile Include="Areas\finance\financeAreaRegistration.cs" />
+    <Compile Include="Areas\finance\Models\CollectionPlan.cs" />
+    <Compile Include="Areas\finance\Models\InvoiceModle.cs" />
+    <Compile Include="Areas\finance\Models\PaymentApply.cs" />
+    <Compile Include="Areas\finance\Models\ProjectInfo.cs" />
+    <Compile Include="Areas\finance\Models\PurchasePay.cs" />
+    <Compile Include="Areas\gyproject\Controllers\CustomInfoController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\gyproject\Controllers\EXWarehouseController.cs" />
+    <Compile Include="Areas\gyproject\Controllers\FAApplyController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\gyproject\Controllers\FAPurchaseController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\gyproject\Controllers\FAStorageController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\gyproject\Controllers\IMWarehouseController.cs" />
+    <Compile Include="Areas\gyproject\Controllers\MApplyController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\gyproject\Controllers\MaterialController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\gyproject\Controllers\MPurchaseController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\gyproject\Controllers\MReceiptController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\gyproject\Controllers\MResidualController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\gyproject\Controllers\PONoController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\gyproject\Controllers\ProjectBudgetController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\gyproject\Controllers\ProjectController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\gyproject\Controllers\ShareController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\gyproject\Controllers\StorageApplyController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\gyproject\Controllers\SupplierController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\gyproject\gyprojectAreaRegistration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\gyproject\Models\EXMaterial.cs" />
+    <Compile Include="Areas\gyproject\Models\IMMaterial.cs" />
+    <Compile Include="Areas\gyproject\Models\MPurchase.cs" />
+    <Compile Include="Areas\gyproject\Models\Stock.cs" />
+    <Compile Include="Areas\gyproject\Models\Warehouse.cs" />
+    <Compile Include="Areas\gyproject\Models\WindowModule.cs" />
+    <Compile Include="Areas\gyproject\ShareMethod\BaseUseController.cs" />
+    <Compile Include="Areas\gyproject\ShareMethod\CommonWay.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\gyproject\ShareMethod\ShareComponentController.cs" />
+    <Compile Include="Areas\gyproject\ShareModule\StoreModule.cs" />
+    <Compile Include="Areas\gyproject\ShareModule\WinModule.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\person\Controllers\BasicController.cs" />
+    <Compile Include="Areas\person\Controllers\BusinessTripController.cs" />
+    <Compile Include="Areas\person\Controllers\CertificateController.cs" />
+    <Compile Include="Areas\person\Controllers\ContractController.cs" />
+    <Compile Include="Areas\person\Controllers\DepartmentController.cs" />
+    <Compile Include="Areas\person\Controllers\DimissionController.cs" />
+    <Compile Include="Areas\person\Controllers\DutyController.cs" />
+    <Compile Include="Areas\person\Controllers\EducationFundController.cs" />
+    <Compile Include="Areas\person\Controllers\ExceptionHandleRecordsController.cs" />
+    <Compile Include="Areas\person\Controllers\FundController.cs" />
+    <Compile Include="Areas\person\Controllers\JobController.cs" />
+    <Compile Include="Areas\person\Controllers\OriginalAttendTimeController.cs" />
+    <Compile Include="Areas\person\Controllers\OverWorkApplyController.cs" />
+    <Compile Include="Areas\person\Controllers\PositionCategoryController.cs" />
+    <Compile Include="Areas\person\Controllers\PunchedExceptionController.cs" />
+    <Compile Include="Areas\person\Controllers\RecommendController.cs" />
+    <Compile Include="Areas\person\Controllers\SalaryController.cs" />
+    <Compile Include="Areas\person\Controllers\SalaryPerHourController.cs" />
+    <Compile Include="Areas\person\Controllers\SchedulingController.cs" />
+    <Compile Include="Areas\person\Controllers\StaffController.cs" />
+    <Compile Include="Areas\person\Controllers\StaffJobController.cs" />
+    <Compile Include="Areas\person\Controllers\StaffSalaryController.cs" />
+    <Compile Include="Areas\person\Controllers\TipsPeopleController.cs" />
+    <Compile Include="Areas\person\Controllers\VacationController.cs" />
+    <Compile Include="Areas\person\Controllers\WorkOverTimeController.cs" />
+    <Compile Include="Areas\person\Models\BasicModel.cs" />
+    <Compile Include="Areas\person\Models\BTApply.cs" />
+    <Compile Include="Areas\person\Models\Department.cs" />
+    <Compile Include="Areas\person\Models\DimissionApply.cs" />
+    <Compile Include="Areas\person\Models\ExceptionHandleRecordsModel.cs" />
+    <Compile Include="Areas\person\Models\NodeWithPreID.cs" />
+    <Compile Include="Areas\person\Models\OriginalAttendTimeModel.cs" />
+    <Compile Include="Areas\person\Models\OWApply.cs" />
+    <Compile Include="Areas\person\Models\PunchedExceptionModle.cs" />
+    <Compile Include="Areas\person\Models\SalaryModel.cs" />
+    <Compile Include="Areas\person\Models\SchListModel.cs" />
+    <Compile Include="Areas\person\Models\SchListStaffModel.cs" />
+    <Compile Include="Areas\person\Models\Settings.cs" />
+    <Compile Include="Areas\person\Models\StaffDetail.cs" />
+    <Compile Include="Areas\person\Models\VacationApply.cs" />
+    <Compile Include="Areas\person\Models\WindowModule.cs" />
+    <Compile Include="Areas\person\personAreaRegistration.cs" />
+    <Compile Include="Areas\person\Tool.cs" />
+    <Compile Include="Areas\reportforms\Controllers\financeController.cs" />
+    <Compile Include="Areas\reportforms\Controllers\PurchaseController.cs" />
+    <Compile Include="Areas\reportforms\Models\MaterialApply.cs" />
+    <Compile Include="Areas\reportforms\Models\MaterialGather.cs" />
+    <Compile Include="Areas\reportforms\Models\ReportForm.cs" />
+    <Compile Include="Areas\reportforms\reportformsAreaRegistration.cs" />
+    <Compile Include="Areas\system\Models\CheckFun.cs" />
+    <Compile Include="Areas\user\Models\Plant.cs" />
+    <Compile Include="Areas\user\Models\WindowModule.cs" />
+    <Compile Include="Areas\user\Controllers\DailyWorkReportController.cs" />
+    <Compile Include="Areas\user\Models\DailyWorkReportModel.cs" />
+    <Compile Include="Areas\system\Controllers\CheckfuncController.cs" />
+    <Compile Include="Areas\system\Controllers\CheckflowManageController.cs" />
+    <Compile Include="Areas\system\Controllers\MenuManageController.cs" />
+    <Compile Include="Areas\system\Controllers\RolesController.cs" />
+    <Compile Include="Areas\system\Controllers\UserManageController.cs" />
+    <Compile Include="Areas\system\Models\CheckflowManage.cs" />
+    <Compile Include="Areas\system\Models\funcmenu.cs" />
+    <Compile Include="Areas\system\Models\RolePermission.cs" />
+    <Compile Include="Areas\system\Models\Roles.cs" />
+    <Compile Include="Areas\system\Models\UserManage.cs" />
+    <Compile Include="Areas\system\Models\WindowModule.cs" />
+    <Compile Include="Areas\system\systemAreaRegistration.cs" />
+    <Compile Include="Areas\user\Controllers\ModifyDataController.cs" />
+    <Compile Include="Areas\user\Models\UserData.cs" />
+    <Compile Include="Areas\user\Models\ViewMessage.cs" />
+    <Compile Include="Areas\user\Models\WorkPlatform.cs" />
+    <Compile Include="Areas\user\userAreaRegistration.cs" />
+    <Compile Include="Areas\user\Controllers\WorkPlatformController.cs" />
+    <Compile Include="Areas\workyard\Controllers\CustomRatingController.cs" />
+    <Compile Include="Areas\workyard\Controllers\FieldAttachController.cs" />
+    <Compile Include="Areas\workyard\Controllers\FieldCheckController.cs" />
+    <Compile Include="Areas\workyard\Controllers\FieldDataManagementController.cs" />
+    <Compile Include="Areas\workyard\Controllers\FieldInfoManagementController.cs" />
+    <Compile Include="Areas\workyard\Controllers\TestController.cs" />
+    <Compile Include="Areas\workyard\workyardAreaRegistration.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SelectStaffController.cs" />
+    <Compile Include="Extensions\Authentication.cs" />
+    <Compile Include="Extensions\EncryptionCommon.cs" />
+    <Compile Include="Extensions\GridModule.cs" />
+    <Compile Include="Extensions\MoneyConvertToChinese.cs" />
+    <Compile Include="Extensions\Mydb.cs" />
+    <Compile Include="Extensions\SerialNum.cs" />
+    <Compile Include="Extensions\UserAuthorizeAttribute .cs" />
+    <Compile Include="Extensions\ValidateCode.cs" />
+    <Compile Include="Extensions\ValidateTool.cs" />
+    <Compile Include="Extensions\VisitAuthorityAttribute.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BaseEntity.cs" />
+    <Compile Include="Models\checkinout.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Company.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DataTransfor.cs" />
+    <Compile Include="Models\DeerMISModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DeerMISModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DeerMISModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DeerMISModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DeerMISModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FDepartMent.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FileUtility.cs" />
+    <Compile Include="Models\GetSalaryByYearMonth_Result.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\HomeModels.cs" />
+    <Compile Include="Models\Login.cs" />
+    <Compile Include="Models\LoginUser.cs" />
+    <Compile Include="Models\MessageManage.cs" />
+    <Compile Include="Models\PageHelper.cs" />
+    <Compile Include="Models\protest_Result.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\P_GM_MaterialGather_Result.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\P_PE_GetRolePermission_Result.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SDepartMent.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_CH_Checker.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_CH_Checkflow.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_CH_Checkfunc.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_CH_Checkfunc_Checkflow_relation.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_CH_Check_state.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_CH_Check_type.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_CH_Operation_list.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_CH_Task.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_FD_AccountPayable.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_FD_AccountReceivable.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_FD_CollectionPlan.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_FD_CollectionType.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_FD_DetailPlan.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_FD_InvoiceList.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_FD_InvoiceType.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_ApplyFixedAsset.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_ApplyMaterial.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_Budget.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_CustomerInfo.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_DM.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_EXWarehouse.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_IMWarehouse.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_InfoMaterial.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_MaterialStock.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_MeasuringUnit.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_NoBody.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_Project.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_PurchaseFixedAsset.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_PurchaseMaterial.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_ReceiptMaterial.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_ResidualM.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_StorageFixedAsset.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_SupplierInfo.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_TempBackup.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_TempDetailMaterial.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_TempGather.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_TypeNo.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_Warehouse.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GM_WarehouseType.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GW_CustomRating.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GW_FieldDataManagement.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GW_FieldImportantAttach.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GW_FieldInfoManagement.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GW_FieldSchedule.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GW_MarkInfo.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_GW_ReceivedInvoiceTime.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_AttendAMPMState.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_Attendance.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_AttendanceExceptionHandleRecords.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_AttendAssess.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_AttendInsert.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_BusinessTrip.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_Certificate.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_Contract.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_Department1.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_Department2.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_Department3.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_Department4.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_Department5.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_Dimission.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_Duty.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_EducationFund.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_EntryPosition.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_ExceptionType.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_Fund.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_Job.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_OverWorkApply.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_PositionCategory.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_Recommend.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_Salary.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_SalaryInput.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_SalaryItems.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_SalaryPerHour.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_Scheduling.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_SchList.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_SchListWithStaff.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_Staff.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_StaffJob.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_StaffSalary.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_TipsPeople.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_Vacation.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_WorkOverTime.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_HR_WorkTime.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PE_Menu.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PE_Permission.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PE_PermissionAction.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PE_RolePermissions.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PE_Roles.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PE_Serial.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PE_UserRoles.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PE_Users.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PM_ApplyMaterial.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PM_ApplyProjectMaterial.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PM_MaterialInfo.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PM_MaterialStock.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PM_MeasuringUnitID.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PM_OfferInfo.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PM_OrderInfo.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PM_ProjectMaterialApply.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PM_StorageApply.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PM_SupplierMaterial.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PM_SupplierMaterialExtra.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PM_SupplierOrder.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_PM_SupplierOrderExtra.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_US_DailyWorkReport.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_US_Message.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_US_WorkHours.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_CH_CheckerFlow.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_CH_Checkfuncflow.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_CH_CheckProcess.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_CH_OperationChecker.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_CH_TaskFunc.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_CH_TaskOperation.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_ComJiaGou.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_FD_DetailCollectionPlan.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_FD_PurchasePayable.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_GM_DetailBudget.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_GM_DetailMStock.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_GM_DetailProject.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_GM_DetailRecieve.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_GM_DM.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_GM_DMStock.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_GM_EXDetail.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_GM_EXWithStateDsp.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_GM_FAApply.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_GM_FAPurchase.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_GM_FAStorage.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_GM_IMDetail.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_GM_IMWithStateDsp.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_GM_MApply.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_GM_MPurchase.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_GM_MResidual.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_GM_TempDM.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_GM_TempMaterial.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_GM_Warehouse.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_GW_FieldImportantAttach.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_AttendAssessWithExceptionType.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_AttendTimeOriginalWithName.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_BTWithDepName.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_Certificate.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_ContractWithStaffName.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_Dep.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_Dimission.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_DutyWithPCName.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_EducationFundWithName.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_ExceptionHandleRecordsWithDetail.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_Fund.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_IDNameWithDepName.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_Job.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_JobWithDutyName.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_OWApplyWithDepName.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_PuchedException.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_RecommendWithName.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_SchListWithStaff.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_SdepartMent.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_StaffJobWithName.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_StaffSalaryWithTime.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_StaffWithDepName.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_TipsPeople.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_VacationWithDepName.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_HR_WorkOverTime.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_PE_Permission_Menu_Roles_Users.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_PE_RolePermission.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_PE_RolePermissionNoMenuDetail.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_PE_UserPermission.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_PE_UserRole.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_PM_MaterialStorageApply.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_US_WorkReportWithHours.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_US_WorkReportWithState.cs">
+      <DependentUpon>DeerMISModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebForms\WebForm1.aspx.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForms\WebForm1.aspx.designer.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="App_Data\excel.xsl" />
+    <Content Include="Areas\gyproject\Views\CustomInfo\CustomerAddView.cshtml" />
+    <Content Include="Areas\gyproject\Views\CustomInfo\CustomerEditView.cshtml" />
+    <Content Include="Areas\gyproject\Views\CustomInfo\Index.cshtml" />
+    <Content Include="Areas\gyproject\Views\FAApply\ApplyFixedAssetAddView.cshtml" />
+    <Content Include="Areas\gyproject\Views\FAApply\Index.cshtml" />
+    <Content Include="Areas\gyproject\Views\FAPurchase\FADeployView.cshtml" />
+    <Content Include="Areas\gyproject\Views\FAPurchase\Index.cshtml" />
+    <Content Include="Areas\gyproject\Views\FAStorage\FAStorageAddView.cshtml" />
+    <Content Include="Areas\gyproject\Views\FAStorage\index.cshtml" />
+    <Content Include="Areas\gyproject\Views\MApply\index.cshtml" />
+    <Content Include="Areas\gyproject\Views\MApply\MApplyAddView.cshtml" />
+    <Content Include="Areas\gyproject\Views\Material\Index.cshtml" />
+    <Content Include="Areas\gyproject\Views\Material\MaterialAddView.cshtml" />
+    <Content Include="Areas\gyproject\Views\Material\MaterialEditView.cshtml" />
+    <Content Include="Areas\gyproject\Views\Material\MaterialStockEditView.cshtml" />
+    <Content Include="Areas\gyproject\Views\Material\StockView.cshtml" />
+    <Content Include="Areas\gyproject\Views\MPurchase\index.cshtml" />
+    <Content Include="Areas\gyproject\Views\MPurchase\MDeployView.cshtml" />
+    <Content Include="Areas\gyproject\Views\MReceipt\index.cshtml" />
+    <Content Include="Areas\gyproject\Views\MReceipt\MReceiptAddView.cshtml" />
+    <Content Include="Areas\gyproject\Views\MResidual\index.cshtml" />
+    <Content Include="Areas\gyproject\Views\MResidual\MResidualAddView.cshtml" />
+    <Content Include="Areas\gyproject\Views\PONo\Index.cshtml" />
+    <Content Include="Areas\gyproject\Views\PONo\POAddView.cshtml" />
+    <Content Include="Areas\gyproject\Views\PONo\PONoSeeView.cshtml" />
+    <Content Include="Areas\gyproject\Views\PONo\PONoUpdateView.cshtml" />
+    <Content Include="Areas\gyproject\Views\ProjectBudget\BudgetAddView.cshtml" />
+    <Content Include="Areas\gyproject\Views\ProjectBudget\BudgetEditView.cshtml" />
+    <Content Include="Areas\gyproject\Views\ProjectBudget\BudgetSeeView.cshtml" />
+    <Content Include="Areas\gyproject\Views\ProjectBudget\Index.cshtml" />
+    <Content Include="Areas\gyproject\Views\Project\BackSeeView.cshtml" />
+    <Content Include="Areas\gyproject\Views\Project\FieldScheduleSeeView.cshtml" />
+    <Content Include="Areas\gyproject\Views\Project\Index.cshtml" />
+    <Content Include="Areas\gyproject\Views\Project\PaidSeeView.cshtml" />
+    <Content Include="Areas\gyproject\Views\Share\Audit.cshtml" />
+    <Content Include="Areas\gyproject\Views\Share\Button.cshtml" />
+    <Content Include="Areas\gyproject\Views\Share\FAApplyAudit.cshtml" />
+    <Content Include="Areas\gyproject\Views\Share\FAPurchaseAudit.cshtml" />
+    <Content Include="Areas\gyproject\Views\Share\MApplyAudit.cshtml" />
+    <Content Include="Areas\gyproject\Views\Share\MDetailSeeView.cshtml" />
+    <Content Include="Areas\gyproject\Views\Share\Modify.cshtml" />
+    <Content Include="Areas\gyproject\Views\Share\MPurchaseAudit.cshtml" />
+    <Content Include="Areas\gyproject\Views\Share\MResidualAudit.cshtml" />
+    <Content Include="Areas\gyproject\Views\Share\ProjectBudgetAudit.cshtml" />
+    <Content Include="Areas\gyproject\Views\Share\SelMInfo.cshtml" />
+    <Content Include="Areas\gyproject\Views\Share\Variable.cshtml" />
+    <Content Include="Areas\gyproject\Views\StorageApplyEdit\StorageApplyEditView.cshtml" />
+    <Content Include="Areas\gyproject\Views\StorageApplyEdit\StorageApplySeeView.cshtml" />
+    <Content Include="Areas\gyproject\Views\StorageApply\Index.cshtml" />
+    <Content Include="Areas\gyproject\Views\StorageApply\StorageApplyAddView.cshtml" />
+    <Content Include="Areas\gyproject\Views\StorageApply\StorageApplyCheckView.cshtml" />
+    <Content Include="Areas\gyproject\Views\Supplier\Index.cshtml" />
+    <Content Include="Areas\gyproject\Views\Supplier\SupplierAddView.cshtml" />
+    <Content Include="Areas\gyproject\Views\Supplier\SupplierEditView.cshtml" />
+    <Content Include="Areas\gyproject\Views\Web.config" />
+    <Content Include="Areas\person\excel.xsl" />
+    <Content Include="AttachFile\DailyWorkReport\2016-10-19\26ff7752-0602-4f95-b072-a6a9530be848..png" />
+    <Content Include="AttachFile\MaterialInfo\7e535201-2d64-4b59-9070-cf0023801aaf.jpg" />
+    <Content Include="AttachFile\PaymentApply\2016-10-11\301fbc79-ede2-4ab9-a302-1cdd67027a40..jpg" />
+    <Content Include="AttachFile\PaymentApply\2016-10-11\331c083e-4534-40c6-ad33-7041b19d7811..png" />
+    <Content Include="AttachFile\PaymentApply\2016-10-12\1e7dafd8-9a69-4477-8a62-a03643fd4e3f..jpg" />
+    <Content Include="AttachFile\PaymentApply\2016-10-12\26237a5e-7874-4f97-a59b-28e5c44af67b..jpg" />
+    <Content Include="AttachFile\ProjectBudget\4ff8ecfc-5a3a-472b-b6b0-06f7693e87f6.txt" />
+    <Content Include="AttachFile\ProjectBudget\579c3be9-1d45-43a1-9751-dfdf2182d449.txt" />
+    <Content Include="AttachFile\ProjectBudget\90f41b11-6d6c-4bea-afd7-342224c1bae6.txt" />
+    <Content Include="AttachFile\ProjectPONo\0d8aab4f-1d97-4b46-b2bb-7ede45e7149e.txt" />
+    <Content Include="AttachFile\ProjectPONo\f7fa6edb-46de-494a-b582-cd49774dffb1.txt" />
+    <Content Include="AttachFile\WorkYard\ExceptionHandle\08c818df-ca2b-4122-bd7f-9ebdb5360d01.txt" />
+    <Content Include="AttachFile\WorkYard\ExceptionMark\8243f965-2b16-4bf2-a877-ecbb63f19055.txt" />
+    <Content Include="AttachFile\WorkYard\FieldData\6d121a76-cd01-46a2-9603-41c24b272ab0.jpg" />
+    <Content Include="AttachFile\WorkYard\FieldData\ba5fc4ba-90d3-453b-8003-47aecf227589.txt" />
+    <Content Include="AttachFile\WorkYard\FieldInfo\2926d79e-4cd1-46af-9262-761e53160186.png" />
+    <Content Include="AttachFile\WorkYard\FieldInfo\ff273507-0034-4c6e-9f61-2854274964c5.txt" />
+    <Content Include="Css\Home\main.css" />
+    <Content Include="Css\Login\Default.css" />
+    <Content Include="Css\Login\User_Login.css" />
+    <Content Include="Css\Login\xtree.css" />
+    <Content Include="Global.asax" />
+    <Content Include="Areas\system\Views\MenuManage\Create.cshtml" />
+    <Content Include="Areas\system\Views\MenuManage\Details.cshtml" />
+    <Content Include="Areas\system\Views\MenuManage\Index.cshtml" />
+    <Content Include="Areas\system\Views\Roles\Index.cshtml" />
+    <Content Include="Areas\system\Views\Shared\_BaseContent.cshtml" />
+    <Content Include="Areas\system\Views\Roles\CreatePage.cshtml" />
+    <Content Include="Areas\system\Views\Roles\EditPage.cshtml" />
+    <Content Include="Areas\system\Views\Checkfunc\Index.cshtml" />
+    <Content Include="Areas\system\Views\Checkfunc\Part.cshtml" />
+    <Content Include="Areas\system\Views\Checkfunc\Edit.cshtml" />
+    <Content Include="Areas\system\Views\CheckflowManage\Index.cshtml" />
+    <Content Include="Areas\system\Views\CheckflowManage\CreateCheckFlow.cshtml" />
+    <Content Include="Areas\system\Views\Roles\Authority.cshtml" />
+    <Content Include="Css\Home\home.scss" />
+    <Content Include="Scripts\base\share.js" />
+    <Content Include="WebForms\WebForm1.aspx" />
+    <EntityDeploy Include="Models\DeerMISModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DeerMISModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Images\aa.jpg" />
+    <Content Include="Images\example.png" />
+    <Content Include="Images\Think\574186f0-de08-4ef5-89dd-92f86b387418..ico" />
+    <Content Include="Images\Think\8d544dc3-6041-4795-b136-bf7640f6750a..jpg" />
+    <Content Include="Images\user_all_bg.gif" />
+    <Content Include="Images\user_bottom_c.gif" />
+    <Content Include="Images\user_bottom_l.gif" />
+    <Content Include="Images\user_bottom_r.gif" />
+    <Content Include="Images\user_botton.gif" />
+    <Content Include="Images\user_login_name.gif" />
+    <Content Include="Images\user_login_password.gif" />
+    <Content Include="Images\user_login_validatecode.gif" />
+    <Content Include="Images\user_main_c.gif" />
+    <Content Include="Images\user_main_l.gif" />
+    <Content Include="Images\user_main_r.gif" />
+    <Content Include="Images\user_top_c.gif" />
+    <Content Include="Images\user_top_l.gif" />
+    <Content Include="Images\user_top_r.gif" />
+    <Content Include="Models\DeerMISModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DeerMISModel.edmx</DependentUpon>
+      <LastGenOutput>DeerMISModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\DeerMISModel.edmx.diagram">
+      <DependentUpon>DeerMISModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\DeerMISModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DeerMISModel.edmx</DependentUpon>
+      <LastGenOutput>DeerMISModel.cs</LastGenOutput>
+    </Content>
+    <Content Include="Areas\system\Views\UserManage\index.cshtml" />
+    <Content Include="Areas\system\Views\UserManage\CreateUser.cshtml" />
+    <Content Include="Areas\user\Views\ModifyData\Index.cshtml" />
+    <Content Include="Areas\user\Views\WorkPlatform\Index.cshtml" />
+    <Content Include="Areas\user\Views\WorkPlatform\TaskCheck.cshtml" />
+    <Content Include="Areas\system\Views\CheckflowManage\UpdateCheckFlow.cshtml" />
+    <Content Include="Views\Shared\Expire.cshtml" />
+    <Content Include="Areas\user\Views\WorkPlatform\Message.cshtml" />
+    <Content Include="Areas\system\Views\Roles\Users.cshtml" />
+    <Content Include="AttachFile\PaymentApply\2016-10-15\693bb7f0-55f9-4815-9b82-9bdd363c37fb..xls" />
+    <Content Include="Areas\user\Views\DailyWorkReport\Index.cshtml" />
+    <Content Include="Areas\user\Views\DailyWorkReport\Detail.cshtml" />
+    <Content Include="Areas\user\Views\DailyWorkReport\Create.cshtml" />
+    <Content Include="Areas\user\Views\DailyWorkReport\Check.cshtml" />
+    <Content Include="AttachFile\DailyWorkReport\2016-10-19\fc79c574-084c-4338-9c11-0911d4eff6e1..pdf" />
+    <Content Include="Areas\user\Views\ModifyData\Password.cshtml" />
+    <Content Include="AttachFile\ProjectPONo\c16c02b4-5b4b-4347-a427-4c3b0c320a77.docx" />
+    <Content Include="Areas\system\Views\Checkfunc\Users.cshtml" />
+    <Content Include="Areas\user\Views\WorkPlatform\CcMessage.cshtml" />
+    <Content Include="Areas\gyproject\Views\IMWarehouse\Index.cshtml" />
+    <Content Include="Areas\gyproject\Views\IMWarehouse\allotment.cshtml" />
+    <Content Include="Areas\gyproject\Views\IMWarehouse\stocktaking.cshtml" />
+    <Content Include="Areas\gyproject\Views\EXWarehouse\allotment.cshtml" />
+    <Content Include="Areas\gyproject\Views\EXWarehouse\Index.cshtml" />
+    <Content Include="Areas\gyproject\Views\EXWarehouse\requisition.cshtml" />
+    <Content Include="Areas\gyproject\Views\EXWarehouse\stocktaking.cshtml" />
+    <Content Include="Areas\gyproject\Views\IMWarehouse\Purchase.cshtml" />
+    <Content Include="Areas\finance\Views\PaymentApply\AddView.cshtml" />
+    <Content Include="Areas\finance\Views\PaymentApply\CheckView.cshtml" />
+    <Content Include="Areas\finance\Views\PaymentApply\Detail.cshtml" />
+    <Content Include="Areas\finance\Views\PaymentApply\EditView.cshtml" />
+    <Content Include="Areas\finance\Views\PaymentApply\Index.cshtml" />
+    <Content Include="Areas\finance\Views\ProjectSelection\Index.cshtml" />
+    <Content Include="Areas\finance\Views\Shared\Expire.cshtml" />
+    <Content Include="Areas\finance\Views\Web.config" />
+    <Content Include="Areas\reportforms\Views\finance\index.cshtml" />
+    <Content Include="Areas\reportforms\Views\finance\salary.cshtml" />
+    <Content Include="Areas\reportforms\Views\Purchase\MaterialApply.cshtml" />
+    <Content Include="Areas\reportforms\Views\Web.config" />
+    <Content Include="Areas\finance\Views\PayablePurchase\InvoiceView.cshtml" />
+    <Content Include="Areas\finance\Views\PayablePurchase\Index.cshtml" />
+    <Content Include="Areas\gyproject\Views\Share\ChooseM.cshtml" />
+    <Content Include="Areas\gyproject\Views\Share\ChooseMP.cshtml" />
+    <Content Include="Areas\gyproject\Views\ProjectBudget\History.cshtml" />
+    <Content Include="Areas\gyproject\Views\MPurchase\MEXWarehouseView.cshtml" />
+    <Content Include="Areas\gyproject\Views\MApply\OrdinaryMApplyAddView.cshtml" />
+    <Content Include="Areas\finance\Views\PayablePurchase\PaymentView.cshtml" />
+    <Content Include="Areas\gyproject\Views\EXWarehouse\Detail.cshtml" />
+    <Content Include="Areas\gyproject\Views\IMWarehouse\Detail.cshtml" />
+    <Content Include="Areas\gyproject\Views\EXWarehouse\CheckEX.cshtml" />
+    <Content Include="Areas\gyproject\Views\IMWarehouse\CheckIM.cshtml" />
+    <Content Include="Areas\gyproject\Views\Material\Warehouse.cshtml" />
+    <Content Include="Areas\person\Views\add.cshtml" />
+    <Content Include="Areas\person\Views\Basic\CertificateInfo.cshtml" />
+    <Content Include="Areas\person\Views\Basic\Index.cshtml" />
+    <Content Include="Areas\person\Views\BusinessTrip\AddBusinessTrip.cshtml" />
+    <Content Include="Areas\person\Views\BusinessTrip\BusinessTripDetail.cshtml" />
+    <Content Include="Areas\person\Views\BusinessTrip\BusinessTripEdit.cshtml" />
+    <Content Include="Areas\person\Views\BusinessTrip\BusinessTripRemove.cshtml" />
+    <Content Include="Areas\person\Views\BusinessTrip\CheckBusinessTrip.cshtml" />
+    <Content Include="Areas\person\Views\BusinessTrip\Index.cshtml" />
+    <Content Include="Areas\person\Views\Certificate\AddCertificate.cshtml" />
+    <Content Include="Areas\person\Views\Certificate\Index.cshtml" />
+    <Content Include="Areas\person\Views\Contract\AddContract.cshtml" />
+    <Content Include="Areas\person\Views\Contract\Index.cshtml" />
+    <Content Include="Areas\person\Views\Dimission\AddDimission.cshtml" />
+    <Content Include="Areas\person\Views\Dimission\CheckDimission.cshtml" />
+    <Content Include="Areas\person\Views\Dimission\DimissionDetail.cshtml" />
+    <Content Include="Areas\person\Views\Dimission\Index.cshtml" />
+    <Content Include="Areas\person\Views\Duty\AddDuty.cshtml" />
+    <Content Include="Areas\person\Views\Duty\Index.cshtml" />
+    <Content Include="Areas\person\Views\EducationFund\AddEducationFund.cshtml" />
+    <Content Include="Areas\person\Views\EducationFund\Index.cshtml" />
+    <Content Include="Areas\person\Views\ExceptionHandleRecords\Index.cshtml" />
+    <Content Include="Areas\person\Views\Fund\AddFund.cshtml" />
+    <Content Include="Areas\person\Views\Fund\Index.cshtml" />
+    <Content Include="Areas\person\Views\Job\AddJob.cshtml" />
+    <Content Include="Areas\person\Views\Job\Index.cshtml" />
+    <Content Include="Areas\person\Views\OriginalAttendTime\index.cshtml" />
+    <Content Include="Areas\person\Views\OverWorkApply\AddOverWorkApply.cshtml" />
+    <Content Include="Areas\person\Views\OverWorkApply\CheckOverWorkApply.cshtml" />
+    <Content Include="Areas\person\Views\OverWorkApply\Index.cshtml" />
+    <Content Include="Areas\person\Views\OverWorkApply\OverWorkApplyDetail.cshtml" />
+    <Content Include="Areas\person\Views\PositionCategory\AddPositionCategory.cshtml" />
+    <Content Include="Areas\person\Views\PositionCategory\Index.cshtml" />
+    <Content Include="Areas\person\Views\PunchedException\Attend.cshtml" />
+    <Content Include="Areas\person\Views\PunchedException\Index.cshtml" />
+    <Content Include="Areas\person\Views\Recommend\AddRecommend.cshtml" />
+    <Content Include="Areas\person\Views\Recommend\Index.cshtml" />
+    <Content Include="Areas\person\Views\SalaryPerHour\AddSalaryPerHour.cshtml" />
+    <Content Include="Areas\person\Views\SalaryPerHour\Index.cshtml" />
+    <Content Include="Areas\person\Views\Salary\index.cshtml" />
+    <Content Include="Areas\person\Views\Scheduling\AddScheduling.cshtml" />
+    <Content Include="Areas\person\Views\Scheduling\AddWorkTime.cshtml" />
+    <Content Include="Areas\person\Views\Scheduling\Index.cshtml" />
+    <Content Include="Areas\person\Views\show.cshtml" />
+    <Content Include="Areas\person\Views\StaffJob\AddStaffJob.cshtml" />
+    <Content Include="Areas\person\Views\StaffJob\Index.cshtml" />
+    <Content Include="Areas\person\Views\StaffJob\StaffJobDetail.cshtml" />
+    <Content Include="Areas\person\Views\StaffSalary\Index.cshtml" />
+    <Content Include="Areas\person\Views\Staff\AddStaff.cshtml" />
+    <Content Include="Areas\person\Views\Staff\CertificateInfo.cshtml" />
+    <Content Include="Areas\person\Views\Staff\Index.cshtml" />
+    <Content Include="Areas\person\Views\Staff\ReinstatementStaff.cshtml" />
+    <Content Include="Areas\person\Views\Staff\StaffDetail.cshtml" />
+    <Content Include="Areas\person\Views\Vacation\AddVacation.cshtml" />
+    <Content Include="Areas\person\Views\Vacation\CheckVacation.cshtml" />
+    <Content Include="Areas\person\Views\Vacation\Index.cshtml" />
+    <Content Include="Areas\person\Views\Vacation\StaffVacationAndHour.cshtml" />
+    <Content Include="Areas\person\Views\Vacation\VacationDetail.cshtml" />
+    <Content Include="Areas\person\Views\Vacation\VacationEdit.cshtml" />
+    <Content Include="Areas\person\Views\Vacation\VacationRemove.cshtml" />
+    <Content Include="Areas\person\Views\Web.config" />
+    <Content Include="Areas\person\Views\WorkOverTime\AddWorkOverTime.cshtml" />
+    <Content Include="Areas\person\Views\WorkOverTime\Index.cshtml" />
+    <Content Include="Areas\gyproject\Views\Material\WarehouseEdit.cshtml" />
+    <Content Include="Areas\finance\Views\CollectionPlan\CreateView.cshtml" />
+    <Content Include="Areas\finance\Views\CollectionPlan\Index.cshtml" />
+    <Content Include="Areas\finance\Views\CollectionPlan\Detail.cshtml" />
+    <Content Include="Areas\workyard\Views\CustomRating\Index.cshtml" />
+    <Content Include="Areas\workyard\Views\FieldCheck\Index.cshtml" />
+    <Content Include="Areas\workyard\Views\FieldDataManagement\FieldDataAddView.cshtml" />
+    <Content Include="Areas\workyard\Views\FieldDataManagement\Index.cshtml" />
+    <Content Include="Areas\workyard\Views\FieldInfoManagement\FieldCheckAddView.cshtml" />
+    <Content Include="Areas\workyard\Views\FieldInfoManagement\FieldCheckAuditView.cshtml" />
+    <Content Include="Areas\workyard\Views\FieldInfoManagement\FieldCheckAuditWin.cshtml" />
+    <Content Include="Areas\workyard\Views\FieldInfoManagement\FieldCheckHandleView.cshtml" />
+    <Content Include="Areas\workyard\Views\FieldInfoManagement\FieldCheckHandleWin.cshtml" />
+    <Content Include="Areas\workyard\Views\FieldInfoManagement\FieldCheckWindow.cshtml" />
+    <Content Include="Areas\workyard\Views\FieldInfoManagement\FieldInfoAddView.cshtml" />
+    <Content Include="Areas\workyard\Views\FieldInfoManagement\FieldScheduleAddView.cshtml" />
+    <Content Include="Areas\workyard\Views\FieldInfoManagement\FieldScheduleSeeView.cshtml" />
+    <Content Include="Areas\workyard\Views\FieldInfoManagement\Index.cshtml" />
+    <Content Include="Areas\workyard\Views\Test\Index.cshtml" />
+    <Content Include="Areas\workyard\Views\Test\TEST.cshtml" />
+    <Content Include="Areas\workyard\Views\Web.config" />
+    <Content Include="Areas\finance\Views\Invoice\InvoiceLst.cshtml" />
+    <Content Include="Areas\system\Views\UserManage\Deatil.cshtml" />
+    <Content Include="Areas\person\Views\Scheduling\AddStaff.cshtml" />
+    <Content Include="Areas\user\Views\DailyWorkReport\StaffVacationAndHour.cshtml" />
+    <Content Include="Areas\person\Views\PunchedException\AddAttend.cshtml" />
+    <Content Include="Areas\person\Views\Department\Index.cshtml" />
+    <Content Include="Areas\person\Views\Department\AddDepartment.cshtml" />
+    <Content Include="Areas\person\Views\TipsPeople\Index.cshtml" />
+    <Content Include="Areas\workyard\Views\FieldAttach\FieldAttachAddView.cshtml" />
+    <Content Include="Areas\workyard\Views\FieldAttach\Index.cshtml" />
+    <Content Include="Areas\workyard\Views\CustomRating\CustomRatingAddView.cshtml" />
+    <Content Include="Areas\gyproject\Views\MPurchase\SupplierAckDate.cshtml" />
+    <Content Include="Areas\person\Views\Scheduling\Department.cshtml" />
+    <None Include="Properties\PublishProfiles\DeerInformation.pubxml" />
+    <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="Images\decorate.png" />
+    <Content Include="Images\floor.png" />
+    <Content Include="Images\gps_03.png" />
+    <Content Include="Images\gps_07.png" />
+    <Content Include="Images\gps_08.png" />
+    <Content Include="Images\gps_09.png" />
+    <Content Include="Images\gps_10.png" />
+    <Content Include="Images\gps_11.png" />
+    <Content Include="Images\gps_12.png" />
+    <Content Include="Images\gps_13.png" />
+    <Content Include="Images\gps_18.png" />
+    <Content Include="Images\gps_19.png" />
+    <Content Include="Images\header.gif" />
+    <Content Include="Images\headerBg.jpg" />
+    <Content Include="Images\preview.jpg" />
+    <Content Include="Images\preview.png" />
+    <Content Include="Scripts\base\system.js" />
+    <Content Include="Scripts\ext-modern-all.js" />
+    <Content Include="Scripts\jquery-1.7.1.js" />
+    <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <Content Include="Scripts\jquery-ui-1.8.20.js" />
+    <Content Include="Scripts\jquery-ui-1.8.20.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\knockout-2.1.0.debug.js" />
+    <Content Include="Scripts\knockout-2.1.0.js" />
+    <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Shared\Unauthorized.aspx" />
+    <Content Include="Views\Shared\Error.aspx" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\Home\head.cshtml" />
+    <Content Include="Views\Home\login.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\SelectStaff\SelectStaff.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Areas\person\Views\Shared\" />
+    <Folder Include="Areas\reportforms\Report\" />
+    <Folder Include="Areas\reportforms\Views\Shared\" />
+    <Folder Include="Areas\user\Views\Shared\" />
+    <Folder Include="Areas\workyard\Models\" />
+    <Folder Include="Areas\workyard\resources\" />
+    <Folder Include="Areas\workyard\Views\Shared\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_BaseLayout.cshtml" />
+    <Content Include="Views\Shared\_BaseLayoutClean.cshtml" />
+    <Content Include="Views\Shared\_BaseLayoutNoMgr.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\changemenu.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\user\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\system\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\content.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>13526</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:13526/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

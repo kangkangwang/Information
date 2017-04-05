@@ -1,0 +1,81 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    ViewBag.Title = "ProjectSelection";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+    
+}
+
+@section content
+{
+    @{
+
+        var head =
+            X.Toolbar().Layout(LayoutType.HBox)
+                .Shadow(true)
+                .LayoutConfig(new HBoxLayoutConfig {Align = HBoxAlign.Middle, Pack = BoxPack.End})
+                .Items(
+                    X.Toolbar().Border(false).Layout(LayoutType.HBox).Flex(1).Items(
+                        X.TextField().Name("name").FieldLabel("客户名或项目名"),
+                        X.ToolbarFill().Flex(1),
+                        X.Button().Text("查询").Icon(Icon.Magnifier).DirectEvents(de =>
+                        {
+                            de.Click.Action = "Select";
+                        })
+                        )
+                        );
+
+        var content = X.GridPanel()
+            .ID("grid")
+            .AnchorHorizontal("100%")
+            .Store(X.Store()
+                .ID("storedata")
+                .Model(X.Model()
+                    .IDProperty("ID")
+                    .Fields("ClientName", "CustomerNo", "ProjectName", "ProjectNo", "OfferMoney")
+                ).Reader(
+                    X.JsonReader().RootProperty("data")
+                )
+                .DataSource(Model))
+            .ColumnModel(
+
+                X.Column()
+                    .Text("客户名称")
+                    .Flex(1)
+                    .DataIndex("ClientName"),
+                    
+                X.Column()
+                    .Text("订单号")
+                    .Flex(1)
+                    .DataIndex("CustomerNo"),
+
+                X.Column()
+                    .Text("项目名称")
+                    .Flex(1)
+                    .DataIndex("ProjectName"),
+
+                X.CommandColumn()
+                    .Text("操作")
+                    .Width(70)
+                    .Commands(
+                        X.GridCommand().Text("选择").CommandName("detail").Icon(Icon.ShapeSquareSelect).ToolTip(tt => tt.Text = "选择")
+                    ).Listeners(ls =>
+                    {
+                        ls.Command.Handler = "parent.fill(record.data);";
+                    })
+                    )
+                    .SelectionModel(X.CheckboxSelectionModel().Mode(SelectionMode.Multi));
+    }
+    @(
+ X.Viewport().Layout(LayoutType.Border).Items(
+    X.Panel().Region(Region.Center).Frame(true).Items(content),
+    X.FormPanel().Region(Region.North).Border(false).Frame(true).Items(head)
+    )
+
+    )
+}

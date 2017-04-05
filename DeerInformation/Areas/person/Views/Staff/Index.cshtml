@@ -1,0 +1,270 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+<script>
+    var reload = function () {
+        App.direct.person.StaffReload();
+    };
+    var onSuccess = function (grid, data) {
+        grid.show();
+        grid.getStore().loadData(data);
+    };
+    var toggleRowSelect = function () {
+        App.SpreadsheetSelectionModel1.setRowSelect(false);
+        App.SpreadsheetSelectionModel1.setRowSelect(true);
+    };
+    var deletejs = function (grid) {
+        var store = grid.store,
+     records = grid.selModel.getSelection();
+        if (records != "") {
+            Ext.MessageBox.confirm("提示", "确认删除该项？", function (but) {
+                if (but == "yes") {
+                    exportData(grid, true);
+                    //store.remove(records);
+                    //store.load(true);
+                }
+            });
+        }
+        else {
+            Ext.Msg.alert("提示", "未选择任何列！");
+        }
+    };
+    function exportData(grid, selectedOnly) {
+        grid.submitData(
+            //serialization config
+            {
+                selectedOnly: selectedOnly
+            },
+
+            //request config
+            {
+                isUpload: true,
+                url: '@Url.Action("JSDeleteStaff")'
+            }
+       );
+    }
+</script>
+    }
+
+
+        @section content{
+
+        @(X.Viewport().ID("BackViewPort")
+        .Layout(LayoutType.Border)
+        .Items(
+      X.Panel().Region(Region.Center).Layout(LayoutType.Border).Title("员工基本信息管理").Items(
+      X.Panel().Region(Region.West).Width(200).Collapsible(false).AutoScroll(true).Items(
+        X.TreePanel().ID("jiagou").RootVisible(true).UseArrows(true).AutoLoad(true)
+                           .DirectEvents(
+                           de =>
+                           {
+                               de.ItemClick.Url = Url.Action("DepClick");
+                               de.ItemClick.ExtraParams.Add(new Parameter("dep", "record.data.id", ParameterMode.Raw, true));
+                               de.ItemClick.ExtraParams.Add(new Parameter("hirestate", "App.HireState.getValue()", ParameterMode.Raw));
+                               de.ItemClick.Success = "onSuccess(App.StaffGridPanel, result.data);";
+                               de.ItemClick.EventMask.ShowMask = true;
+                           }
+                      )
+                      .Root(ViewData["root"] as Node)
+      ),
+      X.Panel().Region(Region.Center).AutoScroll(true).Items(
+       X.FormPanel().Layout(LayoutType.Column).Items(
+                   X.TextField().ID("StaffID")
+                   .FieldLabel("工号"),
+                   X.TextField().ID("Name")
+                   .FieldLabel("姓名"),
+                   X.ComboBox().ID("HireState")
+                   .FieldLabel("雇佣状态").Editable(false).Items(new ListItem("在职"), new ListItem("离职"), new ListItem("停职"), new ListItem("全部")).Value("在职"),
+           X.Button().Text("查询").DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("Getalldata");
+                    de.Click.Success = "onSuccess(App.StaffGridPanel, result.data);";
+                    de.Click.ExtraParams.Add(new Parameter("id", "App.StaffID.getValue()", ParameterMode.Raw));
+                    de.Click.ExtraParams.Add(new Parameter("name", "App.Name.getValue()", ParameterMode.Raw));
+                    de.Click.ExtraParams.Add(new Parameter("hirestate", "App.HireState.getValue()", ParameterMode.Raw));
+                    de.Click.EventMask.ShowMask = true;
+                }),
+                   X.Button().Text("添加")
+                            .DirectEvents(de =>
+                              {
+                                  de.Click.Url = Url.Action("Add");
+                              }),
+                              X.Button().Text("复职")
+                            .DirectEvents(de =>
+                              {
+                                  de.Click.Url = Url.Action("Reinstatement");
+                                  de.Click.ExtraParams.Add(new Parameter("id", "App.StaffGridPanel.getSelectionModel().getSelection()[0].data.ID", ParameterMode.Raw));
+                              }),
+                          X.Button().Text("详细信息")
+                        .DirectEvents(de =>
+                          {
+                              de.Click.Url = Url.Action("Detail");
+                              de.Click.ExtraParams.Add(new Parameter("id", "App.StaffGridPanel.getSelectionModel().getSelection()[0].data.ID", ParameterMode.Raw));
+                          }),
+                            X.Button().Text("删除").Listeners(l =>
+                        {
+                            l.Click.Handler = "deletejs(App.StaffGridPanel);";
+                        })
+       ),
+                       X.GridPanel().ID("StaffGridPanel").AutoScroll(true).ColumnLines(true)
+                                      .Store(
+                                         X.Store().ID("StaffStore").PageSize(20)
+                                                  .AutoLoad(true)
+                                                  .DataSource(Model)
+                                           .Model(
+                                           X.Model().IDProperty("ID").Fields("ID","Name", "TelNum", "Urgencyperson","UPTelNum"
+                              , "Email", "Nation","HireState","CertificateType","CertificateNum", "IdCardAddress", "Nativeplace", "Birthday","Sex","MaritalStatus","StaffType","WorkAddress"
+                              ,"Area","BankAccount","BankType","Craft","Education","GraduationSchool","Major","Remark","CreaterName","CreateTime","EditorName","EditeTime","ID1"
+                              ,"Department1No","Department1Name","ID2","Department2No","Department2Name","ID3","Department3No","Department3Name","ID4","Department4No","Department4Name"
+                              ,"ID5","Department5No","Department5Name","Department","ImagePath","SocialInsuranceType","SSStartdate","SSEnddate"
+                              ,"NoAttend","PreDimissionDate","DimissionType","DimissionReason","Probation","ProbationDate","ProbationValid","FundValid")
+                                                  )
+
+                                                  .Reader(
+                                                              X.JsonReader().RootProperty("data")
+                                                              )
+
+                                  )
+                                      .SelectionModel(
+                                                  X.CheckboxSelectionModel().Mode(SelectionMode.Multi)
+                                       )
+                                        .ViewConfig(X.GridView().TrackOver(false))
+                                                 .BottomBar(
+                                Html.X().PagingToolbar().HideRefresh(true)
+                            )
+                                .ColumnModel(
+                                               X.Column()
+                                               .Text("工号")
+                                               .Width(55)
+                                               .DataIndex("ID"),
+
+                                               X.Column()
+                                               .Text("姓名")
+                                               .Width(55)
+                                               .DataIndex("Name"),
+
+                                                       X.Column()
+                                                       .Text("部门")
+                                                       .Width(55)
+                                                       .DataIndex("Department"),
+
+                                                       X.Column()
+                                                       .Text("电话")
+                                                       .Width(55)
+                                                       .DataIndex("TelNum"),
+
+                                                       X.Column()
+                                                       .Text("民族")
+                                                       .Width(55)
+                                                       .DataIndex("Nation"),
+
+                                                       X.Column()
+                                                       .Text("雇佣状态")
+                                                       .Width(55)
+                                                       .DataIndex("HireState"),
+
+                                                       X.Column()
+                                                       .Text("证件类型")
+                                                       .Width(55)
+                                                       .DataIndex("CertificateType"),
+
+                                                       X.Column()
+                                                       .Text("证件号码")
+                                                       .Width(55)
+                                                       .DataIndex("CertificateNum"),
+
+                                                       X.Column()
+                                                       .Text("籍贯")
+                                                       .Width(55)
+                                                       .DataIndex("Nativeplace"),
+
+                                                       X.DateColumn()
+                                                       .Text("出生日期")
+                                                       .Width(55)
+                                                       .Format("yyyy-MM-dd")
+                                                       .DataIndex("Birthday").Hidden(true),
+
+                                                       X.Column()
+                                                       .Text("性别")
+                                                       .Width(55)
+                                                       .DataIndex("Sex"),
+
+                                                       X.Column()
+                                                       .Text("婚姻状况")
+                                                       .Width(55)
+                                                       .DataIndex("MaritalStatus").Hidden(true),
+
+                                                       X.Column()
+                                                       .Text("员工类型")
+                                                       .Width(55)
+                                                       .DataIndex("StaffType"),
+
+                                                       X.Column()
+                                                       .Text("工作地点")
+                                                       .Width(55)
+                                                       .DataIndex("WorkAddress"),
+
+                                                       X.Column()
+                                                       .Text("地区")
+                                                       .Width(55)
+                                                       .DataIndex("Area"),
+
+                                                       X.Column()
+                                                       .Text("工种")
+                                                       .Width(55)
+                                                       .DataIndex("Craft"),
+
+                                                       X.Column()
+                                                       .Text("打卡类型")
+                                                       .Width(55)
+                                                       .DataIndex("NoAttend "),
+
+                                                       X.Column()
+                                                       .Text("银行账号")
+                                                       .Width(55)
+                                                       .DataIndex("BankAccount").Hidden(true),
+
+                                                       X.Column()
+                                                       .Text("银行类型")
+                                                       .Width(55)
+                                                       .DataIndex("BankType").Hidden(true),
+
+                                                       X.Column()
+                                                       .Text("学历")
+                                                       .Width(55)
+                                                       .DataIndex("Education"),
+
+                                                      X.Column()
+                                                      .Text("备注")
+                                                      .Width(55)
+                                                      .DataIndex("Remark").Hidden(true),
+
+                                      X.CommandColumn()
+                                      .Width(80)
+                                      .Commands(
+                                                 Html.X().GridCommand()
+                                                .CommandName("update")
+                                                .Icon(Icon.UserEdit)
+                                                .Text("修改")
+                                            )
+                                           .DirectEvents(de =>
+                                           {
+                                               de.Command.Url = Url.Action("Update");
+                                               de.Command.ExtraParams.Add(new Parameter("id", "record.data.ID", ParameterMode.Raw));
+                                           })
+
+                                )
+                  )
+         )
+        )
+        )
+            }
+
+
+

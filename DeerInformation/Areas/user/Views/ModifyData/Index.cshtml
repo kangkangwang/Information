@@ -1,0 +1,50 @@
+﻿@model DeerInformation.Areas.user.Models.UserData
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+
+}
+
+@section content
+{
+    @{
+        var Frame = X.FormPanel()
+            .Region(Region.Center)
+            .Frame(true)
+            .BodyPadding(10)
+            .ModelValidation(true)
+            .Layout(LayoutType.HBox )
+            .Items(
+            X.Container().Width(100),
+            X.Container().Layout(LayoutType.VBox).Items(
+            
+            X.TextFieldFor(m=>m.UserName),
+            X.TextFieldFor(m=>m.Name),
+            X.ComboBoxFor(m=>m.Sex).Items("男","女"),
+            X.FileUploadField().ID("UserImageFile").Name("UserImage").Icon(Icon.ImageAdd).Width(260).FieldLabel("图片").Text("选择文件").ButtonText(""),
+            X.TextFieldFor(m => m.UserDspName),            
+            X.DateFieldFor(m=>m.Birthday),
+            X.TextFieldFor(m => m.MobilePhone),
+            X.TextFieldFor(m => m.OfficePhone),
+            X.TextFieldFor(m => m.HomePhone),
+            X.TextFieldFor(m => m.Email),
+            X.CheckboxFor(m => m.SendEmailMsg),
+            X.TextFieldFor(m => m.QQ),
+            X.TextFieldFor(m => m.Address),
+            X.TextFieldFor(m => m.EmployeeID),
+            X.CheckboxFor(m => m.Activity),
+            X.ComboBoxFor(m=>m.Style).Items( Enum.GetNames(typeof(Theme)) ),
+            X.Container().Width(260).Layout(LayoutType.HBox).Items(X.Container().Flex(1), X.Button().Text("保存").Width(70).FormBind(true).DirectClickAction("Save"))
+            )
+            );
+
+    }
+
+    @(X.Viewport().Layout(LayoutType.Border).Items(Frame.AutoScroll(true)))
+
+}

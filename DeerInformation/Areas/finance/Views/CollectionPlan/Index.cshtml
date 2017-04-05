@@ -1,0 +1,132 @@
+﻿@model CollectionPlan
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X(); 
+}
+
+@section headtag
+{
+    <script>
+        
+        var select = function () {
+            var proxy = App.storedata.getProxy();
+            proxy.extraParams = {
+                "customername": App.FilterName1.getValue(),
+                "projectid": App.FilterName2.getValue(),
+                "date": App.FilterDate.getValue()
+            };
+            App.storedata.reload();
+        }
+    </script>
+}
+
+
+
+@section content
+{
+    @{
+
+        var head =
+            X.Toolbar().Layout(LayoutType.HBox)
+                .Shadow(true)
+                .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Middle, Pack = BoxPack.End })
+                .Items(
+                        X.TextField().LabelWidth(60).ID("FilterName1").Name("ClientName").FieldLabel("客户名称"),
+                        X.TextField().LabelWidth(60).ID("FilterName2").Name("ProjectID").FieldLabel("项目编号"),
+                        X.DateField().LabelWidth(40).ID("FilterDate").Name("date").FieldLabel("日期"),
+                        X.Button().Text("查询").Icon(Icon.Magnifier).Handler("select();")
+                        ,
+                        X.ToolbarFill().Flex(1),
+                            
+                        X.Button().Icon(Icon.ApplicationFormAdd).Text("添加").DirectEvents(ls =>
+                        {
+                            ls.Click.Action = "Add";
+                        }),
+                        
+                        X.Button().Icon(Icon.Application).Text("查看").DirectEvents(ls =>
+                        {
+                            ls.Click.Action = "Read";
+                            ls.Click.ExtraParams.Add(new Parameter() { Name = "id", Value = "App.grid.getSelectionModel().getSelection()[0].data.ID", Mode = ParameterMode.Raw });
+                        }),
+
+                        X.Button().Icon(Icon.ApplicationFormEdit).Text("修改").Hidden(true).DirectEvents(de =>
+                        {
+                            de.Click.Action = "Edit";
+                            de.Click.ExtraParams.Add(new Parameter("id", "App.grid.getSelectionModel().getSelection()[0].data.ID", ParameterMode.Raw));
+
+                        })
+                       
+                        );
+
+
+        var proxy = X.AjaxProxy()
+            .ExtraParams(l => l.Add(new Parameter() {Mode = ParameterMode.Value }))
+            .Url(Url.Action("Fiter"))
+            .Reader(X.JsonReader().RootProperty("data"));
+
+        var content = X.GridPanel()
+            .ID("grid")
+            .AutoScroll(true)
+            .Store(X.StoreForModel()
+            .ID("storedata")
+            .PageSize(20)
+            .Proxy(proxy))
+            .ColumnModel(
+
+                X.Column()
+                    .Text("客户名称")
+                    .Flex(1)
+                    .DataIndex("CustomerName"),
+
+                X.Column()
+                    .Text("项目编号")
+                    .Flex(1)
+                    .DataIndex("ProjectID"),
+
+                X.Column()
+                    .Text("项目名称")
+                    .Flex(1)
+                    .DataIndex("ProjectName"),
+
+               X.Column()
+                    .Text("合同总金额")
+                    .Flex(1)
+                    .DataIndex("ContactSum"),
+
+                X.Column()
+                    .Text("创建人")
+                    .Flex(1)
+                    .DataIndex("Creator"),
+
+                X.DateColumn()
+                    .Text("创建日期")
+                    .DataIndex("CreateTime")
+                    .Resizable(false)
+                    .MenuDisabled(true)
+                    .Flex(1)
+                    .Format("yyyy-MM-dd"),
+
+                 X.Column()
+                    .Text("备注")
+                    .Flex(1)
+                    .DataIndex("Remark"))
+                    
+                    .SelectionModel(X.CheckboxSelectionModel().Mode(SelectionMode.Multi))
+                    .BottomBar(
+                        Html.X().PagingToolbar()
+                                .DisplayInfo(true)
+                                .DisplayMsg("当前 {0} - {1} 总共： {2}")
+                                .EmptyMsg("没有数据可以显示")
+                    );
+    }
+    @(
+ X.Viewport().Layout(LayoutType.Border).Items(
+            X.FormPanel().ID("Filter").Region(Region.North).Border(false).PaddingSpec("1,2,1,2").Items(head),
+                content.Region(Region.Center)
+            )
+
+    )
+
+}

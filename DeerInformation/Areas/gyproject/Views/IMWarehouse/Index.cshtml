@@ -1,0 +1,132 @@
+﻿
+@{
+    ViewBag.Title = "材料入库";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+    <script>
+
+        var select = function (store) {
+            var proxy = store.getProxy();
+            proxy.extraParams = {
+                "IMNO": App.IMNO.getValue(),
+                "IMType": App.IMType.getValue(),
+                "CheckState": App.CheckState.getValue()
+            };
+            store.reload();
+        }
+    </script>
+}
+
+@section content
+{
+    @X.Window().ID("IMWarehouse").Layout(LayoutType.HBox).Title("入库类型").Hidden(true).Width(240).Height(70).LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Middle, Pack = BoxPack.Center }).BodyPadding(5).Defaults(X.Parameter().Name("margin").Value("0 5 0 0").Mode(ParameterMode.Value)).Items(
+                X.Button().Text("采购入库").DirectEvents(l =>
+                    {
+                        l.Click.Action = "Opearation";
+                        l.Click.After = "this.up('window').close();";
+                        l.Click.ExtraParams.Add(new Parameter() { Name = "action", Value = "Purchase", Mode = ParameterMode.Value });
+                    })
+,
+                X.Button().Text("调拨入库").DirectEvents(l =>
+                {
+                    l.Click.Action = "Opearation";
+                    l.Click.After = "this.up('window').close();";
+                    l.Click.ExtraParams.Add(new Parameter() { Name = "action", Value = "Allotment", Mode = ParameterMode.Value });
+                })
+,
+                X.Button().Text("盘点入库").DirectEvents(l =>
+                {
+                    l.Click.Action = "Opearation";
+                    l.Click.After = "this.up('window').close();";
+                    l.Click.ExtraParams.Add(new Parameter() { Name = "action", Value = "Stocktaking", Mode = ParameterMode.Value });
+                })
+
+    )
+    @X.Viewport().Layout(LayoutType.Border).Items(
+
+        X.FormPanel().Region(Region.North).Items(
+            X.Toolbar().Region(Region.Center).Layout(LayoutType.Column)
+                .Border(false).Items(
+                    X.TextField().ID("IMNO").FieldLabel("入库单号").LabelAlign(LabelAlign.Right).LabelWidth(100),
+
+                    X.ComboBox().ID("IMType").LabelAlign(LabelAlign.Right).LabelWidth(100).FieldLabel("入库类型").Items("调拨入库", "采购入库", "盘点入库"),
+
+                    X.ComboBox().ID("CheckState").LabelAlign(LabelAlign.Right).LabelWidth(100).FieldLabel("审核状态").Items("审核通过", "审核中", "审核驳回", "审核不通过", "审核过期"),
+
+                    X.Button().Text("查询").Icon(Icon.Magnifier).Handler("select(App.datastore)"),
+                    X.ToolbarFill().ColumnWidth(1),
+                    X.Button().Text("新增入库").Icon(Icon.Add).Handler("App.IMWarehouse.show();"),
+                    X.Button().Text("查看详细").Icon(Icon.ApplicationViewDetail).DirectEvents(l =>
+                    {
+                        l.Click.Action = "ReadLst";
+                        l.Click.ExtraParams.Add(new Parameter() { Name = "id", Value = "App.GridPanel1.getSelectionModel().getSelection()[0].data.IMID", Mode = ParameterMode.Raw });
+                    })
+
+
+                )
+            ),
+        X.Container().Region(Region.Center)
+            .Items(
+                X.GridPanel()
+                    .ID("GridPanel1")
+                    .Store(
+                        X.StoreForModel().ID("datastore")
+                            .PageSize(20)
+                            .Proxy(
+                                X.AjaxProxy().Url(Url.Action("IMFilter", "IMWarehouse")).Reader(X.JsonReader().RootProperty("data"))
+                            )
+                    )
+                    .ColumnModel(
+
+                        X.Column()
+                            .Text("入库单号")
+                            .Width(154).Flex(1)
+                            .DataIndex("IMID"),
+
+                        X.DateColumn()
+                            .Text("入库日期")
+                            .Width(154).Flex(1)
+                            .DataIndex("IMDate")
+                            .Format("yyyy-MM-dd"),
+
+                        X.Column()
+                            .Text("入库类型")
+                            .Width(154).Flex(1)
+                            .DataIndex("IMType"),
+
+                        X.Column()
+                            .Text("项目编号")
+                            .Width(154).Flex(1)
+                            .DataIndex("ProjectID"),
+
+                        X.Column()
+                            .Text("操作人")
+                            .Width(154).Flex(1)
+                            .DataIndex("Operator"),
+
+                        X.DateColumn()
+                            .Text("操作时间")
+                            .Width(154).Flex(1)
+                            .Format("yyyy-MM-dd")
+                            .DataIndex("OperationTime"),
+
+                        X.Column()
+                        .Flex(1)
+                        .Text("审核状态")
+                        .DataIndex("CheckStateDsp")
+                    )
+                    .SelectionModel(
+                        X.CheckboxSelectionModel().Mode(SelectionMode.Multi)
+                    ).BottomBar(
+                        Html.X().PagingToolbar()
+                                .DisplayInfo(true)
+                                .DisplayMsg("当前 {0} - {1} 总共： {2}")
+                                .EmptyMsg("没有数据可以显示")
+                    )
+            )
+        )
+}

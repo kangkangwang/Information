@@ -1,0 +1,69 @@
+﻿@model DeerInformation.Models.V_HR_Certificate
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var closewindow = function () {
+        parent.App.windowCertificate.close()
+    };
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddCertificate</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.HBox)
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                   X.Panel().Flex(9).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Border(false).Items(
+                      X.TextFieldFor(m => m.StaffID).ID("StaffID").FieldLabel("工号").AllowBlank(false).Editable(false),
+                      X.TextFieldFor(m => m.CertificateName).FieldLabel("证件名称").AllowBlank(false),
+                      X.DateFieldFor(m => m.Startdate).FieldLabel("发证日期").Editable(false).AllowBlank(false).Format("Y-n-j"),
+                      X.ComboBoxFor(m=>m.State).FieldLabel("状态").Editable(false).Items(new ListItem("有效"),new ListItem("过期")).Value("有效").AllowBlank(false),
+                      X.TextFieldFor(m => m.Remark).FieldLabel("备注"),
+                      X.TextFieldFor(m => m.ID).FieldLabel("ID").Hidden(true),
+                      X.TextFieldFor(m => m.CerImage).FieldLabel("CerImage").Hidden(true),
+                      X.HiddenFor(m => m.Valid),
+                      X.HiddenFor(m => m.CreaterName),
+                      X.HiddenFor(m => m.CreateTime),
+                      X.HiddenFor(m => m.EditorName),
+                      X.HiddenFor(m => m.EditeTime)
+                   ),
+                      X.Panel().Flex(9).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Border(false).Items(
+                      X.TextFieldFor(m => m.Name).ID("Name").FieldLabel("姓名").AllowBlank(false).Editable(false),
+                      X.TextFieldFor(m => m.CertificateNum).FieldLabel("证件编号").AllowBlank(false),
+                      X.DateFieldFor(m => m.Deadline).FieldLabel("截止日期").Editable(false).AllowBlank(true).Format("Y-n-j"),
+                      X.FileUploadField().ID("UserImageFile").Name("UserImage").Icon(Icon.ImageAdd).Width(260).FieldLabel("图片").Text("选择文件").ButtonText("").EmptyText("小于20M")
+                   ),
+                      X.Panel().Flex(2).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Border(false).Items(
+                        X.Button().Text("选择员工").ID("select")
+                            .DirectEvents(de =>
+                            {
+                                de.Click.Url = Url.Action("SelectStaff");
+                            })
+                      )
+       ),
+        X.Button().Text("保存").Icon(Icon.Accept).ID("save").FormBind(true).Disable(true)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("AddOrEditCertificate");
+                        de.Click.EventMask.ShowMask = true;
+                    })
+    )
+</body>
+
+</html>
+
+
+

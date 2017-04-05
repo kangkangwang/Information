@@ -1,0 +1,30 @@
+﻿@model DeerInformation.Models.T_GM_Project
+
+@{
+    ViewBag.Title = "添加客户订单";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+    @{
+        var first = X.FormPanel().Border(false).FieldDefaults(l=>l.ReadOnly=true).ID("FormPanel1").Frame(true).Layout(LayoutType.Anchor).DefaultAnchor("100%").Items(
+                X.Container().Border(false).ID("container").Layout(LayoutType.Form).Items(
+                    X.TextFieldFor(m=>m.OfferStatus).FieldLabel("订单状态").LabelWidth(60),
+                    X.TextFieldFor(m=>m.CustomerNo).FieldLabel("客户订单号").LabelWidth(75),
+                    X.NumberFieldFor(m => m.PurchaseAmount).FieldLabel("订单金额"),
+                    X.DateFieldFor(m => m.ReciPODate).FieldLabel("收到订单日期").Flex(1),
+                    X.DateFieldFor(m => m.CusCmfDate).FieldLabel("客户订单确认日期").Flex(1),
+                    X.DateFieldFor(m => m.CusStart).FieldLabel("客户要求开工日期").Flex(1),
+                    X.DateFieldFor(m => m.CusEnd).FieldLabel("客户要求交货日期").Flex(1),
+                    X.TextAreaFor(m=>m.Extra).FieldLabel("备注").LabelWidth(30))
+                    .Items(l =>
+                    {
+                        if (Model.AttachmentPath != null)
+                            l.Add(X.HyperlinkButton().Text("客户订单附件").Icon(Icon.Attach).HrefTarget("_blank").Href(Url.Content(Model.AttachmentPath)));
+                    }));                 
+    }
+
+
+    @X.Viewport().Layout(LayoutType.Auto).Items(first.Region(Region.Center))
+}

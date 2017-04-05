@@ -1,0 +1,252 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    ViewBag.Title = "Index";
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+
+<script>
+    var Remove = function (record, StoreOld,StoreNew)
+    {
+        StoreNew.insert(0, record);
+        StoreOld.remove(record);
+    }
+
+    var Removebt = function (GridOld, GridNew) {
+        records = GridOld.selModel.getSelection();
+        GridOld.store.remove(records);
+        GridNew.store.insert(0,records);
+    }
+
+    var Removeall = function (GridOld, GridNew) {
+
+        records = GridOld.store.removeAll();
+        GridNew.store.insert(0,records);
+    }
+
+    var RemoveSall = function (GridOld) {
+
+        records = GridOld.store.removeAll();
+    }
+
+
+    var success = function () {
+        parent.App.window1.close();
+       // parent.App.direct.person.Getq()
+    }
+
+    var Reset = function () {
+        App.StoreReadyselect.removeAll(),
+        App.StoreSelected.removeAll();
+    }
+
+    var onSuccess = function (grid, data) {
+        grid.show();
+        grid.getStore().loadData(data);
+    };
+
+    var Tip = function (selecteddata) {
+        if (selecteddata ==""){
+            Ext.Msg.alert("提示", "未选择任何列！");
+        }
+    }
+
+
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+
+
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @(
+ X.Viewport().ID("window").Layout(LayoutType.Border).Items(
+
+         X.TreePanel().ID("jiagou").RootVisible(true).UseArrows(true).AutoLoad(true).Width(180).Height(400).Region(Region.West)
+                           .DirectEvents(
+                           de =>
+                           {
+                               de.ItemClick.Url = Url.Action("DepClick");
+                               de.ItemClick.ExtraParams.Add(
+                                   new Parameter("dep", "record.data.id", ParameterMode.Raw, true));
+                               de.ItemClick.Success = "onSuccess(App.ReadySelectGP, result.data);";
+                               de.ItemClick.EventMask.ShowMask = true;
+                           }
+                      )
+                      .Root(ViewData["root"] as Node),
+
+
+
+           X.Panel().Region(Region.Center).Items(
+                   X.FormPanel().Layout(LayoutType.Column).Items(
+                     X.TextField().ID("StaffID")
+                           .FieldLabel("工号").Width(200).LabelWidth(50),
+                           X.TextField().ID("Name")
+                           .FieldLabel("姓名").Width(200).LabelWidth(50),
+                   X.Button().Text("查询").DirectEvents(de =>
+                        {
+                            de.Click.Url = Url.Action("Getalldata");
+                            //de.Click.Success = "onSuccess(App.CertificateGridPanel, result.data);";
+                            de.Click.ExtraParams.Add(new Parameter("id", "App.StaffID.getValue()", ParameterMode.Raw));
+                            de.Click.ExtraParams.Add(new Parameter("name", "App.Name.getValue()", ParameterMode.Raw));
+                            de.Click.EventMask.ShowMask = true;
+                        })
+                   ),
+               X.Panel().Layout(LayoutType.Column).Items(
+                    X.Panel().Width(200).Height(300).AutoScroll(true).Items(
+                           X.GridPanel().ID("ReadySelectGP").AutoScroll(true).ColumnLines(true)
+                                      .Store(
+                                         X.Store().ID("ReadySelectStore")
+                                                  .AutoLoad(true)
+                                                  .DataSource(Model)
+                                           .Model(
+                                                     X.Model().Fields(
+                                                             new ModelField("StaffID", ModelFieldType.String),
+                                                             new ModelField("Name", ModelFieldType.String),
+                                                             new ModelField("ID1", ModelFieldType.String),
+                                                             new ModelField("Department1No", ModelFieldType.String),
+                                                             new ModelField("Department1Name", ModelFieldType.String),
+                                                             new ModelField("ID2", ModelFieldType.String),
+                                                             new ModelField("Department2No", ModelFieldType.String),
+                                                             new ModelField("Department2Name", ModelFieldType.String),
+                                                             new ModelField("ID3", ModelFieldType.String),
+                                                             new ModelField("Department3No", ModelFieldType.String),
+                                                             new ModelField("Department3Name", ModelFieldType.String),
+                                                             new ModelField("ID4", ModelFieldType.String),
+                                                             new ModelField("Department4No", ModelFieldType.String),
+                                                             new ModelField("Department4Name", ModelFieldType.String),
+                                                             new ModelField("ID5", ModelFieldType.String),
+                                                             new ModelField("Department5No", ModelFieldType.String),
+                                                             new ModelField("Department5Name", ModelFieldType.String),
+                                                             new ModelField("Department", ModelFieldType.String)
+                                                     )
+                                                  )
+                                          .Reader(
+                                                      X.JsonReader().RootProperty("data")
+                                                      )
+
+                                  )
+                                          .SelectionModel(
+                                                  Html.X().RowSelectionModel().Mode(SelectionMode.Single)
+                                           )
+                                        .ViewConfig(X.GridView().TrackOver(false))
+                                .ColumnModel(
+                                        X.Column()
+                                        .Text("工号")
+                                        .Width(55)
+                                        .DataIndex("StaffID"),
+
+                                        X.Column()
+                                       .Text("姓名")
+                                       .Width(55)
+                                       .DataIndex("Name"),              
+
+                                               X.Column()
+                                               .Text("部门")
+                                               .Width(55)
+                                               .DataIndex("Department")
+                                      )
+                    ),
+
+                    X.Panel().Width(80).Height(300).Defaults(X.Parameter().Name("margin").Value("20 0 0 0").Mode(ParameterMode.Value))
+                    .Layout(LayoutType.VBox).BodyPadding(10).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center }).Items(
+                      X.Button().Text("添加").DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("Add");
+                    //de.Click.Success = "RemoveSall(App.ReadySelectGP);";
+                    de.Click.ExtraParams.Add(new Parameter("id", "App.ReadySelectGP.getSelectionModel().getSelection()[0].data.StaffID", ParameterMode.Raw));
+                    de.Click.EventMask.ShowMask = true;
+                }),
+                X.Panel().BaseCls("x-plain").Flex(0),
+                      X.Button().Text("删除").DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("Delete");
+                    //de.Click.Success = "RemoveSall(App.SelectedGP);";
+                    de.Click.ExtraParams.Add(new Parameter("id", "App.SelectedGP.getSelectionModel().getSelection()[0].data.StaffID", ParameterMode.Raw));
+                    de.Click.EventMask.ShowMask = true;           
+                })
+                    ),
+                    X.Panel().Width(200).Height(300).AutoScroll(true).Items(
+                             X.GridPanel().ID("SelectedGP").AutoScroll(true).ColumnLines(true)
+                                      .Store(
+                                         X.Store().ID("SelectedStore")
+                                                  .AutoLoad(false)
+                                                  .DataSource(Model)
+                                           .Model(
+                                                     X.Model().Fields(
+                                                             new ModelField("StaffID", ModelFieldType.String),
+                                                             new ModelField("Name", ModelFieldType.String),
+                                                             new ModelField("ID1", ModelFieldType.String),
+                                                             new ModelField("Department1No", ModelFieldType.String),
+                                                             new ModelField("Department1Name", ModelFieldType.String),
+                                                             new ModelField("ID2", ModelFieldType.String),
+                                                             new ModelField("Department2No", ModelFieldType.String),
+                                                             new ModelField("Department2Name", ModelFieldType.String),
+                                                             new ModelField("ID3", ModelFieldType.String),
+                                                             new ModelField("Department3No", ModelFieldType.String),
+                                                             new ModelField("Department3Name", ModelFieldType.String),
+                                                             new ModelField("ID4", ModelFieldType.String),
+                                                             new ModelField("Department4No", ModelFieldType.String),
+                                                             new ModelField("Department4Name", ModelFieldType.String),
+                                                             new ModelField("ID5", ModelFieldType.String),
+                                                             new ModelField("Department5No", ModelFieldType.String),
+                                                             new ModelField("Department5Name", ModelFieldType.String),
+                                                             new ModelField("Department", ModelFieldType.String)
+                                                     )
+                                                  )
+                                          .Reader(
+                                                      X.JsonReader().RootProperty("data")
+                                                      )
+
+                                  )
+                                          .SelectionModel(
+                                              Html.X().RowSelectionModel().Mode(SelectionMode.Single)
+                                           )
+                                        .ViewConfig(X.GridView().TrackOver(false))
+                                .ColumnModel(
+                                        X.Column()
+                                        .Text("工号")
+                                        .Width(55)
+                                        .DataIndex("StaffID"),
+
+                                        X.Column()
+                                       .Text("姓名")
+                                       .Width(55)
+                                       .DataIndex("Name"),
+
+                                           X.Column()
+                                                   .Text("部门")
+                                                   .Width(55)
+                                                   .DataIndex("Department")
+                                      )
+                    )
+
+               ),
+
+              X.Panel().Layout(LayoutType.Column).Items(
+               X.Button().Text("提交").DirectEvents(de =>
+               {
+                   de.Click.Url = Url.Action("Submit");
+                   de.Click.Success = "parent.App.window1.close()";
+               }),
+               X.Button().Text("重置").DirectEvents(de =>
+               {
+                   de.Click.Url = Url.Action("Reset");
+                   de.Click.Success = "RemoveSall(App.SelectedGP);";
+                   de.Click.EventMask.ShowMask = true;
+               })
+               )
+           )
+      )
+
+    )
+
+</body>
+
+</html>

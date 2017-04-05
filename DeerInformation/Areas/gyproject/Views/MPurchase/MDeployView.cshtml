@@ -1,0 +1,175 @@
+﻿@model DeerInformation.Models.T_GM_PurchaseMaterial
+
+@{
+    ViewBag.Title = "MDeployView";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+
+<script src="~/Scripts/base/share.js"></script>
+
+<script>
+   
+
+    var fun_success = function ()
+    {
+        //可以在此处增加一个判断（调用前面的getGridValueArr函数），用户配置数量是否大于可配置数量，如果大于则弹出警告窗口。
+        //后台已经做过判断错误配置数据无法录入数据库，但因为刷新函数导致警告弹窗无法显示。
+        Ext.getCmp("GridPanel2").getStore().load();//重新加载view传过来的数据；
+        App.direct.gyproject.MDeployedReload(Ext.getCmp("gid").getValue());
+        Ext.getCmp("spid").setValue("");
+        Ext.getCmp('pno').setValue("");
+        Ext.getCmp("ordertype").setValue("");
+        Ext.getCmp('prepaidday').setValue("");
+        Ext.getCmp("extra").setValue("");
+        Ext.getCmp('receiptmethod').setValue("");
+    };
+
+    var format = function (item)
+    {
+        return item > 9 ? item.toString() : '0' + item.toString();
+    }
+    //日期标准化
+    var test = function ()
+    {
+        var myd = new Date();
+        var y = myd.getFullYear().toString();
+        var m = myd.getMonth() > 8 ? (myd.getMonth() + 1).toString() : '0' + (myd.getMonth() + 1);
+        var d = format(myd.getDay());
+        var h = format(myd.getHours());
+        var min = format(myd.getMinutes());
+        var s = format(myd.getSeconds());
+        var rand = Math.ceil(Math.random() * 10000).toString();
+        var time = "CGM" + rand + +y + m + d + h + min + s;    
+        Ext.getCmp("pno").setValue(time);
+    }
+
+</script>
+
+<style>
+    .search-item {
+        font: normal 11px tahoma, arial, helvetica, sans-serif;
+        padding: 3px 10px 3px 10px;
+        border: 1px solid #fff;
+        border-bottom: 1px solid #eeeeee;
+        white-space: normal;
+        color: #555;
+    }
+</style>  
+
+}
+
+@section content{
+
+@*@{
+    var store = Html.X().Store().ID("CheckerStore")
+                .AutoLoad(false)
+                .Proxy(Html.X().AjaxProxy()
+                    .Url(Url.Action("GetSupplierID", "Share"))
+                    .ActionMethods(am => am.Read = HttpMethod.POST)
+                    .Reader(Html.X().JsonReader().RootProperty("data"))
+                ).Model(Html.X().Model()
+                    .Fields(
+                        Html.X().ModelField().Name("Name"),
+                        Html.X().ModelField().Name("ID")
+                    )
+                );
+}*@
+
+    @( X.Viewport().AutoScroll(true).Layout(LayoutType.Auto).Items(
+    
+            X.FormPanel().ID("form1").Layout(LayoutType.Auto).DefaultAnchor("100%").AutoScroll(true)
+            .Listeners(l => l.ValidityChange.Handler = "#{add}.setDisabled(!valid);").Items(
+                X.Container().Layout(LayoutType.HBox).Items(
+                             X.Container().Layout(LayoutType.Form).DefaultAnchor("100%").Flex(1).MarginSpec("0 5 0 0").Items(
+                                    X.TextFieldFor(m => m.PurchaseMNo).ReadOnly(true).Text("CGM" + new Random().Next(10000).ToString() + DateTime.Now.ToString("ddHHmm")).FieldLabel("采购单号").Flex(2),
+                                    X.ComboBoxFor(m=>m.ReceiptMethod).FieldLabel("收货方式").Flex(2).Items("公司派出", "自提物流/派车", "厂家物流/派车"),
+                                    X.ComboBoxFor(m=>m.CheckProcess).FieldLabel("审核流程").Items(ViewBag.audit).Editable(false).Flex(2),
+                                    X.TextFieldFor(m=>m.OrderType).FieldLabel("订单类型").AllowBlank(false).Flex(2)),
+
+                            X.Container().Layout(LayoutType.Form).DefaultAnchor("100%").Flex(1).MarginSpec("0 5 0 0").Items(
+                                    X.TextField().FieldLabel("申请人电话").ID("tel").Editable(false).Flex(2),
+                                    X.DateField().FieldLabel("交货日期").ID("prepaidday").Editable(false).Flex(2),
+                                    X.TextFieldFor(m=>m.ProjectNo).FieldLabel("项目编号").ID("prono").Editable(false).Flex(2),
+                                    X.ComboBoxFor(m=>m.SupplierID).FieldLabel("供应商").Editable(false).Flex(2).Items(ViewBag.supply)
+                                    @*X.ComboBox().AllowBlank(false).FieldLabel("供应商").ID("spid").Flex(2)
+                                    .TypeAhead(true).MinChars(0).HideTrigger(true).Name("[0].ID")
+                                    .TriggerAction(TriggerAction.Query).DisplayField("Name").ValueField("ID")
+                                    .ListConfig(X.BoundList().LoadingText("查找中...").ItemTpl(X.XTemplate()
+                                    .Html(@<text>
+                                        <div class="search-item">
+                                            <h3><span>供应商名称：{Name}</span> 供应商编号：{ID}</h3>
+                                        </div>
+                                    </text>)))
+                                    .Store(store)*@
+                                    )),
+                                    
+                                    X.TextFieldFor(m=>m.Remark).FieldLabel("备注").LabelWidth(55).MarginSpec("0 0 0 5"),
+
+                                    X.FormPanel().ID("bind").Border(false).Layout(LayoutType.HBox).MarginSpec("5 0 5 0").Listeners(l => l.ValidityChange.Handler = "#{selectm}.setDisabled(!valid);").Items(
+                                        X.ComboBoxFor(m=>m.AMGID).Editable(false).ID("smgid").FieldLabel("申请单号").LabelWidth(55).AllowBlank(false).Flex(5).Items(ViewBag.SQM).MarginSpec("0 10 0 5"),
+                                        X.Button().Text("选择请购单").Disabled(true).Icon(Icon.ShapesManySelect).ID("selectm").DirectEvents(de=>{
+                                            de.Click.Url = Url.Action("TempApply", "Share");
+                                            de.Click.ExtraParams.Add(new Parameter("smgid", "App.smgid.getValue()", ParameterMode.Raw));
+                                            de.Click.Success = "App.selectm.setDisabled(true)";
+                                            de.Click.EventMask.ShowMask = true;
+                                            de.Click.FormID = "bind";
+                                        }))
+                                ),
+                X.Container().ID("projectm").Layout(LayoutType.Auto),
+                X.FormPanel().Layout(LayoutType.Auto).Items(
+                    X.GridPanel().ID("GridPanel2").Title("已选物料").Store(
+                        X.Store().ID("DeployedMaterial").AutoLoad(false)
+                        .PageSize(10).Model(X.Model().IDProperty("MaterialID").Fields(
+                            new ModelField("Brand", ModelFieldType.String),
+                            new ModelField("MaterialID", ModelFieldType.String),
+                            new ModelField("MaterialName", ModelFieldType.String),
+                            new ModelField("Size", ModelFieldType.String),
+                            new ModelField("Unit", ModelFieldType.String),
+                            new ModelField("PurchaseCycle", ModelFieldType.String),
+                            new ModelField("MinPurchase", ModelFieldType.String),
+                            new ModelField("Price", ModelFieldType.String),
+                            new ModelField("Num2", ModelFieldType.String),
+                            new ModelField("Pri", ModelFieldType.String)))
+                            .Reader(X.JsonReader().RootProperty("data")))
+                            .ColumnModel(
+
+                        X.Column().Text("物料编号").Flex(3).DataIndex("MaterialID"),
+                        X.Column().Text("物料名称").Flex(4).DataIndex("MaterialName"),
+
+                        X.ComponentColumn().Editor(true).DataIndex("Num2").Text("采购数量").Flex(3)
+                        .Component(X.NumberField().AllowBlank(false).EmptyText("此项为必须填写项")),
+
+                        X.Column().Text("品牌").Flex(3).DataIndex("Brand"),
+                        X.Column().Text("采购周期").Flex(3).DataIndex("PurchaseCycle"),
+                        X.Column().Text("最小采购量").Flex(3).DataIndex("MinPurchase"),
+                        X.Column().Text("型号").Flex(3).DataIndex("Size"),
+                        X.Column().Text("单位").Flex(3).DataIndex("Unit"),
+                        X.Column().DataIndex("Price").Text("预算价").Flex(3),
+                        
+                        X.ComponentColumn().Editor(true).Text("实际价格").DataIndex("Pri").Flex(3)
+                        .Component(X.NumberField().AllowBlank(false).EmptyText("价格不能为空")),
+
+                        X.CommandColumn().Text("取消选择").Flex(4).Commands(X.GridCommand().CommandName("selected").Icon(Icon.Delete).Text("取消"))
+                            .Listeners(l => l.Command.Handler = "App.DeployedMaterial.remove(record);")))
+                .Buttons(
+                            X.Button().Icon(Icon.ApplicationGet).ID("add").Text("确认").Disabled(true)
+                            .DirectEvents(de =>
+                            {
+                                de.Click.Url = Url.Action("MPurchaseSave", "MPurchase");
+                                de.Click.ExtraParams.Add(new Parameter("list", "App.DeployedMaterial.collect('MaterialID')", ParameterMode.Raw));
+                                de.Click.ExtraParams.Add(new Parameter("record", "getGridValueArr('DeployedMaterial','Num2')", ParameterMode.Raw));
+                                de.Click.ExtraParams.Add(new Parameter("pri", "getGridValueArr('DeployedMaterial','Pri')", ParameterMode.Raw));
+                                de.Click.Success = "Judge('DeployedMaterial','Num2','Pri');";
+                                de.Click.EventMask.ShowMask = true;
+                                de.Click.FormID = "form1";
+                                de.Click.IsUpload = true;
+                            }),
+                            X.Button().Icon(Icon.Cancel).ID("cancel").Text("取消")
+                                .Listeners(l => l.Click.Handler = "parent.App.win.close()"))))
+
+}
+
+

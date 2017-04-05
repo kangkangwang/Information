@@ -1,0 +1,217 @@
+﻿@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var closewindow = function () {
+        parent.App.windowStaffJobDetail.close()
+    };
+
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>StaffJobDetail</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @(X.Viewport().ID("BackViewPort")
+    .Layout(LayoutType.Border)
+    .Items(
+    X.Panel().ID("Panel1").Region(Region.Center).Items(
+
+                    X.FieldSet().Title("员工基本信息").Layout(LayoutType.HBox).Items(
+                      X.Panel().Border(false).Items(
+                              X.TextField().ID("StaffID").FieldLabel("工号").Editable(false),
+                              X.TextField().ID("SDepartMentName").FieldLabel("部门").Editable(false),
+                              X.TextField().ID("StaffType").FieldLabel("员工类型").Editable(false)
+                      ),
+                      X.Component().Width(10),
+                      X.Panel().Border(false).Items(
+                              X.TextField().ID("Name").FieldLabel("姓名").Editable(false),
+                              X.TextField().ID("EntryTime").FieldLabel("入职时间").Editable(false).FormatText("'Y-m-d'")
+                      )
+                   ),
+
+                    X.Panel().AutoScroll(true).Border(false).Items(
+                                      X.GridPanel().ID("StaffJobGridPanal").AutoScroll(true).ColumnLines(true).Height(323)
+                                                      .Store(
+                                                         X.Store().ID("StaffJobStore")
+                                                                  .AutoLoad(true)
+                                                                  .DataSource(Model)
+                                                           .Model(
+                                                                     X.Model().Fields(
+                                                                             new ModelField("StaffID", ModelFieldType.String),
+                                                                             new ModelField("Name", ModelFieldType.String),
+                                                                             new ModelField("SDepartMentId", ModelFieldType.String),
+                                                                             new ModelField("SDepartMentName", ModelFieldType.String),
+                                                                             new ModelField("EntryTime", ModelFieldType.Date),
+                                                                             new ModelField("StaffType", ModelFieldType.String),
+                                                                             new ModelField("JobID", ModelFieldType.String),
+                                                                             new ModelField("JobName", ModelFieldType.String),
+                                                                             new ModelField("DutyID", ModelFieldType.String),
+                                                                             new ModelField("DutyName", ModelFieldType.String),
+                                                                             new ModelField("DutyType", ModelFieldType.String),
+                                                                             new ModelField("PositionCategoryID", ModelFieldType.String),
+                                                                             new ModelField("PositionCategoryName", ModelFieldType.String),
+                                                                             new ModelField("IsValid", ModelFieldType.Boolean),
+                                                                             new ModelField("ValidTime", ModelFieldType.Date),
+                                                                             new ModelField("ChangeType", ModelFieldType.String),
+                                                                             new ModelField("Remark", ModelFieldType.String),
+                                                                             new ModelField("CreaterName", ModelFieldType.String),
+                                                                             new ModelField("CreateTime", ModelFieldType.Date),
+                                                                             new ModelField("EditorName", ModelFieldType.String),
+                                                                             new ModelField("EditeTime", ModelFieldType.Date),
+                                                                             new ModelField("StaffJobID", ModelFieldType.String)
+                                                                     )
+                                                                  )
+                                                          .Reader(
+                                                                      X.JsonReader().RootProperty("data")
+                                                                      )
+
+                                                  )
+                                                      .SelectionModel(
+                                                          X.SpreadsheetSelectionModel()
+                                                           .ID("SpreadsheetSelectionModel1")
+                                                           .CheckboxSelect(true)
+                                                           .PruneRemoved(false)
+                                                           .Extensible(SpreadsheetExtensible.Y)
+                                                           .CellSelect(false)
+                                                           .ColumnSelect(false)
+                                                       )
+                                                        .ViewConfig(X.GridView().TrackOver(false))
+                                                .ColumnModel(
+                                                       X.Column()
+                                                       .Text("工号")
+                                                       .Width(155)
+                                                       .DataIndex("StaffID").Hidden(true),
+
+                                                       X.Column()
+                                                       .Text("员工姓名")
+                                                       .Width(155)
+                                                       .DataIndex("Name").Hidden(true),
+
+                                                       X.Column()
+                                                       .Text("部门ID")
+                                                       .Width(155)
+                                                       .DataIndex("SDepartMentId").Hidden(true),
+
+                                                       X.Column()
+                                                       .Text("部门名称")
+                                                       .Width(155)
+                                                       .DataIndex("SDepartMentName").Hidden(true),
+
+                                                       X.Column()
+                                                      .Text("入职时间")
+                                                      .Width(155)
+                                                      .Renderer(RendererFormat.Date, new string[] { "'Y-m-d'" })
+                                                      .DataIndex("EntryTime").Hidden(true),
+
+                                                       X.Column()
+                                                       .Text("员工类型")
+                                                       .Width(155)
+                                                       .DataIndex("StaffType").Hidden(true),
+
+                                                       X.Column()
+                                                       .Text("职位ID")
+                                                       .Width(155)
+                                                       .DataIndex("JobID").Hidden(true).Hidden(true),
+
+                                                       X.Column()
+                                                       .Text("职位名称")
+                                                       .Width(155)
+                                                       .DataIndex("JobName"),
+
+                                                       X.Column()
+                                                       .Text("职务ID")
+                                                       .Width(155)
+                                                       .DataIndex("DutyID").Hidden(true),
+
+                                                       X.Column()
+                                                       .Text("职务名称")
+                                                       .Width(155)
+                                                       .DataIndex("DutyName"),
+
+                                                       X.Column()
+                                                       .Text("职务类型")
+                                                       .Width(155)
+                                                       .DataIndex("DutyType"),
+
+                                                       X.Column()
+                                                       .Text("职位类别ID")
+                                                       .Width(155)
+                                                       .DataIndex("PositionCategoryID").Hidden(true),
+
+                                                       X.Column()
+                                                       .Text("职位类别名称")
+                                                       .Width(155)
+                                                       .DataIndex("PositionCategoryName"),
+
+                                                       X.Column()
+                                                       .Text("是否有效")
+                                                       .Width(155)
+                                                       .Renderer(RendererFormat.Checkbox)
+                                                       .DataIndex("IsValid"),
+
+                                                       X.Column()
+                                                      .Text("生效日期")
+                                                      .Width(155)
+                                                      .Renderer(RendererFormat.Date, new string[] { "'Y-m-d'" })
+                                                      .DataIndex("ValidTime"),
+
+                                                      X.Column()
+                                                      .Text("职位异动类型")
+                                                      .Width(155)
+                                                      .DataIndex("ChangeType"),
+
+                                                      X.Column()
+                                                      .Text("备注")
+                                                      .Width(155)
+                                                      .DataIndex("Remark"),
+
+                                                      X.Column()
+                                                      .Text("创建人")
+                                                      .Width(155)
+                                                      .DataIndex("CreaterName"),
+
+                                                      X.Column()
+                                                      .Text("创建时间")
+                                                      .Width(155)
+                                                      .Renderer(RendererFormat.Date, new string[] { "'Y-m-d H:m:s'" })
+                                                      .DataIndex("CreateTime"),
+
+                                                      X.Column()
+                                                      .Text("修改人")
+                                                      .Width(155)
+                                                      .DataIndex("EditorName"),
+
+                                                      X.Column()
+                                                      .Text("修改时间")
+                                                      .Width(155)
+                                                      .Renderer(RendererFormat.Date, new string[] { "'Y-m-d H:m:s'" })
+                                                      .DataIndex("EditeTime"),
+
+                                                      X.Column()
+                                                        .Text("员工职位ID")
+                                                        .Width(80)
+                                                        .DataIndex("StaffJobID").Hidden(true).Hidden(true)
+                                                )
+                   ),
+        X.Button().Text("确定").Icon(Icon.Accept).ID("save")
+                    .Listeners(l =>
+                        {
+                            l.Click.Handler = "closewindow();";
+                        })
+    )
+    )
+    )
+</body>
+
+</html>
+
+
+
+

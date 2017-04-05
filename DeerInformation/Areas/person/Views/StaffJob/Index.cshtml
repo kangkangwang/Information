@@ -1,0 +1,285 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var reload = function () {
+        App.direct.person.StaffJobReload();
+    };
+    var onSuccess = function (grid, data) {
+        grid.show();
+        grid.getStore().loadData(data);
+    };
+    var toggleRowSelect = function () {
+        App.SpreadsheetSelectionModel1.setRowSelect(false);
+        App.SpreadsheetSelectionModel1.setRowSelect(true);
+    };
+    var deletejs = function (selecteddata) {
+        if (selecteddata != "") {
+            Ext.MessageBox.confirm("提示", "确认删除该项？", function (but) {
+                if (but == "yes") {
+                    App.direct.person.JSDeleteStaffJob(selecteddata);
+                    App.SpreadsheetSelectionModel1.setRowSelect(false);
+                    App.SpreadsheetSelectionModel1.setRowSelect(true);
+                    App.direct.person.StaffJobReload();
+                    App.StaffJobGridPanal.show();
+                    App.StaffJobGridPanal.getStore().loadData(result.data);
+                }
+            });
+        }
+        else {
+            Ext.Msg.alert("提示", "未选择任何列！");
+        }
+    }
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>StaffJob</title>
+</head>
+
+<body>
+    <div>
+        @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+
+        @(X.Viewport().ID("BackViewPort")
+        .Layout(LayoutType.Border)
+        .Items(
+      X.Panel().Region(Region.Center).Layout(LayoutType.Border).Title("职位异动").Items(
+      X.Panel().Region(Region.West).Width(200).Collapsible(false).AutoScroll(true).Items(
+        X.TreePanel().ID("jiagou").RootVisible(true).UseArrows(true).AutoLoad(true)
+                           .DirectEvents(
+                           de =>
+                           {
+                               de.ItemClick.Url = Url.Action("DepClick");
+                               de.ItemClick.ExtraParams.Add(
+                                   new Parameter("dep", "record.data.id", ParameterMode.Raw, true));
+                               de.ItemClick.Success = "onSuccess(App.StaffJobGridPanal, result.data);";
+                               de.ItemClick.EventMask.ShowMask = true;
+                           }
+                      )
+                      .Root(ViewData["root"] as Node)
+      ),
+      X.Panel().AutoScroll(true).Region(Region.Center).Items(
+       X.FormPanel().Layout(LayoutType.Column).Items(
+                   X.TextField().ID("StaffID")
+                   .FieldLabel("工号"),
+                   X.TextField().ID("Name")
+                   .FieldLabel("姓名"),
+           X.Button().Text("查询").DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("Getalldata");
+                    de.Click.Success = "onSuccess(App.StaffJobGridPanal, result.data);";
+                    de.Click.ExtraParams.Add(new Parameter("id", "App.StaffID.getValue()", ParameterMode.Raw));
+                    de.Click.ExtraParams.Add(new Parameter("name", "App.Name.getValue()", ParameterMode.Raw));
+                    de.Click.EventMask.ShowMask = true;
+                }),
+                X.Button().Text("查看异动记录")
+                            .DirectEvents(de =>
+                              {
+                                  de.Click.Url = Url.Action("Detail");
+                                  de.Click.ExtraParams.Add(new Parameter("id", "App.StaffJobGridPanal.getSelectionModel().getSelection()[0].data.StaffID", ParameterMode.Raw));
+                              }),
+                   X.Button().Text("职位异动")
+                            .DirectEvents(de =>
+                              {
+                                  de.Click.Url = Url.Action("Update");
+                                  de.Click.ExtraParams.Add(new Parameter("id", "App.StaffJobGridPanal.getSelectionModel().getSelection()[0].data.StaffJobID", ParameterMode.Raw));
+                              }),
+                            X.Button().Text("删除").Listeners(l =>
+                        {
+                            l.Click.Handler = "deletejs(App.SpreadsheetSelectionModel1.getSubmitData());";
+                        })
+       ),
+                       X.GridPanel().ID("StaffJobGridPanal").AutoScroll(true).ColumnLines(true)
+                                      .Store(
+                                         X.Store().ID("StaffJobStore")
+                                                  .AutoLoad(true)
+                                                  .DataSource(Model)
+                                           .Model(
+                                                     X.Model().Fields(
+                                                             new ModelField("StaffID", ModelFieldType.String),
+                                                             new ModelField("Name", ModelFieldType.String),
+                                                             new ModelField("SDepartMentId", ModelFieldType.String),
+                                                             new ModelField("SDepartMentName", ModelFieldType.String),
+                                                             new ModelField("EntryTime", ModelFieldType.Date),
+                                                             new ModelField("StaffType", ModelFieldType.String),
+                                                             new ModelField("JobID", ModelFieldType.String),
+                                                             new ModelField("JobName", ModelFieldType.String),
+                                                             new ModelField("DutyID", ModelFieldType.String),
+                                                             new ModelField("DutyName", ModelFieldType.String),
+                                                             new ModelField("DutyType", ModelFieldType.String),
+                                                             new ModelField("PositionCategoryID", ModelFieldType.String),
+                                                             new ModelField("PositionCategoryName", ModelFieldType.String),
+                                                             new ModelField("IsValid", ModelFieldType.Boolean),
+                                                             new ModelField("ValidTime", ModelFieldType.Date),
+                                                             new ModelField("ChangeType", ModelFieldType.String),
+                                                             new ModelField("Remark", ModelFieldType.String),
+                                                             new ModelField("CreaterName", ModelFieldType.String),
+                                                             new ModelField("CreateTime", ModelFieldType.Date),
+                                                             new ModelField("EditorName", ModelFieldType.String),
+                                                             new ModelField("EditeTime", ModelFieldType.Date),
+                                                             new ModelField("StaffJobID", ModelFieldType.String)
+                                                     )
+                                                  )
+                                          .Reader(
+                                                      X.JsonReader().RootProperty("data")
+                                                      )
+
+                                  )
+                                      .SelectionModel(
+                                          X.SpreadsheetSelectionModel()
+                                           .ID("SpreadsheetSelectionModel1")
+                                           .CheckboxSelect(true)
+                                           .PruneRemoved(false)
+                                           .Extensible(SpreadsheetExtensible.Y)
+                                           .CellSelect(false)
+                                           .ColumnSelect(false)
+                                       )
+                                        .ViewConfig(X.GridView().TrackOver(false))
+                                .ColumnModel(                                       
+                                       X.Column()
+                                       .Text("工号")
+                                       .Width(155)
+                                       .DataIndex("StaffID"),
+
+                                       X.Column()
+                                       .Text("员工姓名")
+                                       .Width(155)
+                                       .DataIndex("Name"),
+                                       
+                                       X.Column()
+                                       .Text("部门ID")
+                                       .Width(155)
+                                       .DataIndex("SDepartMentId").Hidden(true),
+                                       
+                                       X.Column()
+                                       .Text("部门名称")
+                                       .Width(155)
+                                       .DataIndex("SDepartMentName"),
+                                       
+                                       X.Column()
+                                      .Text("入职时间")
+                                      .Width(155)
+                                      .Renderer(RendererFormat.Date, new string[] { "'Y-m-d'" })
+                                      .DataIndex("EntryTime"),
+
+                                       X.Column()
+                                       .Text("员工类型")
+                                       .Width(155)
+                                       .DataIndex("StaffType"),
+                                       
+                                       X.Column()
+                                       .Text("职位ID")
+                                       .Width(155)
+                                       .DataIndex("JobID").Hidden(true),
+                                       
+                                       X.Column()
+                                       .Text("职位名称")
+                                       .Width(155)
+                                       .DataIndex("JobName"),
+                                       
+                                       X.Column()
+                                       .Text("职务ID")
+                                       .Width(155)
+                                       .DataIndex("DutyID").Hidden(true),
+                                       
+                                       X.Column()
+                                       .Text("职务名称")
+                                       .Width(155)
+                                       .DataIndex("DutyName"),
+                                       
+                                       X.Column()
+                                       .Text("职务类型")
+                                       .Width(155)
+                                       .DataIndex("DutyType"),
+                                       
+                                       X.Column()
+                                       .Text("职位类别ID")
+                                       .Width(155)
+                                       .DataIndex("PositionCategoryID").Hidden(true),
+                                       
+                                       X.Column()
+                                       .Text("职位类别名称")
+                                       .Width(155)
+                                       .DataIndex("PositionCategoryName"),
+
+                                       X.Column()
+                                       .Text("是否有效")
+                                       .Width(155)
+                                       .Renderer(RendererFormat.Checkbox)
+                                       .DataIndex("IsValid").Hidden(true),
+
+                                       X.Column()
+                                      .Text("生效日期")
+                                      .Width(155)
+                                      .Renderer(RendererFormat.Date, new string[] { "'Y-m-d'" })
+                                      .DataIndex("ValidTime"),
+
+                                      X.Column()
+                                      .Text("职位异动类型")
+                                      .Width(155)
+                                      .DataIndex("ChangeType"),
+                                      
+                                      X.Column()
+                                      .Text("备注")
+                                      .Width(155)
+                                      .DataIndex("Remark"),
+
+                                      X.Column()
+                                      .Text("创建人")
+                                      .Width(155)
+                                      .DataIndex("CreaterName"),
+
+                                      X.Column()
+                                      .Text("创建时间")
+                                      .Width(155)
+                                      .Renderer(RendererFormat.Date, new string[] { "'Y-m-d H:m:s'" })
+                                      .DataIndex("CreateTime"),
+
+                                      X.Column()
+                                      .Text("修改人")
+                                      .Width(155)
+                                      .DataIndex("EditorName"),
+
+                                      X.Column()
+                                      .Text("修改时间")
+                                      .Width(155)
+                                      .Renderer(RendererFormat.Date, new string[] { "'Y-m-d H:m:s'" })
+                                      .DataIndex("EditeTime"),
+                                      
+                                      X.Column()
+                                        .Text("员工职位ID")
+                                        .Width(80)
+                                        .DataIndex("StaffJobID").Hidden(true),
+
+                                      X.CommandColumn()
+                                      .Width(80)
+                                      .Commands(
+                                                 Html.X().GridCommand()
+                                                .CommandName("update")
+                                                .Icon(Icon.UserEdit)
+                                                .Text("异动")
+                                            )
+                                           .DirectEvents(de =>
+                                           {
+                                               de.Command.Url = Url.Action("Update");
+                                               de.Command.ExtraParams.Add(new Parameter("id", "record.data.StaffJobID", ParameterMode.Raw));
+                                           })
+
+                                )
+                  )
+         )
+        )
+        )
+
+
+    </div>
+</body>
+</html>
+

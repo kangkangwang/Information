@@ -1,0 +1,53 @@
+﻿@model PaymentApply
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+@{
+    var content = Html.X().FormPanel().ID("form1")
+            .Layout(LayoutType.Form)
+            .BodyPadding(10)
+            .Frame(true)
+            .Items(
+                   X.TextFieldFor(m => m.ID).ReadOnly(true).Hidden(true),
+                   X.TextFieldFor(m => m.CustomerName).ReadOnly(true),
+                   X.TextFieldFor(m => m.BudgetID).ReadOnly(true),
+                   X.TextFieldFor(m => m.ProjectID).ReadOnly(true),
+                   X.TextFieldFor(m => m.ProjectName).ReadOnly(true),
+                   X.TextFieldFor(m => m.CompletionPercent).ReadOnly(true),
+                   X.CheckboxFor(m => m.InvoiceOrnot),
+                   X.TextFieldFor(m => m.InvoiceNum).Hidden(true),
+                   X.ComboBoxFor(m => m.InvoiceType).Items(Model.InvoiceTypeItems),
+                   X.TextFieldFor(m => m.InvoiceAmount),
+                   X.TextFieldFor(m => m.BudgetSum).ReadOnly(true),
+                   X.TextFieldFor(m => m.HaveReceive).ReadOnly(true),
+                   X.TextFieldFor(m => m.RestAmount).ReadOnly(true).Hidden(true),
+                   X.TextFieldFor(m => m.Creator).ReadOnly(true).Hidden(true),
+                   X.DateFieldFor(m => m.CreateDate).ReadOnly(true).Hidden(true),
+                   X.ComboBoxFor(m => m.PaymentState).Items("未收款", "已收款"),
+                   X.TextFieldFor(m=>m.RealReceiveAmount),
+                   X.TextAreaFor(m => m.Remark)
+            )
+                .Buttons(X.Button()
+                .Text("提交")
+                .FormBind(true)
+                .DirectEvents(de =>
+                        {
+                            de.Click.Action = "Edit";
+                            de.Click.Before = @"if (!#{form1}.getForm().isValid()) { return false; }
+                            Ext.Msg.wait('正在提交...', '上传中');";
+                            de.Click.FormID = "form1";
+                            de.Click.ExtraParams.Add(new {id = Model.ID});
+                            de.Click.Success = "parent.App.direct.finance.Reload();parent.App.win.close();";
+                            de.Click.Failure = "alert('修改失败！')";
+                        })
+                );
+}
+
+@(X.Viewport().Layout(LayoutType.Border).Items(
+    content.Region(Region.Center).AutoScroll(true))
+)
+}

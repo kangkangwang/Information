@@ -1,0 +1,48 @@
+﻿@model DeerInformation.Models.T_PE_Menu
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+    <script>
+        var winclose = function () {
+            this.up('window').close();
+        }
+    </script>
+}
+
+
+@section content{
+    @(X.Viewport().Layout(LayoutType.Border).Items(
+    X.FormPanelFor(m => m)
+    .Frame(true)
+    .Layout(LayoutType.Form)
+    .Region(Region.Center)
+    .ModelValidation(true)
+    .Flex(1)
+    .Buttons(
+    Html.X().Button()
+        .Text("Cancel")
+        .DirectEvents(de =>
+        {
+            de.Click.Action = "Cancel";
+            de.Click.Success = string.Format("parent.App.{0}.close()", ViewBag.winname);
+            de.Click.EventMask.ShowMask = true;
+        }
+        ),
+    Html.X().Button()
+        .Text("Submit")
+        .DirectEvents(de =>
+        {
+            de.Click.Action = "Add";
+            de.Click.Success = string.Format("parent.App.{0}.close()", ViewBag.winname);
+            de.Click.EventMask.ShowMask = true;
+        }
+        )
+    )
+    )
+    )
+}

@@ -1,0 +1,122 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    ViewBag.Title = "现场资料管理";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+    <script>
+        function download(){  
+            var rows = this.getSelectionModel().getSelection();  
+            if(rows==false || rows.length>1){  
+                Ext.Msg.alert('系统提示', '请选择一行进行操作！');  
+                return;  
+            }  
+            var name = rows[0].get('name');  
+            window.location.href = 'backup!download'+"?name="+name;            
+        };
+
+        var deletejs = function (id1) {
+            Ext.MessageBox.confirm("提示", "确认删除该项？", function (but) {
+                if (but == "yes") {
+                    App.direct.workyard.ClickDelete(id1);
+                    App.direct.workyard.FieldDataReload();
+                }
+            });
+        };
+
+        var onSuccess = function (grid, data) {
+            grid.show();
+            grid.getStore().loadData(data);
+        };
+    </script>
+}
+
+@section content{
+    <div>
+    @(X.Container().Layout(LayoutType.HBox).Items(
+            X.TextField().FieldLabel("项目编号").ID("no"),
+            X.TextField().FieldLabel("现场").ID("field"),
+            X.TextField().FieldLabel("记录名称").ID("recordname"),
+            X.Button().Text("查询").ID("btninquire").Icon(Icon.ApplicationGo).DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("FieldInquire");
+                        de.Click.Success = "onSuccess(App.GridPanel1, result.data);";
+                        de.Click.ExtraParams.Add(new Parameter("addno", "App.no.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("addfield", "App.field.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("addrecordname", "App.recordname.getValue()", ParameterMode.Raw));
+                        de.Click.EventMask.ShowMask = true;
+                    }),
+
+                     X.Button().Icon(Icon.ApplicationAdd).Text("添加").DirectEvents(de =>
+                        {
+                            de.Click.Url = Url.Action("FieldDataAddButton");
+                            de.Click.EventMask.ShowMask = true;
+                        })                    )
+    )
+</div>
+    @(X.FormPanel().Layout(LayoutType.Auto).Region(Region.Center).Items(
+                            X.GridPanel().ID("GridPanel1")
+                            .BottomBar(X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true)).Store(
+                                X.Store().ID("FieldDataManagement").DataSource(Model).Model(
+                                        X.Model().IDProperty("ID").Fields(
+                                            new ModelField("ID", ModelFieldType.String),
+                                            new ModelField("ProjectNo", ModelFieldType.String),
+                                            new ModelField("FieldName", ModelFieldType.String),
+                                            new ModelField("AnnetName", ModelFieldType.String),
+                                            new ModelField("UploadMan", ModelFieldType.String),
+                                            new ModelField("UploadTime", ModelFieldType.String),
+                                            new ModelField("AnnetPath", ModelFieldType.String)
+                                            )).Reader(X.JsonReader().RootProperty("data"))
+                                            )
+                                            .ColumnModel(
+
+                                                   X.Column().DataIndex("ID").Hidden(true),
+                                                   X.Column()
+                                                    .Text("项目编号")
+                                                    .Flex(1)
+                                                    .DataIndex("ProjectNo"),
+
+                                                   X.Column()
+                                                    .Text("现场名称")
+                                                    .Flex(1)
+                                                    .DataIndex("FieldName").Hidden(true),
+
+                                                   X.Column()
+                                                    .Text("上传人")
+                                                    .Flex(1)
+                                                    .DataIndex("UploadMan"),
+
+                                                   X.Column()
+                                                    .Text("上传时间")
+                                                    .Flex(1)
+                                                    .DataIndex("UploadTime"),
+
+
+                                                    X.HyperlinkColumn().Flex(1).DataIndex("AnnetName")
+                                                    .DataIndexHref("AnnetPath").Text("查看附件").HrefTarget("_blank"),
+//X.HyperlinkButton().Text("附件").Icon(Icon.Attach).HrefTarget("_blank").Href(Url.Content(Model.AttachmentPath)),
+                                                  //X.HyperlinkColumn().Text("查看附件").Flex(2).ID("annet").DataIndex("AnnetName")
+                                                  //.HrefTarget("_blank").Pattern("{text:uppercase}").DataIndexHref("AnnetPath"),
+
+                                                   X.CommandColumn().Text("下载附件").Flex(1).Commands(
+                                                                 X.GridCommand().CommandName("download").Icon(Icon.ApplicationDelete).Text("下载"))
+                                                                        .DirectEvents(de =>
+                                                                        {
+                                                                            de.Command.Url = Url.Action("FileDownload");
+                                                                            de.Command.ExtraParams.Add(new Parameter("filePath", "record.data.AnnetPath", ParameterMode.Raw));
+                                                                            de.Command.ExtraParams.Add(new Parameter("fileName", "record.data.AnnetName", ParameterMode.Raw));
+                                                                            de.Command.IsUpload = true;
+
+                                                                        }),
+                                                  
+                                                     X.CommandColumn().Text("删除记录").Flex(1).Commands(
+                                                                 X.GridCommand().CommandName("delete").Icon(Icon.ApplicationDelete).Text("删除"))
+                                                                 .Listeners(l =>l.Command.Handler = "deletejs(record.data.ID);")
+                                            )
+                                         )
+                                         )
+    }
+    

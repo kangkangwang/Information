@@ -1,0 +1,79 @@
+﻿@model DeerInformation.Models.V_HR_DutyWithPCName
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var closewindow = function () {
+        parent.App.windowDuty.close()
+    };
+    var setPCName = function () {
+            var combo = App.PCName;
+            combo.setValue(App.PCID.getValue());
+    };
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddDuty</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.Column)
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                   X.Panel().Items(
+                              //X.TextFieldFor(m => m.PositionCategoryID).ID("PCID").FieldLabel("职务类型ID").Editable(false).AllowBlank(false),
+                      X.TextFieldFor(m => m.DutyID).FieldLabel("职务ID").AllowBlank(false).Editable(false).Text(ViewData["AutoID"].ToString()),
+                      X.ComboBox().ID("PCName").FieldLabel("职务类别名称").AllowBlank(false).Editable(false)
+                      .DisplayField("name")
+                      .ValueField("id")
+                      .EmptyText("请选择...")
+                      .Store(X.Store()
+                      .AutoLoad(true)
+                      .Model(X.Model()
+                      .IDProperty("Id")
+                      .Fields(
+                              new ModelField("id", ModelFieldType.String) { Mapping = "PositionCategoryID" },
+                              new ModelField("name", ModelFieldType.String) { Mapping = "PositionCategoryName" }
+                      )
+                      )
+                      .Proxy(X.AjaxProxy().Url(Url.Action("GetPositionCategory")).Reader(X.JsonReader().RootProperty("data"))
+                      )
+                      .Listeners(ls => ls.Load.Handler = "setPCName()")
+                      )
+                      .Listeners(l=>l.Select.Handler="App.direct.person.SetPCid(App.PCName.getValue());"),
+                      X.TextFieldFor(m => m.DutyRank).FieldLabel("职级").AllowBlank(false).Regex("^[A-Z]{1,1}$"),
+                      X.ComboBoxFor(m=>m.DutyType).FieldLabel("职务类型").Editable(false).Items(new ListItem("直接员工"),new ListItem("间接员工")).EmptyText("请选择...").AllowBlank(false),
+                      X.TextFieldFor(m=>m.PositionCategoryID).ID("PCID").FieldLabel("职务类型ID").Editable(false).AllowBlank(false).Hidden(true),
+                      X.HiddenFor(m=>m.PositionCategoryName),
+                      X.HiddenFor(m => m.CreaterName),
+                      X.HiddenFor(m => m.CreateTime),
+                      X.HiddenFor(m => m.EditorName),
+                      X.HiddenFor(m => m.EditorTime)
+                   ),
+                   X.Panel().Items(
+                      X.TextFieldFor(m => m.DutyName).FieldLabel("职务名称").AllowBlank(false),
+                      X.NumberFieldFor(m=>m.DutyLevel).FieldLabel("层级").MaxValue(30).MinValue(1).Value(1).AllowBlank(false).Editable(false),
+                      X.ComboBoxFor(m=>m.FunctionList).FieldLabel("职能序列").Items(new ListItem("专业类职务"),new ListItem("管理类职务")).EmptyText("请选择...").AllowBlank(false).Editable(false),
+                      X.TextFieldFor(m => m.Remark).FieldLabel("备注").AllowBlank(true)
+                   )
+       ),
+        X.Button().Text("保存").Icon(Icon.Accept).ID("save").FormBind(true).Disable(true)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("AddOrEditDuty");
+                        de.Click.EventMask.ShowMask = true;
+                    })
+    )
+</body>
+
+</html>

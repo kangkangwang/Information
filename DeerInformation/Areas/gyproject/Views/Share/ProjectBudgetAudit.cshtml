@@ -1,0 +1,50 @@
+﻿@model DeerInformation.Models.V_GM_DetailBudget
+
+@{
+    ViewBag.Title = "查看报价单";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+    @{
+        var first = X.FormPanel().ID("FormPanel1").Frame(true).Items(
+                X.Container().Layout(LayoutType.Anchor).DefaultAnchor("100%").MarginSpec("0 5 0 5").Items(
+                   X.TextFieldFor(m => m.GID).ID("opreationlistid").Hidden(true),
+                   //X.TextFieldFor(m => m.QuotationNo).FieldLabel("报价编号").ReadOnly(true).LabelWidth(60),
+                   X.TextFieldFor(m => m.ProjectNo).FieldLabel("项目编号").ReadOnly(true).LabelWidth(60),
+                   X.Container().Layout(LayoutType.HBox).Items(
+                       X.Container().Layout(LayoutType.Anchor).DefaultAnchor("100%").Flex(1).Items(
+                           X.TextFieldFor(m => m.ProjectName).FieldLabel("项目名称").ReadOnly(true).LabelWidth(60),
+                           X.TextFieldFor(m => m.ClientName).FieldLabel("客户名称").ReadOnly(true).LabelWidth(60),
+                           X.TextFieldFor(m => m.Name).FieldLabel("经办人").ReadOnly(true).LabelWidth(60)),
+                       X.Container().Layout(LayoutType.Anchor).DefaultAnchor("100%").Flex(1).MarginSpec("0 0 0 5").Items(
+                           X.TextFieldFor(m => m.AuditProgress).FieldLabel("审核流程").ReadOnly(true).LabelWidth(60),
+                           X.TextFieldFor(m => m.TaxRate).FieldLabel("税率").ReadOnly(true).LabelWidth(60),
+                           X.DateFieldFor(m => m.AgentDate).FieldLabel("经办时间").ReadOnly(true).LabelWidth(60))),
+                   X.TextFieldFor(m => m.Extra).FieldLabel("报价备注").ReadOnly(true).LabelWidth(60)),
+
+              X.Panel().Title("报价和成本").Layout(LayoutType.HBox).Collapsible(true).Items(
+                  X.Container().Layout(LayoutType.Anchor).DefaultAnchor("100%").Flex(1).MarginSpec("5 5 0 5").Items(
+                      X.TextFieldFor(m => m.OfferMoney).FieldLabel("报价总额（元）").ReadOnly(true),
+                      X.TextFieldFor(m => m.MaterialOffer).FieldLabel("材料报价（元）").ReadOnly(true),
+                      X.TextFieldFor(m => m.LaborOffer).FieldLabel("人工报价（元）").ReadOnly(true),
+                      X.TextFieldFor(m => m.OtherFeeOffer).FieldLabel("其他费用报价").ReadOnly(true)),
+                  X.Container().Layout(LayoutType.Anchor).DefaultAnchor("100%").Flex(1).MarginSpec("5 5 0 0").Items(
+                      X.TextFieldFor(m => m.CostMoney).FieldLabel("成本总额（元）").ReadOnly(true),
+                      X.TextFieldFor(m => m.MaterialCost).FieldLabel("材料成本（元）").ReadOnly(true),
+                      X.TextFieldFor(m => m.LaborCost).FieldLabel("人工成本（元）").ReadOnly(true),
+                      X.TextFieldFor(m => m.OtherFeeCost).FieldLabel("其他费用成本").ReadOnly(true))
+                  ))
+            .Items(l =>
+            {
+                if (Model.AttachmentPath != null)
+                    l.Add(X.HyperlinkButton().Text("附件").Icon(Icon.Attach).HrefTarget("_blank").Href(Url.Content(Model.AttachmentPath)));
+            });
+        var second = X.Panel().ID("panel");                              
+    }
+
+    @(X.Viewport().Layout(LayoutType.Auto).AutoScroll(true).Items(first,second))
+}
+
+

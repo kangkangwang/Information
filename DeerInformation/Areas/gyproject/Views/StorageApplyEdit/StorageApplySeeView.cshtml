@@ -1,0 +1,136 @@
+﻿@model DeerInformation.Models.T_PM_StorageApply
+
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+
+<script>
+
+    var success = function () {
+        parent.App.window1.close();
+    }
+
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+      @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+     @X.FormPanel().ID("FormPanel1").Frame(true).Width(988).Items(
+       X.FormPanel().Layout(LayoutType.Column)
+       
+       .Loader(
+             X.ComponentLoader().AutoLoad(true)
+             .DisableCaching(true)
+             .LoadMask(m => m.ShowMask = true)
+             .Mode(LoadMode.Frame)
+          )
+          
+       .Items(
+             
+       X.FormPanel().Items(
+       
+       
+       X.TextFieldFor(m=>m.ApplyNo).FieldLabel("申请单编号").Editable(false),
+       X.TextFieldFor(m=>m.ApplyMan).FieldLabel("申请人").Editable(false),
+       X.DateFieldFor(m=>m.ApplyDate).FieldLabel("申请日期").Editable(false),
+       X.TextFieldFor(m=>m.Warehouse).FieldLabel("入库仓库").Editable(false),
+       X.TextFieldFor(m=>m.Extra).FieldLabel("备注").Editable(false)
+       ),
+       
+                    
+        X.FormPanel().Layout(LayoutType.Table).Items(
+       
+        X.GridPanel()
+         .Height(430)
+         .Width(988)
+         .ID("GridPanel1")
+         .Title("入库材料")
+         .Store(
+            X.Store().ID ("MaterialSelected").AutoLoad(false)
+             
+             .PageSize(10)
+             .Model(
+                 X.Model()
+                  .IDProperty("MaterialID")
+                  .Fields(
+                    new ModelField("MaterialNo", ModelFieldType.String ),
+                    new ModelField("MaterialName", ModelFieldType.String ),
+                    new ModelField("Size", ModelFieldType.String),
+                    new ModelField("Unit", ModelFieldType.String),
+                    new ModelField("Price", ModelFieldType.String),
+                    new ModelField("Extra", ModelFieldType.String),
+                    new ModelField("ApplyNumber", ModelFieldType.String)
+                          )
+                   )
+             .Reader(
+                    X.JsonReader().RootProperty("data")
+                   )
+           )
+         .ColumnModel(
+               X.Column()
+                .Text("物资编号")
+                .Width(132)
+                .DataIndex("MaterialNo"),
+
+               X.Column()
+                .Text("物资名称")
+                .Width(132)
+                .DataIndex("MaterialName"),
+
+               X.Column()
+                .Text("型号")
+                .Width(132)
+                .DataIndex("Size"),
+                
+               X.Column()
+                .Text("单位")
+                .Width(132)
+                .DataIndex("Unit"),
+                
+               X.Column()
+                .Text("预算价（元）")
+                .Width(132)
+                .DataIndex("Price"),
+                
+               X.Column()
+                .Text("备注")
+                .Width(132)
+                .DataIndex("Extra"),
+                
+               X.Column()
+                .Text("申请入库数量")
+                .Width(135)
+                .DataIndex("ApplyNumber")
+                
+       
+                     )
+           
+                     .SelectionModel(
+                                          X.SpreadsheetSelectionModel()
+                                           .ID("SpreadsheetSelectionModel1")
+                                           .ColumnSelect(true)
+                                           .PruneRemoved(false)
+                                           .Extensible(SpreadsheetExtensible.Y)
+
+                             )
+                    )   
+            ),
+            X.Button().Text("确认").Icon(Icon.ApplicationGet)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("Back");
+                        de.Click.Success = "parent.App.window1.close()";
+                        de.Click.EventMask.ShowMask = true;
+                        de.Click.FormID = "FormPanel1";
+                    })
+     )
+                
+</body>
+</html>

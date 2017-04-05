@@ -1,0 +1,121 @@
+﻿@model DeerInformation.Areas.user.Models.DailyWorkReportModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();    
+}
+
+@section headtag
+{
+    <script>
+        var select = function () {
+            var proxy = App.storedata.getProxy();
+            proxy.extraParams = {
+                "date": App.FilterDate.getValue(),
+                "name": App.FilterName.getValue()
+            };
+            App.storedata.reload();
+        }
+        var getItemId = function () {
+            var report = App.grid.getSelectionModel().getSelection();
+            if (report.length>0) {
+                return report[0].data.ID;
+            } else {
+                return null;
+            }
+
+        }
+    </script>
+}
+@section content
+{
+    @{
+
+        var head =
+            X.Toolbar().Layout(LayoutType.HBox)
+                .Shadow(true)
+                .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Middle, Pack = BoxPack.End })
+                .Items(
+                    X.Toolbar().Border(false).Layout(LayoutType.HBox).Flex(1).Items(
+                        X.TextField().ID("FilterName").Name("name").FieldLabel("项目名称"),
+                        X.DateField().ID("FilterDate").Name("date").FieldLabel("日期").Editable(false),
+                        X.Button().Text("查询").Icon(Icon.Magnifier).Handler("select();")
+                        ),
+
+                    X.Toolbar().Border(false).Items(
+                        X.Button().Icon(Icon.ApplicationFormAdd).Text("添加").DirectEvents(ls =>
+                        {
+                            ls.Click.Action = "Add";
+                        })
+                        ,
+                        X.Button().Icon(Icon.Application).Text("查看").DirectEvents(ls =>
+                        {
+                            ls.Click.Action = "Read";
+                            ls.Click.ExtraParams.Add(new Parameter() { Name = "id", Value = "getItemId()", Mode = ParameterMode.Raw });
+                        })
+                        ));
+
+
+        var proxy = Html.X().AjaxProxy()
+            .Url(Url.Action("Fiter"))
+            .Reader(X.JsonReader().RootProperty("data"));
+
+        var content = X.GridPanel()
+            .ID("grid")
+            .AutoScroll(true)
+            .Store(X.StoreForModel()
+                .ID("storedata")
+                .PageSize(20)
+                .Proxy(proxy)
+                )
+            .ColumnModel(
+
+                X.DateColumn()
+                    .Text("日期")
+                    .Flex(1)
+                    .DataIndex("Date")
+                    .Format("yyyy-MM-dd"),
+
+                X.Column()
+                    .Text("项目名称")
+                    .Flex(1)
+                    .DataIndex("ProjectName"),
+                    
+                X.Column()
+                    .Text("考勤归属地")
+                    .Flex(1)
+                    .DataIndex("ProjectSite"),
+                    
+                X.Column()
+                    .Text("项目进度百分比")
+                    .Flex(1)
+                    .DataIndex("ProgressPercentage"),
+
+                X.Column()
+                    .Text("经办人")
+                    .Flex(1)
+                    .DataIndex("Creator"),
+
+                X.Column()
+                    .Text("审核状态")
+                    .DataIndex("State")
+                    .Flex(1)
+                    
+                    )
+                    .SelectionModel(X.CheckboxSelectionModel().Mode(SelectionMode.Single))
+                    .BottomBar(
+                        Html.X().PagingToolbar()
+                                .DisplayInfo(true)
+                                .DisplayMsg("当前 {0} - {1} 总共： {2}")
+                                .EmptyMsg("没有数据可以显示")
+                    );
+    }
+    @(
+ X.Viewport().Layout(LayoutType.Border).Items(
+            X.FormPanel().ID("Filter").Region(Region.North).Border(false).PaddingSpec("1,2,1,2").Items(head),
+                content.Region(Region.Center)
+            )
+
+    )
+
+}

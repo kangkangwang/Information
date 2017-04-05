@@ -1,0 +1,65 @@
+﻿@using Ext.Net
+@using Ext.Net.MVC
+@{
+    ViewBag.Title = "index";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+@section content
+{
+    <div style="padding: 10px; border: 1px solid black">
+        <div>
+            <a href="@Url.Action("FaninceResult", new {format = "Image"})" download="报表.png" data-options="iconCls:'icon-view'">图片输出</a>
+            <a href="@Url.Action("FaninceResult", new {format = "PDF"})" download="报表.pdf" data-options="iconCls:'icon-view'"> PDF输出</a>
+            <a href="@Url.Action("FaninceResult", new {format = "Excel"})" download="报表.xls" data-options="iconCls:'icon-view'">Excel输出</a>
+            <a href="@Url.Action("FaninceResult", new {format = "Word"})" download="报表.doc" data-options="iconCls:'icon-view'">Word输出</a>
+        </div>
+    </div>
+
+    <div id="autoUpdate" style="width: 100%; height: 100%; text-align:center; ">
+<img id="myReport" src="@Url.Action("FaninceResult", new {format = "Image"})"></img>
+
+</div>
+    @*@X.Viewport().Layout(LayoutType.Border).Items(
+           
+        X.Toolbar().Region(Region.North).Items(
+                    X.Button().Icon(Icon.Image).DirectEvents(l =>
+                    {
+                        l.Click.Action = "FaninceResult";
+                        l.Click.ExtraParams.Add(new Parameter("format", "Image",ParameterMode.Value));
+                        l.Click.IsUpload = true;
+                    }),
+                    X.Button().Icon(Icon.Page).DirectEvents(l =>
+                    {
+                        l.Click.Action = "FaninceResult";
+                        l.Click.ExtraParams.Add(new Parameter("format", "PDF", ParameterMode.Value));
+                        l.Click.IsUpload = true;
+                    }),
+                    X.Button().Icon(Icon.PageExcel).DirectEvents(l =>
+                    {
+                        l.Click.Action = "FaninceResult";
+
+                        l.Click.ExtraParams.Add(new Parameter("format", "Excel", ParameterMode.Value));
+                        l.Click.IsUpload = true;
+                    }),
+                    X.Button().Icon(Icon.PageWord).DirectEvents(l =>
+                    {
+                        l.Click.Action = "FaninceResult";
+
+                        l.Click.ExtraParams.Add(new Parameter("format", "Word", ParameterMode.Value));
+                        l.Click.IsUpload = true;
+                    })
+            ),
+        X.Panel()
+            .Region(Region.Center)
+            .AutoRender(true)
+            .Loader(
+                Html.X().ComponentLoader()
+                    .ID("tab")
+                                    .Url(@Url.Action("FaninceResult", new { format = "Image" }))
+                    .Mode(LoadMode.Frame)
+                    .LoadMask(lm => lm.ShowMask = true)
+            )
+        )*@
+
+}

@@ -1,0 +1,48 @@
+﻿@model PaymentApply 
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+    @{
+        var content = 
+                X.FormPanel()
+                .FieldDefaults(l=>l.ReadOnly=true)
+                .Layout(LayoutType.Form)
+                .BodyPadding(10)
+                .Frame(true)
+                .Items(
+                   
+                   X.TextFieldFor(m => m.CustomerName).Listeners(l => { l.Focus.Handler = "App.Window1.show();Ext.getCmp('CreateDate').focus();"; }),
+                   X.TextFieldFor(m => m.BudgetID),
+                   X.TextFieldFor(m => m.ProjectID),
+                   X.TextFieldFor(m => m.ProjectName),
+                   X.TextFieldFor(m => m.CompletionPercent),
+                   X.CheckboxFor(m => m.InvoiceOrnot),
+                   X.TextFieldFor(m => m.InvoiceNum),
+                   X.TextFieldFor(m => m.InvoiceType),
+                   X.TextFieldFor(m => m.InvoiceAmount),
+                   X.TextFieldFor(m => m.BudgetSum),
+                   X.TextFieldFor(m => m.HaveReceive),
+                   X.TextFieldFor(m => m.RestAmount),
+                   X.TextFieldFor(m => m.Creator),
+                   X.DateFieldFor(m => m.CreateDate),
+                   X.TextFieldFor(m => m.PaymentState),
+                   X.TextAreaFor(m => m.Remark)
+                   ).Items(l =>
+                {
+                    if(Model.AnnetPath!=null)
+                    l.Add(X.HyperlinkButton().Text("附件").Icon(Icon.Attach).HrefTarget("_blank").Href(Url.Content(Model.AnnetPath)));
+                })
+                .Buttons(X.Button()
+                .Text("关闭").Handler("parent.App.win.close();")
+                );
+    }
+
+    @(X.Viewport().Layout(LayoutType.Border).Items(
+        content.Region(Region.Center).AutoScroll(true))
+    )
+
+}

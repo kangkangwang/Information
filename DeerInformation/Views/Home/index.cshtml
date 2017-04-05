@@ -1,0 +1,146 @@
+﻿@using DeerInformation.BaseType
+@model DeerInformation.Models.MainMenu
+
+@{
+    ViewBag.Title = "德尔信息化管理平台";
+    Layout = "~/views/shared/_baselayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+    <style>
+        .x-btn-inner-default-small {
+            font: 400 12px/16px 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+            padding: 0 5px;
+            max-width: 100%;
+        }
+    </style>
+
+    <script>
+
+        var StopTask = function () {
+            var task = App.TaskManagerMessagePort.getTask('Message');
+            App.TaskManagerMessagePort.runner.stop(task);
+        }
+
+    </script>
+}
+
+
+@section content{
+
+    @(Html.X().Viewport().Layout(LayoutType.Border)
+          .Items(
+              X.Panel().ID("contian_1").Region(Region.West).Width(200)
+                  .Title("功能菜单")
+                  .Layout(LayoutType.Card)
+                  .ItemsFromPartial("changemenu", Model)
+                  .Split(true)
+                  .Collapsible(true)
+              ,
+              Html.X().Container()
+                  .Layout(LayoutType.Card)
+                  .Region(Region.Center)
+                  .ID("maincontent")
+                  .Flex(1)
+                  .AutoRender(true)
+                  .ItemsFromPartial("content", Model)
+              ,
+              Html.X().Panel()
+                  .ID("tittle")
+                  .Region(Region.North)
+                  .Split(true)
+                  .Layout(LayoutType.Anchor)
+                  .Height(120)
+                  .MarginSpec("0 0 3 0")
+                  .Border(false)
+                  .Items(
+                      X.Panel()
+                          .ItemsFromPage(this, "head.cshtml")
+                          .AnchorHorizontal("100%")
+                          .AnchorVertical("-45"),
+                      X.Panel()
+                          .Frame(true)
+                          .AnchorHorizontal("100%")
+                          .Shadow(true)
+                          .Layout(LayoutType.Column).Items(ls =>
+                          {
+                              var menutool = Model.usermenu.FindAll(m => m.pid == "-1" && m.permission.Contains(PermissionType.Read));
+                              menutool = (from a in menutool orderby a.index select a).ToList();
+                              ls.Add(Html.X().ToolbarFill().Width(20));
+                              ls.Add(Html.X().Image().ID("UserImage").Width(40).Height(40).ImageUrl(Model.UserImageUrl));
+
+                              ls.Add(
+                                  Html.X().Container().Layout(LayoutType.Anchor)
+                                      .Items(
+                                          Html.X().Container()
+                                              .Height(20)
+                                              .AnchorHorizontal("100%")
+                                              .Layout(LayoutType.HBox)
+                                              .Items(
+                                                  Html.X().Label(Model.Name).PaddingSpec("0 2 0 2"),
+                                                  Html.X().HyperlinkButton().PaddingSpec("0 2 0 2").ID("Layout")
+                                                  .Text("[注销]")
+                                                  .Cls("logout_color")
+                                                  .DirectEvents(de =>de.Click.Url = Url.Action("LoginOut"))
+                                              )
+
+                                          ,
+                                          Html.X().Container()
+                                              .AnchorHorizontal("100%")
+                                              .Layout(LayoutType.HBox)
+                                              .ID("Tips")
+                                              .Items(
+                                                  Html.X().HyperlinkButton().ID("messagenum").Text("0").Icon(Icon.Email).ToolTip("消息").PaddingSpec("0 2 0 2").Flex(1).DirectEvents(de =>
+                                                  {
+                                                      de.Click.Action = "DeatilMessage";
+                                                  }),
+                                                  Html.X().HyperlinkButton().ID("tasknum").Text("0").Icon(Icon.Mail).ToolTip("审核任务").PaddingSpec("0 2 0 2").Flex(1).DirectEvents(de =>
+                                                  {
+                                                      de.Click.Action="DeatilTask";
+                                                  }),
+                                                  Html.X().HyperlinkButton().ID("ccnum").Text("0").Icon(Icon.PageCopy).ToolTip("抄送消息").PaddingSpec("0 2 0 2").Flex(1).DirectEvents(de =>
+                                                  {
+                                                      de.Click.Action = "DetailCc";
+                                                  })
+                                              )
+                                      )
+
+                                  );
+
+                              ls.Add(Html.X().ToolbarFill().Width(120));
+                              for (int i = 0; i < menutool.Count; i++)
+                              {
+                                  ls.Add(X.Button().Frame(true).ID(menutool[i].id).ToggleGroup("cardMode").Text(menutool[i].name).Height(40).Width(90).Cls("menu_btn").Flat(true)
+                                      .DirectEvents(de =>
+                                      {
+                                          de.Click.Url = Url.Action("Changemenu");
+                                          de.Click.ExtraParams.Add(new
+                                          {
+                                              pid = menutool[i].id,
+                                              url = menutool[i].url
+                                          });
+
+                                      }));
+                              }
+                          }
+                          ))
+          ))
+
+    @(
+ X.TaskManager()
+        .ID("TaskManagerMessagePort")
+        .Tasks(X.Task()
+            .TaskID("Message")
+            .Interval(10000)
+            .AutoRun(true)
+            .DirectEvents(de =>
+
+            {
+                de.Update.Action = "GetMessage";
+                de.Update.Failure = "StopTask";
+            })
+        )
+    )
+
+}

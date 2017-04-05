@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "_BaseContent";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var x = Html.X();
+}
+
+@section headtag{
+
+}
+
+@section content{
+    @(x.Viewport().Layout(LayoutType.Border).Items(
+    x.Container().ID("system_main").Region(Region.Center).Layout(LayoutType.Anchor)
+    .Items(
+    RenderSection("detail",true)
+    )
+    )
+    )
+}
+
+

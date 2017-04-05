@@ -1,0 +1,199 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var onSuccess = function (grid, data) {
+        grid.show();
+        grid.getStore().loadData(data);
+    };
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>StaffSalary</title>
+</head>
+
+<body>
+    <div>
+        @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+
+        @(X.Viewport().ID("BackViewPort")
+        .Layout(LayoutType.Border)
+        .Items(
+      X.Panel().Region(Region.Center).Layout(LayoutType.Border).Title("直接员工薪资").Items(
+      X.Panel().AutoScroll(true).Region(Region.Center).Items(
+       X.FormPanel().Layout(LayoutType.Column).Items(
+                   X.TextField().ID("Month")
+                   .FieldLabel("月份").Regex(@"^\d{6}$").EmptyText("例：201609"),
+           X.Button().Text("查询").DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("Getalldata");
+                    de.Click.Success = "onSuccess(App.StaffSalaryGridPanel, result.data);";
+                    de.Click.ExtraParams.Add(new Parameter("month", "App.Month.getValue()", ParameterMode.Raw));
+                    de.Click.EventMask.ShowMask = true;
+                })
+       ),
+                       X.GridPanel().ID("StaffSalaryGridPanel").AutoScroll(true).ColumnLines(true)
+                                      .Store(
+                                         X.Store().ID("StaffSalaryStore")
+                                                  .AutoLoad(true)
+                                                  .DataSource(Model)
+                                           .Model(
+                                                     X.Model().Fields(
+                                                             new ModelField("ID", ModelFieldType.String),
+                                                             new ModelField("StaffID", ModelFieldType.String),
+                                                             new ModelField("Name", ModelFieldType.String),
+                                                             new ModelField("EntryTime", ModelFieldType.Date),
+                                                             new ModelField("DimissionTime", ModelFieldType.Date),
+                                                             new ModelField("DaySalary", ModelFieldType.Float),
+                                                             new ModelField("EHS", ModelFieldType.Float),
+                                                             new ModelField("Food", ModelFieldType.Float),
+                                                             new ModelField("Connection", ModelFieldType.Float),
+                                                             new ModelField("Water", ModelFieldType.Float),
+                                                             new ModelField("EWSalary", ModelFieldType.Float),
+                                                             new ModelField("DHours", ModelFieldType.Float),
+                                                             new ModelField("EHours", ModelFieldType.Float),
+                                                             new ModelField("DaySalarySum", ModelFieldType.Float),
+                                                             new ModelField("EWSalarySum", ModelFieldType.Float),
+                                                             new ModelField("ConnectionSum", ModelFieldType.Float),
+                                                             new ModelField("WaterSum", ModelFieldType.Float),
+                                                             new ModelField("Salary", ModelFieldType.Float),
+                                                             new ModelField("Year", ModelFieldType.Int),
+                                                             new ModelField("Month", ModelFieldType.Int)
+                                                     )
+                                                  )
+                                          .Reader(
+                                                      X.JsonReader().RootProperty("data")
+                                                      )
+
+                                  )
+                                      .SelectionModel(
+                                          X.SpreadsheetSelectionModel()
+                                           .ID("SpreadsheetSelectionModel1")
+                                           .CheckboxSelect(true)
+                                           .PruneRemoved(false)
+                                           .Extensible(SpreadsheetExtensible.Y)
+                                           .CellSelect(false)
+                                           .ColumnSelect(false)
+                                       )
+                                        .ViewConfig(X.GridView().TrackOver(false))
+                                .ColumnModel(
+                                       X.Column()
+                                       .Text("ID")
+                                       .Width(50)
+                                       .DataIndex("ID").Hidden(true),
+                                       
+                                       X.Column()
+                                       .Text("工号")
+                                       .Width(50)
+                                       .DataIndex("StaffID"),
+
+                                       X.Column()
+                                       .Text("姓名")
+                                       .Width(50)
+                                       .DataIndex("Name"),                   
+
+                                      X.DateColumn()
+                                     .Text("入职时间")
+                                     .Width(50)
+                                     .Format("yyyy-MM-dd")
+                                     .DataIndex("EntryTime"),
+                                     
+                                     X.DateColumn()
+                                     .Text("离职时间")
+                                     .Width(50)
+                                     .Format("yyyy-MM-dd")
+                                     .DataIndex("DimissionTime"),
+                                     
+                                     X.Column()
+                                     .Text("年")
+                                     .Width(50)
+                                     .DataIndex("Year"),
+                                     
+                                     X.Column()
+                                     .Text("月")
+                                     .Width(50)
+                                     .DataIndex("Month"),
+                                     
+                                     X.Column()
+                                     .Text("日薪")
+                                     .Width(50)
+                                     .DataIndex("DaySalary"),
+                                     
+                                     X.Column()
+                                     .Text("EHS日补")
+                                     .Width(50)
+                                     .DataIndex("EHS"),
+                                     
+                                     X.Column()
+                                     .Text("伙食日补")
+                                     .Width(50)
+                                     .DataIndex("Food"),
+                                     
+                                     X.Column()
+                                     .Text("通讯补贴")
+                                     .Width(50)
+                                     .DataIndex("Connection"),
+                                     
+                                     X.Column()
+                                     .Text("茶水费基数")
+                                     .Width(50)
+                                     .DataIndex("Water"),
+                                     
+                                     X.Column()
+                                     .Text("加班费率")
+                                     .Width(50)
+                                     .DataIndex("EWSalary"),
+                                     
+                                     X.Column()
+                                     .Text("出勤时数")
+                                     .Width(50)
+                                     .DataIndex("DHours"),
+                                     
+                                     X.Column()
+                                     .Text("加班时数")
+                                     .Width(50)
+                                     .DataIndex("EHours"),
+                                     
+                                     X.Column()
+                                     .Text("月日薪合计")
+                                     .Width(50)
+                                     .DataIndex("DaySalarySum"),
+                                     
+                                     X.Column()
+                                     .Text("加班费")
+                                     .Width(50)
+                                     .DataIndex("EWSalarySum"),
+                                     
+                                     X.Column()
+                                     .Text("通讯补贴")
+                                     .Width(50)
+                                     .DataIndex("ConnectionSum"),
+                                     
+                                     X.Column()
+                                     .Text("茶水费")
+                                     .Width(50)
+                                     .DataIndex("WaterSum"),
+                                     
+                                     X.Column()
+                                     .Text("应发合计")
+                                     .Width(50)
+                                     .DataIndex("Salary")
+                                )
+                  )
+         )
+        )
+        )
+
+
+    </div>
+</body>
+</html>
+
+

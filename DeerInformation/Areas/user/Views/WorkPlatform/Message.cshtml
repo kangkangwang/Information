@@ -1,0 +1,111 @@
+﻿@{
+    ViewBag.Title = "Message";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+
+<style>
+    .new-row .x-grid-cell, .new-row .x-grid-rowwrap-div {
+        color: red !important;
+        font-weight: bold;
+    }
+</style>
+
+<script>
+
+
+    var readMessage = function (record) {
+        workplatform.user.SetRead(record.data.id,
+        {
+            success: function (result) {
+                record.set('read', true);
+                App.storeMessage.commitChanges();
+            }
+        });
+    };
+
+    var getRowClass = function (record) {
+        if (!record.data.read) {
+            return "new-row";
+        }
+    };
+
+
+</script>
+}
+
+@section content
+{
+    @{
+    var content = X.Panel()
+        .Title("消息管理")
+        .Closable(false)
+        .Layout(LayoutType.Fit)
+        .Height(350)
+        .TopBar(new Toolbar
+        {
+            Items =
+               {
+                   new Button
+                   {
+                       Text = "Reload",
+                       Icon = Icon.ArrowRefresh,
+                       OnClientClick = "App.storeMessage.load();"
+                   }
+               }
+        })
+        .Items(
+            X.GridPanel()
+                .Header(false)
+                .Border(false)
+                .Store(X.Store()
+                    .ID("storeMessage")
+                    .AutoLoad(true)
+                    .PageSize(20)
+                    .Proxy(
+                        X.AjaxProxy()
+                            .Url(Url.Action("GetMessage"))
+                            .ActionMethods(actions =>
+                            {
+                                actions.Read = HttpMethod.POST;
+                            })
+                            .Reader(
+                                X.JsonReader().RootProperty("data")
+                            )
+                    )
+                    .Model(X.Model()
+                        .Fields(
+                            new ModelField("id"),
+                            new ModelField("title"),
+                            new ModelField("type"),
+                            new ModelField("read"),
+                            new ModelField("createtime"),
+                            new ModelField("url")
+                        )
+                    )
+
+                )
+                .ColumnModel(
+                    X.Column().Text("内容").DataIndex("title").Flex(1),
+                    X.Column().Text("类型").DataIndex("type").Width(200),
+                    X.DateColumn().Text("创建时间").DataIndex("createtime").Format("yyyy-MM-dd HH:mm:ss").Width(200),
+                    //X.CheckColumn().Text("已查看").DataIndex("read").Width(50),
+                    X.CommandColumn().Text("操作").Commands(
+                        X.GridCommand().CommandName("Delete").Icon(Icon.Attach).Text("前往处理").ToolTip(tt => tt.Text = "前往处理")
+                        ).Listeners(ls => ls.Command.Handler = "readMessage(record)")
+                ).BottomBar(
+                X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示")
+                )
+                .View(X.GridView()
+                .StripeRows(true)
+                .GetRowClass(grc => grc.Fn = "getRowClass")
+        )
+        );
+
+}
+
+@X.Viewport().Layout(LayoutType.Border).Items(content.Region(Region.Center))
+}

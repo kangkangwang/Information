@@ -1,0 +1,36 @@
+﻿@model DeerInformation.Areas.system.Models.UserManage
+
+@{
+    ViewBag.Title = "DetailUser";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+
+}
+
+@section content
+{
+    @X.Viewport().Layout(LayoutType.Border).Items(
+        X.FormPanel().FieldDefaults(l=>l.ReadOnly=true)
+            .Frame(true)
+            .Region(Region.Center)
+            .ModelValidation(true)
+            .Layout(LayoutType.Form)
+            .Items(
+                X.TextFieldFor(m => m.EmployeeID),
+                X.TextFieldFor(m=>m.UserName),
+                X.TextFieldFor(m=>m.Password),
+                X.CheckboxFor(m=>m.Activity)
+
+            )
+            .Buttons(
+                Html.X().Button()
+                    .Text("关闭")
+                    .Handler(string.Format("parent.App.{0}.close()", "win"))
+
+                    )
+            ))
+}

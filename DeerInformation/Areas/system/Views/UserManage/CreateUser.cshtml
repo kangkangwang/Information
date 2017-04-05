@@ -1,0 +1,48 @@
+﻿@using InputType = Ext.Net.InputType
+@model DeerInformation.Areas.system.Models.UserManage
+
+@{
+    ViewBag.Title = "CreateUser";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+
+}
+
+@section content
+{
+    @X.Viewport().Layout(LayoutType.Border).Items(
+        X.FormPanel()
+            .Frame(true)
+            .Region(Region.Center)
+            .ModelValidation(true)
+            .Layout(LayoutType.Form)
+            .Items(
+                X.TextFieldFor(m => m.EmployeeID),
+                X.TextFieldFor(m=>m.UserName),
+                X.TextFieldFor(m=>m.Password).InputType(InputType.Password	),
+                X.TextFieldFor(m => m.PasswordConfirm).InputType(InputType.Password),
+                X.CheckboxFor(m=>m.Activity),
+                X.ComboBoxFor(m=>m.RoleID).Items(Model.RoleNameItems).Editable(false)
+
+            )
+            .Buttons(
+                Html.X().Button()
+                    .Text("Cancel")
+                    .Handler(string.Format("parent.App.{0}.close()", "win")),
+                Html.X().Button()
+                    .FormBind(true)
+                    .Text("Submit")
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Action = "Submit";
+                        de.Click.Success = string.Format("alert('数据保存成功！');parent.App.{0}.close();", "win");
+                        de.Click.Failure = "alert('数据保存失败！请确认登录名,工号是否存在及密码的确认输入是否正确！');";
+                        de.Click.EventMask.ShowMask = true;
+                    }
+                    )
+            ))
+}

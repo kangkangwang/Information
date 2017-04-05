@@ -1,0 +1,111 @@
+﻿@model DeerInformation.Areas.person.Models.DimissionApply
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var closewindow = function () {
+        parent.App.windowDimission.close()
+    };
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CheckDimission</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                   X.Panel().Layout(LayoutType.HBox).Items(
+                   X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                   X.TextFieldFor(m => m.StaffID).FieldLabel("工号").AllowBlank(false).Editable(false),
+                   X.DateFieldFor(m => m.DimissionTime).FieldLabel("离职时间").Editable(false).Selectable(false),
+                   X.TextFieldFor(m => m.DimissionReason).FieldLabel("离职原因").AllowBlank(false).Editable(false),
+                   X.TextFieldFor(m => m.Remark).FieldLabel("备注").AllowBlank(true).Editable(false),
+                   //X.TextFieldFor(m => m.CreaterName).FieldLabel("申请人").AllowBlank(true).Editable(false),
+                           X.HiddenFor(m => m.CreaterName),
+                              X.HiddenFor(m => m.CreateTime),
+                   X.HiddenFor(m => m.ID),
+                   X.HiddenFor(m => m.Num),
+                   X.HiddenFor(m => m.IsValid),
+                   X.HiddenFor(m => m.Department),
+                      X.HiddenFor(m => m.EditorName),
+                      X.HiddenFor(m => m.EditeTime)
+                   ),
+                   X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                   X.TextFieldFor(m => m.Name).FieldLabel("姓名").AllowBlank(false).Editable(false),
+                   X.ComboBoxFor(m => m.DimissionType).FieldLabel("离职类型").Editable(false).Selectable(false).Items(new ListItem("辞职"), new ListItem("辞退"),
+                      new ListItem("解除劳动关系"), new ListItem("自离"), new ListItem("试用期不合格"), new ListItem("经济型裁员"), new ListItem("法定退休"), new ListItem("合同到期")).EmptyText("请选择...").AllowBlank(false),
+                   X.TextFieldFor(m => m.ReasonType).FieldLabel("离职原因归类").AllowBlank(false).Editable(false),
+                      //X.ComboBoxFor(m => m.ReasonType).FieldLabel("离职原因归类").Editable(false).Selectable(false).Items(new ListItem("自离"), new ListItem("辞退（试用期不合格+不能胜任）"), new ListItem("解除劳动关系（严重违纪）"),
+                      //new ListItem("另有他职"), new ListItem("学习机会"), new ListItem("升迁机会"), new ListItem("个人因素（个人原因）"), new ListItem("食宿"), new ListItem("工作因素"), new ListItem("公司制度"),
+                      //new ListItem("薪酬福利"), new ListItem("管理方式"), new ListItem("企业文化"), new ListItem("法定退休"), new ListItem("合同到期不续约"), new ListItem("上司管理风格")).EmptyText("请选择...").AllowBlank(false),
+                   X.ComboBoxFor(m => m.CheckFlowId).ID("checkflow").FieldLabel("审核流程").AllowBlank(false).Editable(false).Selectable(false)
+                      .DisplayField("name")
+                      .ValueField("id")
+                      .EmptyText("请选择...")
+                      .Store(X.Store()
+                      .AutoLoad(true)
+                      .Model(X.Model()
+                      .IDProperty("Id")
+                      .Fields(
+                              new ModelField("id", ModelFieldType.String) { Mapping = "ID" },
+                              new ModelField("name", ModelFieldType.String) { Mapping = "Name" }
+                      )
+                      )
+                      .Proxy(X.AjaxProxy().Url(Url.Action("CheckFlowItems")).Reader(X.JsonReader().RootProperty("data")))
+                      )
+                      //X.TextFieldFor(m => m.CreateTime).FieldLabel("申请时间").AllowBlank(true).Editable(false)
+                      
+                   )
+                   ),
+                   X.Panel().Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                           X.ComboBoxFor(m => m.State).ID("state").FieldLabel("审核意见").AllowBlank(false).Editable(false)
+                              .DisplayField("name")
+                              .ValueField("id")
+                              .EmptyText("请选择...")
+                              .Store(X.Store()
+                              .AutoLoad(true)
+                              .Model(X.Model()
+                              .IDProperty("Id")
+                              .Fields(
+                                      new ModelField("id", ModelFieldType.String) { Mapping = "ID" },
+                                      new ModelField("name", ModelFieldType.String) { Mapping = "Description" }
+                              )
+                              )
+                              .Proxy(X.AjaxProxy().Url(Url.Action("CheckStateItems")).Reader(X.JsonReader().RootProperty("data")))
+                              ),
+                   X.TextFieldFor(m => m.DescriptionForCheck).FieldLabel("审核备注").AllowBlank(true)
+                   )
+            //       X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+            ////X.Panel().Border(false).Height(0),
+            //            X.Button().Text("选择员工").ID("select")
+            //                .DirectEvents(de =>
+            //                {
+            //                    de.Click.Url = Url.Action("SelectStaff");
+            //                    //de.Click.EventMask.ShowMask = true;
+            //                })
+            //          )
+       ),
+        X.Button().Text("Submit").Icon(Icon.Accept).ID("save").FormBind(true).Disable(true)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("CheckSubmit");
+                        de.Click.EventMask.ShowMask = true;
+                    })
+    )
+</body>
+
+</html>
+
+

@@ -1,0 +1,67 @@
+﻿@model DeerInformation.Models.V_HR_EducationFundWithName
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var closewindow = function () {
+        parent.App.windowEducationFund.close()
+    };
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddEducationFund</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.Column)
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                   X.Panel().Border(false).Items(
+                      X.TextFieldFor(m => m.StaffID).ID("StaffID").FieldLabel("工号").AllowBlank(false).Editable(false),
+                      X.ComboBoxFor(m => m.Style).FieldLabel("资助证件类型").Editable(true).Items(new ListItem("中级职称"), new ListItem("二级建造师"),
+                      new ListItem("一级建造师"), new ListItem("高级职称"), new ListItem("电工证"), new ListItem("焊工证")).EmptyText("请选择...").AllowBlank(false),
+                      X.DateFieldFor(m => m.StartTime).FieldLabel("开始时间").AllowBlank(false).Editable(false),
+                      X.TextFieldFor(m => m.Remark).FieldLabel("备注"),
+                      X.TextFieldFor(m => m.ID).FieldLabel("教育资助ID").Hidden(true),
+                      X.HiddenFor(m => m.Valid),
+                      X.HiddenFor(m => m.Department),
+                      X.HiddenFor(m => m.CreaterName),
+                      X.HiddenFor(m => m.CreateTime),
+                      X.HiddenFor(m => m.EditorName),
+                      X.HiddenFor(m => m.EditeTime)
+                   ),
+                      X.Panel().Border(false).Items(
+                      X.TextFieldFor(m => m.Name).ID("Name").FieldLabel("姓名").AllowBlank(false).Editable(false),
+                      X.TextFieldFor(m => m.Money).FieldLabel("资助金额").AllowBlank(false).Editable(true).Regex("^[0-9]+(.[0-9]{1,3})?$"),
+                      X.DateFieldFor(m => m.EndTime).FieldLabel("结束时间").Editable(false)  
+                   ),
+                      X.Panel().Border(false).Items(
+                        //X.Panel().Border(false).Height(0),
+                        X.Button().Text("选择员工").ID("select")
+                            .DirectEvents(de =>
+                            {
+                                de.Click.Url = Url.Action("SelectStaff");
+                                //de.Click.EventMask.ShowMask = true;
+                            })
+                      )
+       ),
+        X.Button().Text("保存").Icon(Icon.Accept).ID("save").FormBind(true).Disable(true)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("AddOrEditEducationFund");
+                        de.Click.EventMask.ShowMask = true;
+                    })
+    )
+</body>
+
+</html>

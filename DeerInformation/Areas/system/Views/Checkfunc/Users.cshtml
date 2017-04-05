@@ -1,0 +1,101 @@
+﻿@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+    <script>
+        var select = function () {
+            var records = App.storedata.getModifiedRecords();
+            var data = [];
+            for (var i = 0; i < records.length; i++) {
+                data.push(records[i].data);
+            }
+            return Ext.encode(data);
+        }
+
+        var success=function (result) {
+            App.storedata.commitChanges();
+        }
+        var Failure = function (result) {
+            App.storedata.rejectChanges();
+        }
+    </script>
+}
+
+@section content
+{
+@{
+    var head =X.Toolbar().Border(false).Layout(LayoutType.HBox).Items(
+                    X.TextField().ID("keyWord").Name("name").FieldLabel("用户名或工号"),
+                    X.ToolbarFill().Flex(1),
+                    X.Button().Text("查询").Icon(Icon.Magnifier).DirectEvents(de =>
+                    {
+                        de.Click.Action = "UsersFilter";
+                        de.Click.ExtraParams.Add(new Parameter() { Name = "keyWord", Value = "App.keyWord.getValue()", Mode = ParameterMode.Raw });
+                        de.Click.ExtraParams.Add(new Parameter() { Name = "funId", Value = ViewBag.funId, Mode = ParameterMode.Value });
+                        
+                    }));
+}
+    @(
+ X.Viewport().AutoRender(true).Layout(LayoutType.Border).Items(
+    head.Region(Region.North),
+    X.Container().ID("system_main").Region(Region.Center).Layout(LayoutType.Anchor).AutoScroll(true)
+            .Items(X.GridPanel()
+                .ID("grid")
+                .AnchorHorizontal("100%")
+                .Store(X.Store()
+                .ID("storedata")
+                .PageSize(20)
+                    .Model(X.Model()
+                    .IDProperty("UserID")
+                            .Fields("UserID", "UserName", "Activity", "Grant", "EmployeeID")
+                    )
+                    .DataSource(Model)
+
+                )
+                .ColumnModel(
+
+                    X.Column()
+                    .Text("工号")
+                    .Flex(1)
+                    .DataIndex("EmployeeID"),
+
+                    X.Column()
+                    .Text("用户名")
+                    .Flex(1)
+                    .DataIndex("UserName"),
+
+                    X.Column()
+                    .Text("已激活")
+                    .Flex(1)
+                    .DataIndex("Activity"),
+                    
+                    X.CheckColumn()
+                    .Text("已授予")
+                    .Flex(1)
+                    .DataIndex("Grant")
+                    .Editable(true)
+
+                    )
+                    .SelectionModel(X.CheckboxSelectionModel().Mode(SelectionMode.Multi))
+                    .BottomBar(
+                            Html.X().PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true).Items(
+                            X.LineSparkLine(),
+                                X.Button().Icon(Icon.DatabaseSave).ToolTip("提交更改").DirectEvents(l =>
+                                {
+                                    l.Click.Action = "SaveUsers";
+                                    l.Click.Success = "success(result);";
+                                    l.Click.Failure = "Failure(result);";
+                                    l.Click.ExtraParams.Add(new Parameter(){Name="users",Value = "select",Mode = ParameterMode.Raw});
+                                    l.Click.ExtraParams.Add(new Parameter() { Name = "funId", Value = ViewBag.funId, Mode = ParameterMode.Value });
+                                }
+                            )
+                            )
+                    )
+
+    )
+))
+}

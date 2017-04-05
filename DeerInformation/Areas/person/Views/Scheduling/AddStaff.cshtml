@@ -1,0 +1,202 @@
+﻿@*@model DeerInformation.Areas.person.Models.SchListModel*@
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var closewindow = function () {
+        parent.App.windowStaff.close()
+    };
+
+    var onSuccess = function (grid, data) {
+        grid.show();
+        grid.getStore().loadData(data);
+    };
+    var toggleRowSelect = function () {
+        App.SpreadsheetSelectionModel1.setRowSelect(false);
+        App.SpreadsheetSelectionModel1.setRowSelect(true);
+    };
+    var deletejs = function (grid) {
+        var store = grid.store,
+     records = grid.selModel.getSelection();
+        if (records != "") {
+            Ext.MessageBox.confirm("提示", "确认删除该项？", function (but) {
+                if (but == "yes") {
+                    exportData(grid, true);
+                    //store.remove(records);
+                    //store.load(true);
+                }
+            });
+        }
+        else {
+            Ext.Msg.alert("提示", "未选择任何列！");
+        }
+    };
+    function exportData(grid, selectedOnly) {
+        grid.submitData(
+            //serialization config
+            {
+                selectedOnly: selectedOnly
+            },
+
+            //request config
+            {
+                isUpload: true,
+                url: '@Url.Action("JSDeleteSchListStaff")'
+            }
+       );
+    }
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddStaff</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                   X.FieldSet().ID("BaseList").Title("排班信息").Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                   X.Panel().Layout(LayoutType.HBox).Items(
+                           X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                              X.TextField().ID("ID").Hidden(true),
+                                   X.TextField().ID("Name").FieldLabel("系列名称").Editable(false),
+                                           X.TextField().ID("AMTime").FieldLabel("上午上下班时间").Editable(false),
+                              X.TextField().ID("AMValidGoTime").FieldLabel("上午上班有效打卡时间").Editable(false),
+                              X.TextField().ID("AMValidOffTime").FieldLabel("上午下班有效打卡时间").Editable(false),
+                               X.TextField().ID("CreaterName").FieldLabel("创建人").Editable(false),
+                              X.TextField().ID("EditorName").FieldLabel("修改人").Editable(false)
+                           ),
+                           X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                      X.TextField().ID("PMTime").FieldLabel("下午下班时间").Editable(false),
+                                      X.TextField().ID("PMValidGoTime").FieldLabel("下午上班有效打卡时间").Editable(false),
+                                      X.TextField().ID("PMValidOffTime").FieldLabel("下午下班有效打卡时间").Editable(false),
+                                              X.TextField().ID("AttNum").FieldLabel("打卡次数").Editable(false),
+                                      X.TextField().ID("CreateTime").FieldLabel("创建时间").Editable(false),
+                                              X.TextField().ID("EditeTime").FieldLabel("修改时间").Editable(false)
+                           )
+                   )
+                   ),
+
+               X.FieldSet().ID("StaffList").Title("员工").Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+               X.Panel().Layout(LayoutType.HBox).Items(
+                           X.Panel().ID("Staff").Height(150).Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                        //                   .Loader(X.ComponentLoader()
+                        //    .Url(Url.Action("Staff", "Scheduling", new { id = TempData["s_schlistid"] }))
+                        //    .Mode(LoadMode.Frame)
+                        //    .LoadMask(lm => lm.ShowMask = true)
+                        //)
+                        .Items(
+                                X.FormPanel().Layout(LayoutType.Column)
+                                        .Defaults(X.Parameter().Name("margin").Value("0 5 0 0").Mode(ParameterMode.Value))
+                                .Items(
+                                        X.TextField().ID("StaffID").LabelWidth(50)
+                           .FieldLabel("工号"),
+                           X.TextField().ID("StaffName").LabelWidth(50)
+                           .FieldLabel("姓名"),
+                                   X.Button().Text("查询").DirectEvents(de =>
+                        {
+                            de.Click.Url = Url.Action("GetallStaffdata");
+                            //de.Click.Success = "onSuccess(App.StaffGridPanel, result.data);";
+                            de.Click.ExtraParams.Add(new Parameter("id", "App.StaffID.getValue()", ParameterMode.Raw));
+                            de.Click.ExtraParams.Add(new Parameter("name", "App.StaffName.getValue()", ParameterMode.Raw));
+                            de.Click.ExtraParams.Add(new Parameter("schlistid", "App.ID.getValue()", ParameterMode.Raw));
+                            de.Click.EventMask.ShowMask = true;
+                        }),
+                                   X.Button().Text("按员工添加")
+                                            .DirectEvents(de =>
+                                              {
+                                                  de.Click.Url = Url.Action("SelectStaff");
+                                                  //de.Click.ExtraParams.Add(new Parameter("schlistid", "App.StaffGridPanel.getSelectionModel().getSelection()[0].data.SchListID", ParameterMode.Raw));
+                                              }),
+                                              X.Button().Text("按部门添加")
+                                            .DirectEvents(de =>
+                                              {
+                                                  de.Click.Url = Url.Action("AddStaffFromDep");
+                                                  //de.Click.ExtraParams.Add(new Parameter("schlistid", "App.StaffGridPanel.getSelectionModel().getSelection()[0].data.SchListID", ParameterMode.Raw));
+                                              }),
+                                              X.Button().Text("迁移")
+                                            .DirectEvents(de =>
+                                              {
+                                                  de.Click.Url = Url.Action("AddStaffToAnotherList");
+                                                  de.Click.ExtraParams.Add(new Parameter("schlistid", "App.ID.getValue()", ParameterMode.Raw));
+                                              }),
+                                            X.Button().Text("删除").Listeners(l =>
+                                        {
+                                            l.Click.Handler = "deletejs(App.StaffGridPanel);";
+                                        })
+                       ),
+                               X.GridPanel().ID("StaffGridPanel").AutoScroll(true).ColumnLines(true)
+                                              .Store(
+                                                 X.Store().ID("StaffStore").PageSize(3)
+                                                          .AutoLoad(true)
+                                                          .DataSource(Model)
+                                                   .Model(
+                                                             X.Model().IDProperty("ID").Fields("ID", "SchListID", "StaffID", "Name", "Department", "CreaterName", "CreateTime", "EditorName", "EditeTime")
+                                                          )
+
+                                                          .Reader(
+                                                                      X.JsonReader().RootProperty("data")
+                                                                      )
+
+                                          )
+                                              .SelectionModel(
+                                                          X.CheckboxSelectionModel().Mode(SelectionMode.Multi)
+                                               )
+                                                .ViewConfig(X.GridView().TrackOver(false))
+                                                         .BottomBar(
+                                        Html.X().PagingToolbar().HideRefresh(true)
+                                    )
+                                        .ColumnModel(
+                                                X.Column()
+                                                               .Text("ID")
+                                                               .Width(55)
+                                                               .DataIndex("ID").Hidden(true),
+
+                                                                       X.Column()
+                                                                       .Text("SchID")
+                                                                       .Width(55)
+                                                                       .DataIndex("SchListID").Hidden(true),
+
+                                                       X.Column()
+                                                       .Text("工号")
+                                                       .Width(55)
+                                                       .DataIndex("StaffID"),
+
+                                                       X.Column()
+                                                       .Text("姓名")
+                                                       .Width(55)
+                                                       .DataIndex("Name"),
+
+                                                       X.Column()
+                                                       .Text("部门")
+                                                       .Width(280)
+                                                       .DataIndex("Department")
+                                        )
+                        )
+                           )
+               )
+
+       ),
+        X.Button().Text("确定").Icon(Icon.Accept).ID("save")
+                    .Listeners(l =>
+                        {
+                            l.Click.Handler = "closewindow();";
+                        })
+    )
+</body>
+
+</html>
+
+
+

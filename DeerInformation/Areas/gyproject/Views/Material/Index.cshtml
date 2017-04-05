@@ -1,0 +1,106 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    ViewBag.Title = "物料信息";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+<script>
+
+    var onSuccess = function (grid, data) {
+        grid.show();
+        grid.getStore().loadData(data);
+    };
+
+    var deletematerialid = function (id) {
+            Ext.MessageBox.confirm("提示", "确认删除该项？", function (but) {
+                if (but == "yes") {
+                    App.direct.gyproject.ClickDelete(id);
+                    App.direct.gyproject.MaterialInfoReload();
+                }
+            });      
+    };
+
+    var IsEnable = function (value){
+        return value? "是": "否";
+    }
+</script>
+}
+@section content{
+    @X.Viewport().Layout(LayoutType.Border).AutoScroll(true).Items(
+        X.Toolbar().Border(false).Region(Region.North	).Frame(true).Layout(LayoutType.HBox).Items(
+                    X.TextField().ID("MaterialName").FieldLabel("物资名称"),
+            X.TextField().ID("Brand").FieldLabel("品牌"),
+            X.TextField().ID("Size").FieldLabel("型号"),
+
+            X.Button().Icon(Icon.ApplicationGo).Text("查询").DirectEvents(de =>
+            {
+                de.Click.Url = Url.Action("SelectMaterial");
+                de.Click.Success = "onSuccess(App.GridPanel1, result.data);";
+                de.Click.ExtraParams.Add(new Parameter("materialname", "App.MaterialName.getValue()", ParameterMode.Raw));
+                de.Click.ExtraParams.Add(new Parameter("size", "App.Size.getValue()", ParameterMode.Raw));
+                de.Click.ExtraParams.Add(new Parameter("brand", "App.Brand.getValue()", ParameterMode.Raw));
+                de.Click.EventMask.ShowMask = true;
+            }),
+            X.ToolbarFill().Flex(1),
+            X.Button().Icon(Icon.ApplicationAdd).Text("添加").DirectEvents(de =>
+            {
+                de.Click.Url = Url.Action("MaterialAddButton");
+                de.Click.EventMask.ShowMask = true;
+            })),
+
+                X.FormPanel().Region(Region.Center).Items(
+            X.GridPanel().ID("GridPanel1")
+                .BottomBar(Html.X().PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true))
+                .Store(
+                    X.Store().ID("MaterialInfoSelect").DataSource(Model).PageSize(20).Model(
+                        X.Model().IDProperty("UID").Fields("UID","MaterialID", "MaterialName", "Size","IsEnable"
+                            , "Unit", "Price", "Extra", "Brand", "PicturePath","Type","PurchaseCycle","MinPurchase"))
+                        .Reader(X.JsonReader().RootProperty("data")))
+                .ColumnModel(
+                    X.Column().DataIndex("UID").Hidden(true),
+                    X.Column().Text("物资编号").Flex(1).DataIndex("MaterialID"),
+                    X.Column().Text("物资名称").Flex(1).DataIndex("MaterialName"),
+                    X.Column().Text("品牌").Flex(1).DataIndex("Brand"),
+                    X.Column().Text("是否启用").Flex(1).DataIndex("IsEnable").Renderer("IsEnable"),
+                    X.Column().Text("采购周期").Flex(1).DataIndex("PurchaseCycle"),
+                    X.Column().Text("最小采购量").Flex(1).DataIndex("MinPurchase"),
+                    X.Column()
+                        .Text("型号")
+                        .Flex(1)
+                        .DataIndex("Size"),
+
+                    X.Column()
+                        .Text("单位")
+                        .Flex(1)
+                        .DataIndex("Unit"),
+
+                    X.Column()
+                        .Text("标准价")
+                        .Flex(1)
+                        .DataIndex("Price"),
+
+                    X.Column()
+                        .Text("备注")
+                        .Flex(1)
+                        .DataIndex("Extra"),
+
+                    X.HyperlinkColumn().Flex(2).DataIndex("MaterialName").DataIndexHref("PicturePath").Text("技术规格书").HrefTarget("_blank"),
+                    //.Pattern("{text:uppercase}").HrefPattern("file:///{href}"),
+                    //X.Column().Text("技术规格书").DataIndex("Type").Add(X.HyperlinkButton().Text("附件").Icon(Icon.Attach).HrefTarget("_blank").Href("PicturePath")),
+
+                    X.CommandColumn().Flex(1).Commands(
+                        X.GridCommand().CommandName("update").Icon(Icon.CommentEdit).Text("修改"))
+                        .DirectEvents(de =>
+                        {
+                            de.Command.Url = Url.Action("ClickEdit", "Material");
+                            de.Command.ExtraParams.Add(new Parameter("id", "record.data.UID", ParameterMode.Raw));
+                        }),
+
+                    X.CommandColumn().Flex(1).Hidden(true).Commands(
+                        X.GridCommand().CommandName("delete").Icon(Icon.CommentDelete).Text("删除"))
+                        .Listeners(l =>l.Command.Handler = "deletematerialid(record.data.UID);")))
+        )
+}

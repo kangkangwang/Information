@@ -1,0 +1,107 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+    <script>
+
+        var onSuccess = function (grid, data) {
+            grid.show();
+            grid.getStore().loadData(data);
+        };
+
+    </script>
+}
+
+@section content{
+    @(
+ X.Viewport().Layout(LayoutType.Auto).AutoScroll(true).Region(Region.Center).Items(
+            X.Toolbar().Frame(true).Border(false).Layout(LayoutType.HBox).Items(
+                    X.TextField().ID("ClientName").FieldLabel("客户名称"),
+
+                    X.TextField().ID("ProjectName").FieldLabel("项目名称"),
+
+                     X.Button().Icon(Icon.ApplicationGo).Text("查询").DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("SelectPONo");
+                        de.Click.Success = "onSuccess(App.GridPanel1, result.data);";
+                        de.Click.ExtraParams.Add(new Parameter("clientname", "App.ClientName.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("projectname", "App.ProjectName.getValue()", ParameterMode.Raw));
+                        de.Click.EventMask.ShowMask = true;
+                    }),
+
+                     X.Button().Icon(Icon.ApplicationAdd).Text("添加").DirectEvents(de =>
+                        {
+                            de.Click.Url = Url.Action("PONoAddButton");
+                            de.Click.EventMask.ShowMask = true;
+                        }))
+                            ,
+
+             X.FormPanel().Layout(LayoutType.Auto).Items(
+                        X.GridPanel().ID("GridPanel1").Border(false)
+                    .BottomBar(X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true)).Store(
+                            X.Store().ID("PONoSelect").DataSource(Model).PageSize(20).Model(
+                                X.Model().IDProperty("UID").Fields(
+                                  "UID", "CustomerNo", "ProjectNo", "ProjectName", "ClientName",
+                                    "OfferDate", "OfferMoney", "Name", "OfferStatus","PurchaseAmount"
+                              ))
+                 .Reader(X.JsonReader().RootProperty("data")))
+             .ColumnModel(
+                   X.Column().DataIndex("UID").Hidden(true),
+                   X.Column()
+                    .Text("客户订单号")
+                    .Flex(3)
+                    .DataIndex("CustomerNo"),
+                   X.Column()
+                    .Text("项目编号")
+                    .Flex(3)
+                    .DataIndex("ProjectNo"),
+                   X.Column()
+                     .Text("项目名称")
+                     .Flex(2)
+                     .DataIndex("ProjectName"),
+                   X.Column()
+                    .Text("客户名称")
+                    .Flex(2)
+                    .DataIndex("ClientName"),
+
+                   X.Column()
+                    .Text("报价日期").Flex(3)
+                    .Renderer(RendererFormat.Date, new string[] { "'Y-n-j'" })
+                    .DataIndex("OfferDate"),
+
+                    X.Column()
+                    .Text("订单金额").Flex(3)
+                        .DataIndex("PurchaseAmount"),
+
+                    X.Column()
+                    .Text("经办人")
+                    .Flex(2)
+                    .DataIndex("Name"),
+
+                    X.Column()
+                    .Text("订单收到")
+                    .Flex(3)
+                    .DataIndex("OfferStatus"),
+
+                    X.CommandColumn().Flex(2).Text("查看订单").Commands(
+                                    X.GridCommand().CommandName("see").Icon(Icon.ApplicationViewDetail).Text("查看"))
+                                               .DirectEvents(de =>
+                                               {
+                                                   de.Command.Url = Url.Action("ClickSee");
+                                                   de.Command.ExtraParams.Add(new Parameter("id", "record.data.UID", ParameterMode.Raw));
+                                               }),
+                    X.CommandColumn().Flex(2).Text("修改订单").Commands(
+                            X.GridCommand().CommandName("update").Icon(Icon.ApplicationViewDetail).Text("修改"))
+                                .DirectEvents(de =>
+                                {
+                                    de.Command.Url = Url.Action("PONoUpdate");
+                                    de.Command.ExtraParams.Add(new Parameter("id", "record.data.UID", ParameterMode.Raw));
+                                }))
+                                                   
+                                           )     
+                         ))
+}

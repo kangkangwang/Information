@@ -1,0 +1,1534 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+您 Web 项目的发布/打包进程将使用此文件。您可以通过编辑此 MSBuild 文件
+来自定义该进程的行为。若要了解与此相关的详细信息，请访问 http://go.microsoft.com/fwlink/?LinkID=208121。
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>E:\DeerInformation</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="App_Data/excel.xsl">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Areas/finance/Views/CollectionPlan/CreateView.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/finance/Views/CollectionPlan/Detail.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/finance/Views/CollectionPlan/Index.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/finance/Views/Invoice/InvoiceLst.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/finance/Views/PayablePurchase/Index.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/finance/Views/PayablePurchase/InvoiceView.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/finance/Views/PayablePurchase/PaymentView.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/finance/Views/Payment/Index.cshtml">
+      <publishTime>08/29/2016 10:22:06</publishTime>
+    </File>
+    <File Include="Areas/finance/Views/Payment/PaymentAddView.cshtml">
+      <publishTime>08/29/2016 10:22:07</publishTime>
+    </File>
+    <File Include="Areas/finance/Views/PaymentApply/AddView.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/finance/Views/PaymentApply/CheckView.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/finance/Views/PaymentApply/Detail.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/finance/Views/PaymentApply/EditView.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/finance/Views/PaymentApply/Index.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/finance/Views/PaymentApply/ProjectSelection.cshtml">
+      <publishTime>10/10/2016 18:10:35</publishTime>
+    </File>
+    <File Include="Areas/finance/Views/ProjectSelection/Index.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/finance/Views/Shared/Expire.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/finance/Views/Web.config">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/CustomInfo/CustomerAddView.cshtml">
+      <publishTime>03/27/2017 15:52:52</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/CustomInfo/CustomerEditView.cshtml">
+      <publishTime>03/27/2017 15:52:52</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/CustomInfo/Index.cshtml">
+      <publishTime>03/27/2017 15:52:52</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/EXWarehouse/allotment.cshtml">
+      <publishTime>03/27/2017 15:52:53</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/EXWarehouse/CheckEX.cshtml">
+      <publishTime>03/27/2017 15:52:53</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/EXWarehouse/Detail.cshtml">
+      <publishTime>03/27/2017 15:52:53</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/EXWarehouse/Index.cshtml">
+      <publishTime>03/27/2017 15:52:53</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/EXWarehouse/requisition.cshtml">
+      <publishTime>03/30/2017 16:32:40</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/EXWarehouse/stocktaking.cshtml">
+      <publishTime>03/27/2017 15:52:53</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FAApply/ApplyFixedAssetAddView.cshtml">
+      <publishTime>03/27/2017 15:52:52</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FAApply/FADeployView.cshtml">
+      <publishTime>10/21/2016 10:53:56</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FAApply/Index.cshtml">
+      <publishTime>03/27/2017 15:52:52</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FAAudit/FixedAssetAuditView.cshtml">
+      <publishTime>09/14/2016 23:22:18</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FAAudit/Index.cshtml">
+      <publishTime>09/14/2016 23:22:18</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FAManage/Index.cshtml">
+      <publishTime>09/14/2016 23:22:18</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FAManage/PurchaseFAAddView.cshtml">
+      <publishTime>09/14/2016 23:22:18</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FAManage/PurchaseFAAuditView.cshtml">
+      <publishTime>09/14/2016 23:22:18</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FAManage/PurchaseFASeeView.cshtml">
+      <publishTime>09/14/2016 23:22:18</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FAManage/SelectApplyFAInfoView.cshtml">
+      <publishTime>09/14/2016 23:22:18</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FAPurchase/FADeployView.cshtml">
+      <publishTime>03/27/2017 15:52:51</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FAPurchase/Index.cshtml">
+      <publishTime>03/27/2017 15:52:51</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FAStorage/FAStorageAddView.cshtml">
+      <publishTime>03/27/2017 15:52:55</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FAStorage/index.cshtml">
+      <publishTime>03/27/2017 15:52:55</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FixedAsset/ApplyFixedAssetAddView.cshtml">
+      <publishTime>09/14/2016 23:22:18</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FixedAsset/FixedAssetSeeView.cshtml">
+      <publishTime>09/14/2016 23:22:18</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FixedAsset/FixedAssetSeeView2.cshtml">
+      <publishTime>09/14/2016 23:22:18</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FixedAsset/Index.cshtml">
+      <publishTime>09/14/2016 23:22:18</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FixedAsset/ProjectMaterialEngineeringDepartmentCheckView.cshtml">
+      <publishTime>09/14/2016 23:22:18</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FixedAsset/ProjectMaterialPurchasingSupervisorCheckView.cshtml">
+      <publishTime>09/14/2016 23:22:18</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FixedAsset/ProjectMaterialSceneGetConfirmView.cshtml">
+      <publishTime>09/14/2016 23:22:18</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/FixedAsset/SelectFixedAssetInfo.cshtml">
+      <publishTime>09/14/2016 23:22:18</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/IMWarehouse/allotment.cshtml">
+      <publishTime>03/27/2017 15:52:52</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/IMWarehouse/CheckIM.cshtml">
+      <publishTime>03/27/2017 15:52:52</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/IMWarehouse/Detail.cshtml">
+      <publishTime>03/27/2017 15:52:52</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/IMWarehouse/Index.cshtml">
+      <publishTime>03/27/2017 15:52:52</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/IMWarehouse/Purchase.cshtml">
+      <publishTime>03/27/2017 15:52:52</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/IMWarehouse/stocktaking.cshtml">
+      <publishTime>03/27/2017 15:52:52</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/MApply/index.cshtml">
+      <publishTime>03/27/2017 15:52:53</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/MApply/MApplyAddView.cshtml">
+      <publishTime>03/29/2017 17:02:55</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/MApply/MApplyModifyView.cshtml">
+      <publishTime>10/12/2016 23:06:37</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/MApply/MApplySeeView.cshtml">
+      <publishTime>10/12/2016 19:15:05</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/MApply/MDeployView.cshtml">
+      <publishTime>10/19/2016 16:31:42</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/MApply/OrdinaryMApplyAddView.cshtml">
+      <publishTime>03/29/2017 16:48:27</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/MApply/SelectMaterialInfo.cshtml">
+      <publishTime>09/05/2016 15:52:19</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Material/Index.cshtml">
+      <publishTime>03/27/2017 15:52:52</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Material/MaterialAddView.cshtml">
+      <publishTime>03/27/2017 15:52:52</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Material/MaterialEditView.cshtml">
+      <publishTime>03/27/2017 15:52:52</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Material/MaterialStockEditView.cshtml">
+      <publishTime>03/27/2017 15:52:52</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Material/StockView.cshtml">
+      <publishTime>03/27/2017 15:52:52</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Material/Warehouse.cshtml">
+      <publishTime>03/27/2017 16:26:36</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Material/WarehouseEdit.cshtml">
+      <publishTime>03/27/2017 15:52:52</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/MPurchase/index.cshtml">
+      <publishTime>03/29/2017 19:00:52</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/MPurchase/MDeployView.cshtml">
+      <publishTime>03/29/2017 15:38:05</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/MPurchase/MEXWarehouseView.cshtml">
+      <publishTime>03/27/2017 15:52:52</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/MPurchase/MPurchaseModifyView.cshtml">
+      <publishTime>09/14/2016 23:22:18</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/MPurchase/MPurchaseSeeView.cshtml">
+      <publishTime>09/14/2016 23:22:18</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/MPurchase/SupplierAckDate.cshtml">
+      <publishTime>03/29/2017 19:36:22</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/MReceipt/index.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/MReceipt/MPurchaseModifyView.cshtml">
+      <publishTime>09/13/2016 09:07:50</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/MReceipt/MPurchaseSeeView.cshtml">
+      <publishTime>09/13/2016 09:07:50</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/MReceipt/MReceiptAddView.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/MReceipt/MReceiptSeeView.cshtml">
+      <publishTime>09/14/2016 23:22:18</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/MResidual/index.cshtml">
+      <publishTime>03/27/2017 15:52:51</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/MResidual/MResidualAddView.cshtml">
+      <publishTime>03/27/2017 15:52:51</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/PONo/Index.cshtml">
+      <publishTime>03/27/2017 16:27:17</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/PONo/POAddView.cshtml">
+      <publishTime>03/27/2017 15:52:55</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/PONo/PONoSeeView.cshtml">
+      <publishTime>03/27/2017 15:52:55</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/PONo/PONoUpdateView.cshtml">
+      <publishTime>03/27/2017 15:52:55</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Project/BackSeeView.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Project/FieldScheduleSeeView.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Project/Index.cshtml">
+      <publishTime>03/28/2017 15:29:01</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Project/PaidSeeView.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/ProjectBudget/BudgetAddView.cshtml">
+      <publishTime>03/27/2017 15:52:53</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/ProjectBudget/BudgetEditView.cshtml">
+      <publishTime>03/27/2017 15:52:53</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/ProjectBudget/BudgetSeeView.cshtml">
+      <publishTime>03/27/2017 15:52:53</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/ProjectBudget/History.cshtml">
+      <publishTime>03/27/2017 15:52:53</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/ProjectBudget/Index.cshtml">
+      <publishTime>03/27/2017 15:52:53</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Share/Audit.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Share/Button.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Share/ChooseM.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Share/ChooseMP.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Share/FAApplyAudit.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Share/FAPurchaseAudit.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Share/MApplyAudit.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Share/MDetailSeeView.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Share/Modify.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Share/MPurchaseAudit.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Share/MResidualAudit.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Share/ProjectBudgetAudit.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Share/SelectMaterialInfo.cshtml">
+      <publishTime>09/14/2016 23:22:18</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Share/SelMInfo.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Share/Variable.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/StorageApply/Index.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/StorageApply/StorageApplyAddView.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/StorageApply/StorageApplyCheckView.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/StorageApplyEdit/StorageApplyEditView.cshtml">
+      <publishTime>03/27/2017 15:52:51</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/StorageApplyEdit/StorageApplySeeView.cshtml">
+      <publishTime>03/27/2017 15:52:51</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Supplier/Index.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Supplier/SupplierAddView.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Supplier/SupplierEditView.cshtml">
+      <publishTime>03/27/2017 15:52:54</publishTime>
+    </File>
+    <File Include="Areas/gyproject/Views/Web.config">
+      <publishTime>03/27/2017 15:52:51</publishTime>
+    </File>
+    <File Include="Areas/person/excel.xsl">
+      <publishTime>03/27/2017 15:52:56</publishTime>
+    </File>
+    <File Include="Areas/person/Views/AbsenceCount/Index.cshtml">
+      <publishTime>05/23/2016 16:45:03</publishTime>
+    </File>
+    <File Include="Areas/person/Views/add.cshtml">
+      <publishTime>03/27/2017 15:52:57</publishTime>
+    </File>
+    <File Include="Areas/person/Views/AddPersontoView/Index.cshtml">
+      <publishTime>05/23/2016 16:45:03</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Basic/CertificateInfo.cshtml">
+      <publishTime>03/27/2017 15:52:57</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Basic/Index.cshtml">
+      <publishTime>03/27/2017 15:52:57</publishTime>
+    </File>
+    <File Include="Areas/person/Views/BusinessTrip/AddBusinessTrip.cshtml">
+      <publishTime>03/29/2017 19:50:01</publishTime>
+    </File>
+    <File Include="Areas/person/Views/BusinessTrip/BusinessTripDetail.cshtml">
+      <publishTime>03/29/2017 19:50:01</publishTime>
+    </File>
+    <File Include="Areas/person/Views/BusinessTrip/BusinessTripEdit.cshtml">
+      <publishTime>03/29/2017 19:50:01</publishTime>
+    </File>
+    <File Include="Areas/person/Views/BusinessTrip/BusinessTripRemove.cshtml">
+      <publishTime>03/29/2017 19:50:00</publishTime>
+    </File>
+    <File Include="Areas/person/Views/BusinessTrip/CheckBusinessTrip.cshtml">
+      <publishTime>03/27/2017 15:52:58</publishTime>
+    </File>
+    <File Include="Areas/person/Views/BusinessTrip/Index.cshtml">
+      <publishTime>03/29/2017 08:39:30</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Certificate/AddCertificate.cshtml">
+      <publishTime>03/29/2017 19:50:00</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Certificate/Index.cshtml">
+      <publishTime>03/29/2017 19:50:00</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Contract/AddContract.cshtml">
+      <publishTime>03/30/2017 16:35:19</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Contract/Index.cshtml">
+      <publishTime>03/30/2017 16:35:19</publishTime>
+    </File>
+    <File Include="Areas/person/Views/DayAttendanceShow/Index.cshtml">
+      <publishTime>05/23/2016 16:45:03</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Department/AddDepartment.cshtml">
+      <publishTime>03/27/2017 15:52:59</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Department/Index.cshtml">
+      <publishTime>03/27/2017 15:52:59</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Dimission/AddDimission.cshtml">
+      <publishTime>03/29/2017 19:50:01</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Dimission/CheckDimission.cshtml">
+      <publishTime>03/29/2017 19:50:01</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Dimission/DimissionDetail.cshtml">
+      <publishTime>03/29/2017 19:50:01</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Dimission/Index.cshtml">
+      <publishTime>03/27/2017 15:52:59</publishTime>
+    </File>
+    <File Include="Areas/person/Views/DirectStaffWork/ADDDirectStaffWorkView.cshtml">
+      <publishTime>05/23/2016 16:45:03</publishTime>
+    </File>
+    <File Include="Areas/person/Views/DirectStaffWork/Index.cshtml">
+      <publishTime>05/23/2016 16:45:03</publishTime>
+    </File>
+    <File Include="Areas/person/Views/DirectStaffWorkCheck/check.cshtml">
+      <publishTime>05/23/2016 16:45:03</publishTime>
+    </File>
+    <File Include="Areas/person/Views/DirectStaffWorkCheck/Index.cshtml">
+      <publishTime>05/23/2016 16:45:03</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Duty/AddDuty.cshtml">
+      <publishTime>03/27/2017 15:52:58</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Duty/Index.cshtml">
+      <publishTime>03/27/2017 15:52:58</publishTime>
+    </File>
+    <File Include="Areas/person/Views/EducationFund/AddEducationFund.cshtml">
+      <publishTime>03/27/2017 15:52:58</publishTime>
+    </File>
+    <File Include="Areas/person/Views/EducationFund/Index.cshtml">
+      <publishTime>03/30/2017 16:35:19</publishTime>
+    </File>
+    <File Include="Areas/person/Views/ExceptionHandleRecords/Index.cshtml">
+      <publishTime>03/27/2017 15:52:58</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Fund/AddFund.cshtml">
+      <publishTime>03/27/2017 15:52:58</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Fund/Index.cshtml">
+      <publishTime>03/27/2017 15:52:58</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Job/AddJob.cshtml">
+      <publishTime>03/27/2017 15:53:01</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Job/Index.cshtml">
+      <publishTime>03/27/2017 15:53:01</publishTime>
+    </File>
+    <File Include="Areas/person/Views/OriginalAttendTime/index.cshtml">
+      <publishTime>03/27/2017 15:52:57</publishTime>
+    </File>
+    <File Include="Areas/person/Views/OverWorkApply/AddOverWorkApply.cshtml">
+      <publishTime>03/29/2017 19:50:00</publishTime>
+    </File>
+    <File Include="Areas/person/Views/OverWorkApply/CheckOverWorkApply.cshtml">
+      <publishTime>03/27/2017 15:52:57</publishTime>
+    </File>
+    <File Include="Areas/person/Views/OverWorkApply/Index.cshtml">
+      <publishTime>03/29/2017 08:39:30</publishTime>
+    </File>
+    <File Include="Areas/person/Views/OverWorkApply/OverWorkApplyDetail.cshtml">
+      <publishTime>03/29/2017 19:50:00</publishTime>
+    </File>
+    <File Include="Areas/person/Views/PositionCategory/AddPositionCategory.cshtml">
+      <publishTime>03/27/2017 15:52:59</publishTime>
+    </File>
+    <File Include="Areas/person/Views/PositionCategory/Index.cshtml">
+      <publishTime>03/27/2017 15:52:59</publishTime>
+    </File>
+    <File Include="Areas/person/Views/PositionChangeApply/AddPositionChangeView.cshtml">
+      <publishTime>05/31/2016 13:45:07</publishTime>
+    </File>
+    <File Include="Areas/person/Views/PositionChangeApply/Index.cshtml">
+      <publishTime>05/23/2016 16:45:03</publishTime>
+    </File>
+    <File Include="Areas/person/Views/PositionChangeApply/ShowPositionChangeApply.cshtml">
+      <publishTime>05/31/2016 13:45:34</publishTime>
+    </File>
+    <File Include="Areas/person/Views/PostShow/Index.cshtml">
+      <publishTime>05/23/2016 16:45:03</publishTime>
+    </File>
+    <File Include="Areas/person/Views/PunchedException/AddAttend.cshtml">
+      <publishTime>03/29/2017 19:50:01</publishTime>
+    </File>
+    <File Include="Areas/person/Views/PunchedException/Attend.cshtml">
+      <publishTime>03/27/2017 15:53:00</publishTime>
+    </File>
+    <File Include="Areas/person/Views/PunchedException/Index.cshtml">
+      <publishTime>03/27/2017 15:53:00</publishTime>
+    </File>
+    <File Include="Areas/person/Views/PunchSet/Index.cshtml">
+      <publishTime>05/23/2016 16:45:03</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Recommend/AddRecommend.cshtml">
+      <publishTime>03/30/2017 16:35:19</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Recommend/Index.cshtml">
+      <publishTime>03/30/2017 16:35:19</publishTime>
+    </File>
+    <File Include="Areas/person/Views/SAbsenceApply/Index.cshtml">
+      <publishTime>05/26/2016 19:26:52</publishTime>
+    </File>
+    <File Include="Areas/person/Views/SAbsenceApplyTable/Index.cshtml">
+      <publishTime>05/26/2016 19:20:51</publishTime>
+    </File>
+    <File Include="Areas/person/Views/SAbsenceShow/CheckView.cshtml">
+      <publishTime>05/23/2016 18:28:32</publishTime>
+    </File>
+    <File Include="Areas/person/Views/SAbsenceShow/Index.cshtml">
+      <publishTime>05/23/2016 16:45:03</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Salary/index.cshtml">
+      <publishTime>03/27/2017 15:52:58</publishTime>
+    </File>
+    <File Include="Areas/person/Views/SalaryPerHour/AddSalaryPerHour.cshtml">
+      <publishTime>03/27/2017 15:52:59</publishTime>
+    </File>
+    <File Include="Areas/person/Views/SalaryPerHour/Index.cshtml">
+      <publishTime>03/27/2017 15:52:59</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Scheduling/AddScheduling.cshtml">
+      <publishTime>03/27/2017 15:52:58</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Scheduling/AddStaff.cshtml">
+      <publishTime>03/30/2017 16:59:53</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Scheduling/AddWorkTime.cshtml">
+      <publishTime>03/29/2017 19:50:00</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Scheduling/Department.cshtml">
+      <publishTime>03/30/2017 16:59:53</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Scheduling/Index.cshtml">
+      <publishTime>03/27/2017 15:52:58</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Scheduling/Staff.cshtml">
+      <publishTime>03/27/2017 15:52:58</publishTime>
+    </File>
+    <File Include="Areas/person/Views/SelectStaff/Index.cshtml">
+      <publishTime>11/04/2016 19:39:43</publishTime>
+    </File>
+    <File Include="Areas/person/Views/SExitShow/Check.cshtml">
+      <publishTime>05/31/2016 13:45:56</publishTime>
+    </File>
+    <File Include="Areas/person/Views/SExitShow/Index.cshtml">
+      <publishTime>05/23/2016 16:45:03</publishTime>
+    </File>
+    <File Include="Areas/person/Views/show.cshtml">
+      <publishTime>03/27/2017 15:53:01</publishTime>
+    </File>
+    <File Include="Areas/person/Views/ShowConTract/Index.cshtml">
+      <publishTime>05/23/2016 16:45:02</publishTime>
+    </File>
+    <File Include="Areas/person/Views/ShowStaffTable/Index.cshtml">
+      <publishTime>05/23/2016 16:45:02</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Staff/AddStaff.cshtml">
+      <publishTime>03/30/2017 16:35:19</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Staff/CertificateInfo.cshtml">
+      <publishTime>03/27/2017 15:53:00</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Staff/Index.cshtml">
+      <publishTime>03/27/2017 15:53:00</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Staff/ReinstatementStaff.cshtml">
+      <publishTime>03/30/2017 16:35:19</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Staff/StaffDetail.cshtml">
+      <publishTime>03/30/2017 16:35:19</publishTime>
+    </File>
+    <File Include="Areas/person/Views/StaffContractadd/Index.cshtml">
+      <publishTime>06/01/2016 21:05:48</publishTime>
+    </File>
+    <File Include="Areas/person/Views/StaffDetailed/Index.cshtml">
+      <publishTime>06/01/2016 21:04:56</publishTime>
+    </File>
+    <File Include="Areas/person/Views/StaffExitApply/Index.cshtml">
+      <publishTime>05/23/2016 18:28:32</publishTime>
+    </File>
+    <File Include="Areas/person/Views/StaffExitApplyTable/Index.cshtml">
+      <publishTime>05/23/2016 16:45:02</publishTime>
+    </File>
+    <File Include="Areas/person/Views/StaffInfor/AddStaffpostView.cshtml">
+      <publishTime>06/01/2016 21:15:27</publishTime>
+    </File>
+    <File Include="Areas/person/Views/StaffInfor/AddStaffView.cshtml">
+      <publishTime>06/01/2016 21:15:25</publishTime>
+    </File>
+    <File Include="Areas/person/Views/StaffInfor/EducationFundingAddView.cshtml">
+      <publishTime>06/01/2016 21:15:22</publishTime>
+    </File>
+    <File Include="Areas/person/Views/StaffInfor/Index.cshtml">
+      <publishTime>06/13/2016 11:00:36</publishTime>
+    </File>
+    <File Include="Areas/person/Views/StaffInfor/RecommendedAddView.cshtml">
+      <publishTime>06/01/2016 21:15:19</publishTime>
+    </File>
+    <File Include="Areas/person/Views/StaffInfor/StaffjobView.cshtml">
+      <publishTime>06/01/2016 21:15:18</publishTime>
+    </File>
+    <File Include="Areas/person/Views/StaffInfor/StaffpositionView.cshtml">
+      <publishTime>06/01/2016 21:21:06</publishTime>
+    </File>
+    <File Include="Areas/person/Views/StaffJob/AddStaffJob.cshtml">
+      <publishTime>03/27/2017 15:52:59</publishTime>
+    </File>
+    <File Include="Areas/person/Views/StaffJob/Index.cshtml">
+      <publishTime>03/27/2017 15:52:59</publishTime>
+    </File>
+    <File Include="Areas/person/Views/StaffJob/StaffJobDetail.cshtml">
+      <publishTime>03/27/2017 15:52:59</publishTime>
+    </File>
+    <File Include="Areas/person/Views/StaffSalary/Index.cshtml">
+      <publishTime>03/27/2017 15:52:57</publishTime>
+    </File>
+    <File Include="Areas/person/Views/TipsPeople/Index.cshtml">
+      <publishTime>03/27/2017 15:52:57</publishTime>
+    </File>
+    <File Include="Areas/person/Views/TravelApply/Index.cshtml">
+      <publishTime>05/26/2016 19:05:55</publishTime>
+    </File>
+    <File Include="Areas/person/Views/TravelApplyTable/Index.cshtml">
+      <publishTime>05/23/2016 16:45:02</publishTime>
+    </File>
+    <File Include="Areas/person/Views/TravelShow/Check.cshtml">
+      <publishTime>05/31/2016 13:46:10</publishTime>
+    </File>
+    <File Include="Areas/person/Views/TravelShow/Index.cshtml">
+      <publishTime>05/23/2016 16:45:02</publishTime>
+    </File>
+    <File Include="Areas/person/Views/TSetWorkingday/Index.cshtml">
+      <publishTime>05/23/2016 18:28:32</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Vacation/AddVacation.cshtml">
+      <publishTime>03/29/2017 19:50:01</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Vacation/CheckVacation.cshtml">
+      <publishTime>03/29/2017 08:39:31</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Vacation/Index.cshtml">
+      <publishTime>03/27/2017 15:53:00</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Vacation/StaffVacationAndHour.cshtml">
+      <publishTime>03/27/2017 15:53:00</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Vacation/VacationDetail.cshtml">
+      <publishTime>03/29/2017 19:50:01</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Vacation/VacationEdit.cshtml">
+      <publishTime>03/29/2017 19:50:01</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Vacation/VacationRemove.cshtml">
+      <publishTime>03/29/2017 19:50:01</publishTime>
+    </File>
+    <File Include="Areas/person/Views/Web.config">
+      <publishTime>03/27/2017 15:52:57</publishTime>
+    </File>
+    <File Include="Areas/person/Views/WorkOverTime/AddWorkOverTime.cshtml">
+      <publishTime>03/27/2017 15:52:59</publishTime>
+    </File>
+    <File Include="Areas/person/Views/WorkOverTime/Index.cshtml">
+      <publishTime>03/27/2017 15:52:59</publishTime>
+    </File>
+    <File Include="Areas/person/Views/WorkOverTimeApply/Index.cshtml">
+      <publishTime>05/23/2016 18:28:32</publishTime>
+    </File>
+    <File Include="Areas/person/Views/WorkOverTimeShow/Index.cshtml">
+      <publishTime>05/23/2016 16:45:02</publishTime>
+    </File>
+    <File Include="Areas/project/Views/AddApplyProjectMaterial/Index.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/AddApplyStorageMaterial/Index.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/AddProject/Index.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/AddProjectClient/Index.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/CustomInfo/CustomerAddView.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/CustomInfo/CustomerEditView.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/CustomInfo/Index.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/Material/Index.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/Material/MaterialAddView.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/Material/MaterialEditView.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/Material/MaterialStockEditView.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/Material/StockView.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/MaterialEdit/MaterialEditView.cshtml">
+      <publishTime>05/26/2016 13:38:13</publishTime>
+    </File>
+    <File Include="Areas/project/Views/MaterialEdit/MaterialStockEditView.cshtml">
+      <publishTime>06/02/2016 13:58:11</publishTime>
+    </File>
+    <File Include="Areas/project/Views/MaterialStorage/Index.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/MaterialStorage/StorageApplyAddView.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/MaterialStorage/StorageApplyCheckView.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/MaterialStorage/StorageApplyEditView.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/MaterialStorage/StorageApplySeeView.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/Offer/Index.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/Offer/OfferAddView.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/OfferSee/OfferSeeView.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/Order/Index.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/Order/OrderAddView.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/OrderEdit/OrderEditView.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/OrderEdit/OrderSeeView.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/ProjectAudit/Index.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/ProjectAudit/ProjectAuditView.cshtml">
+      <publishTime>08/26/2016 10:23:05</publishTime>
+    </File>
+    <File Include="Areas/project/Views/ProjectBudget/BudgetAddView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/ProjectBudget/BudgetEditView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/ProjectBudget/BudgetSeeView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/ProjectBudget/Index.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/ProjectInfo/Index.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/ProjectInfo/InfoSeeView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/ProjectMaterial/Index.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/ProjectMaterial/ProjectMaterialApplyAddView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/ProjectMaterial/ProjectMaterialEngineeringDepartmentCheckView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/ProjectMaterial/ProjectMaterialPurchasingSupervisorCheckView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/ProjectMaterial/ProjectMaterialSceneGetConfirmView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/ProjectMaterialEdit/ProjectMaterialEngineeringDepartmentCheckView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/ProjectMaterialEdit/ProjectMaterialPurchasingSupervisorCheckView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/ProjectMaterialEdit/ProjectMaterialSceneGetConfirmView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/ProjectMaterialEdit/ProjectMaterialSeeView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/StorageApply/Index.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/StorageApply/StorageApplyAddView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/StorageApply/StorageApplyCheckView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/StorageApplyEdit/StorageApplyEditView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/StorageApplyEdit/StorageApplySeeView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/Supplier/Index.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/Supplier/SupplierAddView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/Supplier/SupplierEditView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/SupplierEdit/SupplierEditView.cshtml">
+      <publishTime>05/24/2016 10:28:29</publishTime>
+    </File>
+    <File Include="Areas/project/Views/SupplierOrder/AddProjectView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/SupplierOrder/AddSupplierView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/SupplierOrder/Index.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/SupplierOrder/SelectProjectMaterialView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/SupplierOrder/SupplierOrderAddView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/SupplierOrderEdit/SupplierOrderSeeView.cshtml">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/project/Views/Web.config">
+      <publishTime>08/26/2016 10:23:06</publishTime>
+    </File>
+    <File Include="Areas/reportforms/Views/finance/index.cshtml">
+      <publishTime>03/27/2017 15:52:46</publishTime>
+    </File>
+    <File Include="Areas/reportforms/Views/finance/salary.cshtml">
+      <publishTime>03/27/2017 15:52:46</publishTime>
+    </File>
+    <File Include="Areas/reportforms/Views/Purchase/MaterialApply.cshtml">
+      <publishTime>03/27/2017 15:52:46</publishTime>
+    </File>
+    <File Include="Areas/reportforms/Views/Web.config">
+      <publishTime>03/27/2017 15:52:46</publishTime>
+    </File>
+    <File Include="Areas/system/Controllers/MenuManageController.cs">
+      <publishTime>08/11/2016 15:40:36</publishTime>
+    </File>
+    <File Include="Areas/system/Controllers/RolesController.cs">
+      <publishTime>08/11/2016 15:31:08</publishTime>
+    </File>
+    <File Include="Areas/system/Views/CheckflowManage/CreateCheckFlow.cshtml">
+      <publishTime>03/27/2017 15:52:50</publishTime>
+    </File>
+    <File Include="Areas/system/Views/CheckflowManage/Index.cshtml">
+      <publishTime>03/27/2017 15:52:50</publishTime>
+    </File>
+    <File Include="Areas/system/Views/CheckflowManage/UpdateCheckFlow.cshtml">
+      <publishTime>03/27/2017 15:52:50</publishTime>
+    </File>
+    <File Include="Areas/system/Views/Checkfunc/Edit.cshtml">
+      <publishTime>03/27/2017 15:52:49</publishTime>
+    </File>
+    <File Include="Areas/system/Views/Checkfunc/Index.cshtml">
+      <publishTime>03/27/2017 15:52:49</publishTime>
+    </File>
+    <File Include="Areas/system/Views/Checkfunc/Part.cshtml">
+      <publishTime>03/27/2017 15:52:49</publishTime>
+    </File>
+    <File Include="Areas/system/Views/Checkfunc/Users.cshtml">
+      <publishTime>03/27/2017 15:52:49</publishTime>
+    </File>
+    <File Include="Areas/system/Views/MenuManage/Create.cshtml">
+      <publishTime>03/27/2017 15:52:50</publishTime>
+    </File>
+    <File Include="Areas/system/Views/MenuManage/Details.cshtml">
+      <publishTime>03/27/2017 15:52:50</publishTime>
+    </File>
+    <File Include="Areas/system/Views/MenuManage/Index.cshtml">
+      <publishTime>03/27/2017 15:52:50</publishTime>
+    </File>
+    <File Include="Areas/system/Views/Roles/Authority.cshtml">
+      <publishTime>03/27/2017 15:52:49</publishTime>
+    </File>
+    <File Include="Areas/system/Views/Roles/CreatePage.cshtml">
+      <publishTime>03/27/2017 15:52:49</publishTime>
+    </File>
+    <File Include="Areas/system/Views/Roles/EditPage.cshtml">
+      <publishTime>03/27/2017 15:52:49</publishTime>
+    </File>
+    <File Include="Areas/system/Views/Roles/Index.cshtml">
+      <publishTime>03/27/2017 15:52:49</publishTime>
+    </File>
+    <File Include="Areas/system/Views/Roles/Users.cshtml">
+      <publishTime>03/27/2017 15:52:49</publishTime>
+    </File>
+    <File Include="Areas/system/Views/Shared/_BaseContent.cshtml">
+      <publishTime>03/27/2017 15:52:49</publishTime>
+    </File>
+    <File Include="Areas/system/Views/UserManage/CreateUser.cshtml">
+      <publishTime>03/27/2017 15:52:49</publishTime>
+    </File>
+    <File Include="Areas/system/Views/UserManage/Deatil.cshtml">
+      <publishTime>03/27/2017 15:52:49</publishTime>
+    </File>
+    <File Include="Areas/system/Views/UserManage/index.cshtml">
+      <publishTime>03/27/2017 15:52:49</publishTime>
+    </File>
+    <File Include="Areas/system/Views/Web.config">
+      <publishTime>03/27/2017 15:52:49</publishTime>
+    </File>
+    <File Include="Areas/user/Views/DailyWorkReport/Check.cshtml">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Areas/user/Views/DailyWorkReport/Create.cshtml">
+      <publishTime>03/29/2017 08:39:31</publishTime>
+    </File>
+    <File Include="Areas/user/Views/DailyWorkReport/Detail.cshtml">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Areas/user/Views/DailyWorkReport/Index.cshtml">
+      <publishTime>03/27/2017 15:53:01</publishTime>
+    </File>
+    <File Include="Areas/user/Views/DailyWorkReport/StaffVacationAndHour.cshtml">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Areas/user/Views/ModifyData/Index.cshtml">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Areas/user/Views/ModifyData/Password.cshtml">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Areas/user/Views/test/Index.cshtml">
+      <publishTime>05/23/2016 16:45:04</publishTime>
+    </File>
+    <File Include="Areas/user/Views/Web.config">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Areas/user/Views/WorkPlatform/CcMessage.cshtml">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Areas/user/Views/WorkPlatform/Index.cshtml">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Areas/user/Views/WorkPlatform/Message.cshtml">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Areas/user/Views/WorkPlatform/TaskCheck.cshtml">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Areas/workyard/FieldDataManagement/02016090915455912.jpg">
+      <publishTime>09/09/2016 15:45:59</publishTime>
+    </File>
+    <File Include="Areas/workyard/Views/CustomRating/CustomRatingAddView.cshtml">
+      <publishTime>03/27/2017 15:52:47</publishTime>
+    </File>
+    <File Include="Areas/workyard/Views/CustomRating/Index.cshtml">
+      <publishTime>03/27/2017 15:52:47</publishTime>
+    </File>
+    <File Include="Areas/workyard/Views/FieldAttach/FieldAttachAddView.cshtml">
+      <publishTime>03/27/2017 15:52:47</publishTime>
+    </File>
+    <File Include="Areas/workyard/Views/FieldAttach/Index.cshtml">
+      <publishTime>03/27/2017 15:52:47</publishTime>
+    </File>
+    <File Include="Areas/workyard/Views/FieldCheck/Index.cshtml">
+      <publishTime>03/27/2017 15:52:47</publishTime>
+    </File>
+    <File Include="Areas/workyard/Views/FieldDataManagement/FieldDataAddView.cshtml">
+      <publishTime>03/27/2017 15:52:47</publishTime>
+    </File>
+    <File Include="Areas/workyard/Views/FieldDataManagement/Index.cshtml">
+      <publishTime>03/27/2017 15:52:47</publishTime>
+    </File>
+    <File Include="Areas/workyard/Views/FieldInfoManagement/FieldCheckAddView.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/workyard/Views/FieldInfoManagement/FieldCheckAuditView.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/workyard/Views/FieldInfoManagement/FieldCheckAuditWin.cshtml">
+      <publishTime>03/27/2017 15:52:47</publishTime>
+    </File>
+    <File Include="Areas/workyard/Views/FieldInfoManagement/FieldCheckHandleView.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/workyard/Views/FieldInfoManagement/FieldCheckHandleWin.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/workyard/Views/FieldInfoManagement/FieldCheckWindow.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/workyard/Views/FieldInfoManagement/FieldInfoAddView.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/workyard/Views/FieldInfoManagement/FieldScheduleAddView.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/workyard/Views/FieldInfoManagement/FieldScheduleSeeView.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/workyard/Views/FieldInfoManagement/Index.cshtml">
+      <publishTime>03/27/2017 15:52:48</publishTime>
+    </File>
+    <File Include="Areas/workyard/Views/Test/Index.cshtml">
+      <publishTime>03/27/2017 15:52:47</publishTime>
+    </File>
+    <File Include="Areas/workyard/Views/Test/TEST.cshtml">
+      <publishTime>03/27/2017 15:52:47</publishTime>
+    </File>
+    <File Include="Areas/workyard/Views/Web.config">
+      <publishTime>03/27/2017 15:52:47</publishTime>
+    </File>
+    <File Include="AttachFile/DailyWorkReport/2016-10-19/26ff7752-0602-4f95-b072-a6a9530be848..png">
+      <publishTime>03/27/2017 15:53:04</publishTime>
+    </File>
+    <File Include="AttachFile/DailyWorkReport/2016-10-19/fc79c574-084c-4338-9c11-0911d4eff6e1..pdf">
+      <publishTime>03/27/2017 15:53:04</publishTime>
+    </File>
+    <File Include="AttachFile/MaterialInfo/7e535201-2d64-4b59-9070-cf0023801aaf.jpg">
+      <publishTime>03/27/2017 15:53:14</publishTime>
+    </File>
+    <File Include="AttachFile/PaymentApply/2016-10-11/301fbc79-ede2-4ab9-a302-1cdd67027a40..jpg">
+      <publishTime>03/27/2017 15:53:07</publishTime>
+    </File>
+    <File Include="AttachFile/PaymentApply/2016-10-11/331c083e-4534-40c6-ad33-7041b19d7811..png">
+      <publishTime>03/27/2017 15:53:07</publishTime>
+    </File>
+    <File Include="AttachFile/PaymentApply/2016-10-12/1e7dafd8-9a69-4477-8a62-a03643fd4e3f..jpg">
+      <publishTime>03/27/2017 15:53:07</publishTime>
+    </File>
+    <File Include="AttachFile/PaymentApply/2016-10-12/26237a5e-7874-4f97-a59b-28e5c44af67b..jpg">
+      <publishTime>03/27/2017 15:53:07</publishTime>
+    </File>
+    <File Include="AttachFile/PaymentApply/2016-10-15/693bb7f0-55f9-4815-9b82-9bdd363c37fb..xls">
+      <publishTime>03/27/2017 15:53:07</publishTime>
+    </File>
+    <File Include="AttachFile/ProjectBudget/4ff8ecfc-5a3a-472b-b6b0-06f7693e87f6.txt">
+      <publishTime>03/27/2017 15:53:05</publishTime>
+    </File>
+    <File Include="AttachFile/ProjectBudget/579c3be9-1d45-43a1-9751-dfdf2182d449.txt">
+      <publishTime>03/27/2017 15:53:05</publishTime>
+    </File>
+    <File Include="AttachFile/ProjectBudget/90f41b11-6d6c-4bea-afd7-342224c1bae6.txt">
+      <publishTime>03/27/2017 15:53:05</publishTime>
+    </File>
+    <File Include="AttachFile/ProjectPONo/0d8aab4f-1d97-4b46-b2bb-7ede45e7149e.txt">
+      <publishTime>03/27/2017 15:53:05</publishTime>
+    </File>
+    <File Include="AttachFile/ProjectPONo/c16c02b4-5b4b-4347-a427-4c3b0c320a77.docx">
+      <publishTime>03/27/2017 15:53:05</publishTime>
+    </File>
+    <File Include="AttachFile/ProjectPONo/f7fa6edb-46de-494a-b582-cd49774dffb1.txt">
+      <publishTime>03/27/2017 15:53:05</publishTime>
+    </File>
+    <File Include="AttachFile/WorkYard/ExceptionHandle/08c818df-ca2b-4122-bd7f-9ebdb5360d01.txt">
+      <publishTime>03/27/2017 15:53:06</publishTime>
+    </File>
+    <File Include="AttachFile/WorkYard/ExceptionMark/8243f965-2b16-4bf2-a877-ecbb63f19055.txt">
+      <publishTime>03/27/2017 15:53:06</publishTime>
+    </File>
+    <File Include="AttachFile/WorkYard/FieldData/6d121a76-cd01-46a2-9603-41c24b272ab0.jpg">
+      <publishTime>03/27/2017 15:53:06</publishTime>
+    </File>
+    <File Include="AttachFile/WorkYard/FieldData/ba5fc4ba-90d3-453b-8003-47aecf227589.txt">
+      <publishTime>03/27/2017 15:53:06</publishTime>
+    </File>
+    <File Include="AttachFile/WorkYard/FieldInfo/2926d79e-4cd1-46af-9262-761e53160186.png">
+      <publishTime>03/27/2017 15:53:06</publishTime>
+    </File>
+    <File Include="AttachFile/WorkYard/FieldInfo/ff273507-0034-4c6e-9f61-2854274964c5.txt">
+      <publishTime>03/27/2017 15:53:06</publishTime>
+    </File>
+    <File Include="bin/App_global.asax.compiled">
+      <publishTime>01/08/2017 15:17:56</publishTime>
+    </File>
+    <File Include="bin/App_global.asax.dll">
+      <publishTime>01/08/2017 15:17:56</publishTime>
+    </File>
+    <File Include="bin/DeerInformation.dll">
+      <publishTime>03/30/2017 21:40:04</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.dll">
+      <publishTime>03/27/2017 15:53:30</publishTime>
+    </File>
+    <File Include="bin/EPPlus.dll">
+      <publishTime>03/27/2017 15:53:44</publishTime>
+    </File>
+    <File Include="bin/Ext.Net.dll">
+      <publishTime>03/27/2017 15:53:38</publishTime>
+    </File>
+    <File Include="bin/Ext.Net.Utilities.dll">
+      <publishTime>03/27/2017 15:53:38</publishTime>
+    </File>
+    <File Include="bin/Microsoft.CSharp.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/Microsoft.ReportViewer.Common.dll">
+      <publishTime>02/20/2011 04:40:08</publishTime>
+    </File>
+    <File Include="bin/Microsoft.ReportViewer.WebForms.dll">
+      <publishTime>08/11/2016 10:27:36</publishTime>
+    </File>
+    <File Include="bin/Microsoft.SqlServer.Types.dll">
+      <publishTime>05/15/2014 15:06:44</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Infrastructure.dll">
+      <publishTime>03/27/2017 15:53:28</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Mvc.FixedDisplayModes.dll">
+      <publishTime>03/27/2017 15:53:31</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>03/27/2017 15:53:38</publishTime>
+    </File>
+    <File Include="bin/System.ComponentModel.DataAnnotations.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Configuration.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Data.DataSetExtensions.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Data.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Data.Entity.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Data.Linq.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Drawing.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.EnterpriseServices.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.Formatting.dll">
+      <publishTime>03/27/2017 15:53:31</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.WebRequest.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Runtime.Serialization.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Security.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Web.Abstractions.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Web.ApplicationServices.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Web.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Web.DynamicData.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Web.Entity.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Web.Extensions.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Web.Helpers.dll">
+      <publishTime>03/27/2017 15:53:40</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.dll">
+      <publishTime>03/27/2017 15:53:43</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.WebHost.dll">
+      <publishTime>03/27/2017 15:53:28</publishTime>
+    </File>
+    <File Include="bin/System.Web.Mvc.dll">
+      <publishTime>03/27/2017 15:53:38</publishTime>
+    </File>
+    <File Include="bin/System.Web.Optimization.dll">
+      <publishTime>03/27/2017 15:53:32</publishTime>
+    </File>
+    <File Include="bin/System.Web.Razor.dll">
+      <publishTime>03/27/2017 15:53:39</publishTime>
+    </File>
+    <File Include="bin/System.Web.Routing.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Web.Services.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.Deployment.dll">
+      <publishTime>03/27/2017 15:53:40</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.dll">
+      <publishTime>03/27/2017 15:53:40</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.Razor.dll">
+      <publishTime>03/27/2017 15:53:40</publishTime>
+    </File>
+    <File Include="bin/System.Xml.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Xml.Linq.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/Transformer.NET.dll">
+      <publishTime>03/27/2017 15:53:38</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/EntityFramework.resources.dll">
+      <publishTime>03/27/2017 15:53:30</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/Microsoft.SqlServer.Types.resources.dll">
+      <publishTime>05/15/2014 15:11:34</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Net.Http.Formatting.resources.dll">
+      <publishTime>03/27/2017 15:53:31</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Web.Helpers.resources.dll">
+      <publishTime>03/27/2017 15:53:40</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Web.Http.resources.dll">
+      <publishTime>03/27/2017 15:53:43</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Web.Http.WebHost.resources.dll">
+      <publishTime>03/27/2017 15:53:28</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Web.Mvc.resources.dll">
+      <publishTime>07/09/2013 11:34:00</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Web.Razor.resources.dll">
+      <publishTime>03/27/2017 15:53:39</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Web.WebPages.Deployment.resources.dll">
+      <publishTime>03/27/2017 15:53:40</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Web.WebPages.Razor.resources.dll">
+      <publishTime>03/27/2017 15:53:40</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Web.WebPages.resources.dll">
+      <publishTime>03/27/2017 15:53:40</publishTime>
+    </File>
+    <File Include="Css/Home/home.scss">
+      <publishTime>03/27/2017 15:52:46</publishTime>
+    </File>
+    <File Include="Css/Home/main.css">
+      <publishTime>03/27/2017 15:52:46</publishTime>
+    </File>
+    <File Include="Css/Login/Default.css">
+      <publishTime>03/27/2017 15:52:46</publishTime>
+    </File>
+    <File Include="Css/Login/User_Login.css">
+      <publishTime>03/27/2017 15:52:46</publishTime>
+    </File>
+    <File Include="Css/Login/xtree.css">
+      <publishTime>03/27/2017 15:52:46</publishTime>
+    </File>
+    <File Include="Global.asax">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Images/aa.jpg">
+      <publishTime>03/27/2017 15:53:14</publishTime>
+    </File>
+    <File Include="Images/aac.ico">
+      <publishTime>09/15/2016 17:44:39</publishTime>
+    </File>
+    <File Include="Images/decorate.png">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/example.png">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/floor.png">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/gps_03.png">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/gps_07.png">
+      <publishTime>03/27/2017 15:53:14</publishTime>
+    </File>
+    <File Include="Images/gps_08.png">
+      <publishTime>03/27/2017 15:53:14</publishTime>
+    </File>
+    <File Include="Images/gps_09.png">
+      <publishTime>03/27/2017 15:53:14</publishTime>
+    </File>
+    <File Include="Images/gps_10.png">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/gps_11.png">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/gps_12.png">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/gps_13.png">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/gps_18.png">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/gps_19.png">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/header.gif">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/headerBg.jpg">
+      <publishTime>03/27/2017 15:53:14</publishTime>
+    </File>
+    <File Include="Images/preview.jpg">
+      <publishTime>03/27/2017 15:53:14</publishTime>
+    </File>
+    <File Include="Images/preview.png">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/Think/574186f0-de08-4ef5-89dd-92f86b387418..ico">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/Think/8d544dc3-6041-4795-b136-bf7640f6750a..jpg">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/user_all_bg.gif">
+      <publishTime>03/27/2017 15:53:14</publishTime>
+    </File>
+    <File Include="Images/user_bottom_c.gif">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/user_bottom_l.gif">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/user_bottom_r.gif">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/user_botton.gif">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/user_login_name.gif">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/user_login_password.gif">
+      <publishTime>03/27/2017 15:53:14</publishTime>
+    </File>
+    <File Include="Images/user_login_validatecode.gif">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/user_main_c.gif">
+      <publishTime>03/27/2017 15:53:14</publishTime>
+    </File>
+    <File Include="Images/user_main_l.gif">
+      <publishTime>03/27/2017 15:53:14</publishTime>
+    </File>
+    <File Include="Images/user_main_r.gif">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/user_top_c.gif">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/user_top_l.gif">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Images/user_top_r.gif">
+      <publishTime>03/27/2017 15:53:15</publishTime>
+    </File>
+    <File Include="Models/BaseEntity.cs">
+      <publishTime>05/23/2016 16:45:03</publishTime>
+    </File>
+    <File Include="Models/DataTransfor.cs">
+      <publishTime>06/05/2016 21:38:26</publishTime>
+    </File>
+    <File Include="Models/DeerMISModel.edmx.diagram">
+      <publishTime>03/30/2017 16:39:17</publishTime>
+    </File>
+    <File Include="Models/HomeModels.cs">
+      <publishTime>08/25/2016 21:11:44</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>03/27/2017 15:52:40</publishTime>
+    </File>
+    <File Include="PrecompiledApp.config">
+      <publishTime>01/08/2017 15:17:53</publishTime>
+    </File>
+    <File Include="Scripts/base/share.js">
+      <publishTime>03/27/2017 15:52:45</publishTime>
+    </File>
+    <File Include="Scripts/base/system.js">
+      <publishTime>03/27/2017 15:52:45</publishTime>
+    </File>
+    <File Include="Scripts/ext-modern-all.js">
+      <publishTime>03/27/2017 15:52:45</publishTime>
+    </File>
+    <File Include="Scripts/jquery-1.7.1.js">
+      <publishTime>03/27/2017 15:52:45</publishTime>
+    </File>
+    <File Include="Scripts/jquery-1.7.1.min.js">
+      <publishTime>03/27/2017 15:52:46</publishTime>
+    </File>
+    <File Include="Scripts/jquery-ui-1.8.20.js">
+      <publishTime>03/27/2017 15:52:45</publishTime>
+    </File>
+    <File Include="Scripts/jquery-ui-1.8.20.min.js">
+      <publishTime>03/27/2017 15:52:46</publishTime>
+    </File>
+    <File Include="Scripts/jquery.unobtrusive-ajax.js">
+      <publishTime>03/27/2017 15:52:45</publishTime>
+    </File>
+    <File Include="Scripts/jquery.unobtrusive-ajax.min.js">
+      <publishTime>03/27/2017 15:52:44</publishTime>
+    </File>
+    <File Include="Scripts/jquery.validate.js">
+      <publishTime>03/27/2017 15:52:44</publishTime>
+    </File>
+    <File Include="Scripts/jquery.validate.min.js">
+      <publishTime>03/27/2017 15:52:45</publishTime>
+    </File>
+    <File Include="Scripts/jquery.validate.unobtrusive.js">
+      <publishTime>03/27/2017 15:52:45</publishTime>
+    </File>
+    <File Include="Scripts/jquery.validate.unobtrusive.min.js">
+      <publishTime>03/27/2017 15:52:44</publishTime>
+    </File>
+    <File Include="Scripts/knockout-2.1.0.debug.js">
+      <publishTime>03/27/2017 15:52:45</publishTime>
+    </File>
+    <File Include="Scripts/knockout-2.1.0.js">
+      <publishTime>03/27/2017 15:52:45</publishTime>
+    </File>
+    <File Include="Scripts/modernizr-2.5.3.js">
+      <publishTime>03/27/2017 15:52:44</publishTime>
+    </File>
+    <File Include="Scripts/_references.js">
+      <publishTime>03/30/2017 17:04:25</publishTime>
+    </File>
+    <File Include="Views/Home/changemenu.cshtml">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Views/Home/content.cshtml">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Views/Home/head.cshtml">
+      <publishTime>03/27/2017 15:53:03</publishTime>
+    </File>
+    <File Include="Views/Home/index.cshtml">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Views/Home/login.cshtml">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Views/SelectStaff/SelectStaff.cshtml">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Views/Shared/Error.aspx">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Views/Shared/Expire.cshtml">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Views/Shared/Unauthorized.aspx">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Views/Shared/_BaseLayout.cshtml">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Views/Shared/_BaseLayoutClean.cshtml">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Views/Shared/_BaseLayoutNoMgr.cshtml">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Views/Web.config">
+      <publishTime>03/27/2017 15:53:02</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>03/27/2017 17:05:51</publishTime>
+    </File>
+    <File Include="WebForms/WebForm1.aspx">
+      <publishTime>03/27/2017 15:52:43</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

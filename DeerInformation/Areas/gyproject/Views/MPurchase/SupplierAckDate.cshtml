@@ -1,0 +1,52 @@
+﻿@model DeerInformation.Areas.gyproject.Models.MPurchase
+@{
+    ViewBag.Title = "SupplierAckDate";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+    <script>
+        var selectMPurchase=function() {
+            App.direct.gyproject.MPurchaseAckDate(App.MPurchaseNo.getValue());
+        }
+    </script>
+}
+@section content
+{
+    @{
+        var content =
+            X.FormPanel()
+                .ID("form1")
+                .Layout(LayoutType.Column)
+                .BodyPadding(10)
+                .Frame(true)
+                .FieldDefaults(l =>
+                {
+                    l.LabelWidth = 70;
+                    l.LabelAlign = LabelAlign.Right;
+                    l.AllowBlank = false;
+                })
+                .Items(
+                X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(
+                X.ComboBoxFor(m=>m.MPurchaseNo).FieldLabel("采购单编号").Items(Model.MPurchaseNoLst).Listeners(l=>l.Select.Fn="selectMPurchase"),
+                X.TextField().ID("SupplierName").FieldLabel("供应商名称").Editable(false),
+                X.DateField().ID("SupplierAckDate").FieldLabel("供应商确认时间")
+                )
+                )
+                .Buttons(
+                    X.Button().Text("关闭").Handler("parent.App.win.close();"),
+                    X.Button().Text("提交").FormBind(true).ID("Submit").DirectEvents(l =>
+                    {
+                        l.Click.Action = "SubmitSupplierAckDate";
+                        l.Click.Before = @"if (!#{form1}.getForm().isValid()) { return false; }
+                            Ext.Msg.wait('正在提交你的申请...', '上传中');";
+                        l.Click.FormID = "form1";
+                    })
+                );
+    }
+    @(X.Viewport().Layout(LayoutType.Border).Items(
+        content.Region(Region.Center).AutoScroll(true))
+)
+}

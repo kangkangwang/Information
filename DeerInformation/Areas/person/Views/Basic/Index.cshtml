@@ -1,0 +1,227 @@
+﻿@*@model DeerInformation.Areas.person.Models.BasicModel*@
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var count = 0; // a counter for new records
+
+    function addRecord(grid) {
+        grid.store.insert(0, { company: 'New' + count++ });
+
+        Ext.Function.defer(function () {
+            grid.editingPlugin.startEditByPosition({ row: 0, column: 0 })
+        }, 100);
+    }
+
+    function deleteSelected(grid) {
+        var store = grid.store,
+            records = grid.selModel.getSelection();
+
+        store.remove(records);
+        store.load(true);
+    }
+
+    function selectRecord(grid, id) {
+        var record = grid.store.getById(id);
+
+        if (!record) {
+            Ext.Msg.alert("Error", "Record '" + id + "' not found.");
+        } else {
+            grid.store.loadPage(grid.store.findPage(record), {
+                callback: function () {
+                    grid.getSelectionModel().select(record);
+                }
+            });
+        }
+    };
+
+    function exportData(grid, selectedOnly) {
+        grid.submitData(
+            //serialization config
+            {
+                selectedOnly: selectedOnly
+            },
+
+            //request config
+            {
+                isUpload: true,
+                url: '@Url.Action("Submit")'
+            }
+       );
+    }
+
+
+</script>
+
+
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                   X.FieldSet().ID("BaseList").Title("基本信息").Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                   X.Panel().Layout(LayoutType.HBox).Items(
+                   X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                        //   X.TextField().ID("p").FieldLabel("Path"),
+                        //           X.Image().ID("UserImage").Width(40).Height(400).ImageUrl(TempData["image"].ToString()),
+                        //                   X.FileUploadField().ID("UserImageFile").Name("UserImage").Icon(Icon.ImageAdd).Width(260).FieldLabel("图片").Text("选择文件").ButtonText(""),                  
+                          
+                        //X.Button()
+                        //.Text("Set Property")
+                        //.DirectEvents(de =>
+                        //{
+                        //    de.Click.Url = Url.Action("SetIFrameLoadProperty");
+                        //    //de.Click.Method = HttpMethod.GET;
+                        //    //de.Click.ExtraParams.Add(new Parameter("id", "2"));
+                        //})
+                                Html.X().Button()
+                                    .Text("Selection To XML")
+                                    .Icon(Icon.PageCode)
+                                    .Handler("exportData(App.ss, true);"),
+                         Html.X().GridPanel()
+            .Title("Plants").ID("ss")
+            .Frame(true)
+            .Width(750)
+            .Height(340)
+            .Store(
+                Html.X().Store()
+                    .ID("Store1")
+                    .DataSource(Model)
+                    .Model(
+                        Html.X().Model()
+                            .IDProperty("company")
+                            .Fields(
+                                Html.X().ModelField().Name("company"),
+                                Html.X().ModelField().Name("price").Type(ModelFieldType.Float),
+                                Html.X().ModelField().Name("change").Type(ModelFieldType.Float),
+                                Html.X().ModelField().Name("pctChange").Type(ModelFieldType.Float),
+                                Html.X().ModelField().Name("lastChange").Type(ModelFieldType.Date)
+                            )
+                    )
+                    .PageSize(10)
+                    .ServerProxy(
+                        Html.X().AjaxProxy()
+                            .Url(Url.Action("Read"))
+                            .API(api=>api.Sync = Url.Action("Sync"))
+                    )
+            )
+            .ColumnModel(
+                Html.X().Column()
+                    .DataIndex("company")
+                    .Text("Company")
+                    .Flex(1)
+                    .Editor(Html.X().TextField()),
+
+                Html.X().Column()
+                    .DataIndex("price")
+                    .Text("Price")
+                    .Width(75)
+                    .Editor(Html.X().NumberField()),
+
+                Html.X().Column()
+                    .DataIndex("change")
+                    .Text("Change")
+                    .Width(75),
+
+                Html.X().Column()
+                    .DataIndex("pctChange")
+                    .Text("Change")
+                    .Width(75),
+
+                Html.X().DateColumn()
+                    .DataIndex("lastChange")
+                    .Text("Last Updated")
+                    .Width(85)
+                    .Format("HH:mm:ss")
+            )
+            .SelectionModel(
+                Html.X().RowSelectionModel().Mode(SelectionMode.Multi)
+            )
+            .Plugins(
+                Html.X().CellEditing()
+            )
+            .BottomBar(
+                Html.X().PagingToolbar()
+            )
+            .TopBar(
+                Html.X().Toolbar()
+                    .Items(
+                        Html.X().Button()
+                            .Text("Add record")
+                            .Icon(Icon.Add)
+                            .Handler("addRecord(this.up('grid'));"),
+
+                        Html.X().Button()
+                            .Text("Delete selected")
+                            .Icon(Icon.Delete)
+                            .Handler("deleteSelected(this.up('grid'));"),
+
+                        Html.X().ToolbarFill(),
+
+                        Html.X().Button()
+                            .Text("Find 'Government Motors'")
+                            .Icon(Icon.Find)
+                            .Handler("selectRecord(this.up('grid'), 'Government Motors Corporation');"),
+
+                        Html.X().Button()
+                            .Text("To XML")
+                            .Icon(Icon.PageCode)
+                            .Handler("exportData(this.up('grid'));"),
+
+                        Html.X().Button()
+                            .Text("Selection To XML")
+                            .Icon(Icon.PageCode)
+                            .Handler("exportData(this.up('grid'), true);"),
+
+                        Html.X().Button()
+                            .Text("Save")
+                            .Icon(Icon.Disk)
+                            .DirectEvents(de =>
+                            {
+                                de.Click.Url = Url.Action("Sync");
+                                de.Click.ExtraParams.Add(new Parameter
+                                {
+                                    Name = "data",
+                                    Value = "this.up('grid').store.getChangedData()",
+                                    Mode = ParameterMode.Raw,
+                                    Encode = true
+                                });
+                            })
+                    )
+            )
+    )
+                                           
+                   //grid end
+                   )
+                   )
+       )
+       )
+       //),
+       //X.Button().Text("保存").Icon(Icon.Accept).ID("save")//.FormBind(true).Disable(true)
+       //             .DirectEvents(de =>
+       //             {
+       //                 de.Click.Url = Url.Action("Save");
+       //                 de.Click.EventMask.ShowMask = true;
+       //             })
+    )
+</body>
+
+</html>
+
+
+

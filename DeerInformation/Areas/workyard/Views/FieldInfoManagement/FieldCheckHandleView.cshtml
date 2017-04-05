@@ -1,0 +1,145 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    ViewBag.Title = "FieldCheckHandleView";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+    <style>
+        .ex-panel {
+            filter: alpha(opacity=40);
+            -moz-opacity: 0.4;
+            opacity: 0.4;
+        }
+
+        .bg {
+            background-image: url('@ViewBag.cls');
+            /*position: absolute;*/
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    </style>
+
+    }
+
+@section content{
+        @(X.Panel().Height(600).Width(600).BaseCls("bg").LayoutConfig(new VBoxLayoutConfig { Pack = BoxPack.Center, Align = VBoxAlign.Stretch }).Items(
+                                            
+                    X.CartesianChart().ID("Chart1").Height(600).Width(600).BaseCls("ex-panel").Store(
+                        X.Store().DataSource(Model).ID("MarkHandleTable").Model(
+                                         X.Model().IDProperty("ID").Fields(
+                                            new ModelField("ID", ModelFieldType.String),
+                                            new ModelField("ProjectNo", ModelFieldType.String),
+                                            new ModelField("Xaxes", ModelFieldType.String),
+                                            new ModelField("Yaxes", ModelFieldType.String),
+                                            new ModelField("Mark", ModelFieldType.String),
+                                            new ModelField("IsHandled", ModelFieldType.String),
+                                            new ModelField("AuditResult", ModelFieldType.String),
+                                            new ModelField("WarnLevel", ModelFieldType.String),
+                                            new ModelField("Remark", ModelFieldType.String)))
+                                     .Reader(X.JsonReader().RootProperty("data")))
+                                     .Interactions(
+                                        X.PanZoomInteraction().ZoomOnPanGesture(true),
+                                        X.ItemHighlightInteraction())
+                                .Axes(
+                                    X.NumericAxis().Position(Position.Bottom).Fields("Xaxes").Grid(false).Hidden(true).Maximum(600).Minimum(0),
+                                    X.NumericAxis().Position(Position.Left).Fields("Yaxes").Grid(false).Hidden(true).Maximum(600).Minimum(0))
+                        .Items().Series(
+                        X.ScatterSeries().XField("Xaxes").YField("Yaxes").Marker(
+                            X.CircleSprite().Radius(4)).HighlightDefaults(X.CircleSprite().FillStyle("red").Opacity(100).Radius(10).LineWidth(2))
+                            .Tooltip(X.ChartTip().TrackMouse(true).Width(300).Height(28)
+                            .Renderer(r => r.Handler = "toolTip.setHtml(record.get('WarnLevel') + ',' + record.get('IsHandled') + ',' + record.get('AuditResult') + ',' +record.get('Mark') );"))
+                                ))
+        )
+
+    @(X.FormPanel().Layout(LayoutType.Auto).AutoScroll(true).Items(
+            X.GridPanel().ID("GridPanel1").Store(
+                    X.Store().ID("FieldMarkTable").DataSource(Model).PageSize(10).Model(
+                          X.Model().IDProperty("ID").Fields(
+                                            new ModelField("ID", ModelFieldType.String),
+                                            new ModelField("ProjectNo", ModelFieldType.String),
+                                            new ModelField("Xaxes", ModelFieldType.String),
+                                            new ModelField("Yaxes", ModelFieldType.String),
+                                            new ModelField("WorkPlace", ModelFieldType.String),
+                                            new ModelField("IsHandled", ModelFieldType.String),
+                                            new ModelField("HandleDes", ModelFieldType.String),
+                                            new ModelField("WarnLevel", ModelFieldType.String),
+                                            new ModelField("Mark", ModelFieldType.String),
+                                            new ModelField("ExceptionDes", ModelFieldType.String),
+                                            new ModelField("ExceptionHandleSug", ModelFieldType.String),
+                                            new ModelField("AuditResult", ModelFieldType.String),
+                                            new ModelField("Remark", ModelFieldType.String),
+                                            new ModelField("ReportMan",ModelFieldType.String),
+                                            new ModelField("ReportTime",ModelFieldType.Date),
+                                            new ModelField("HandleMan",ModelFieldType.String),
+                                            new ModelField("HandleTime",ModelFieldType.Date),
+                                            new ModelField("AuditMan",ModelFieldType.String),
+                                            new ModelField("AuditTime",ModelFieldType.Date)))
+                                   .Reader(X.JsonReader().RootProperty("data")))
+                                   .ColumnModel(
+                                                   X.Column()
+                                                    .Text("项目编号")
+                                                    .Flex(1)
+                                                    .DataIndex("ProjectNo"),
+
+                                                    X.Column()
+                                                    .Text("现场")
+                                                    .Flex(1)
+                                                    .DataIndex("WorkPlace"),
+
+                                                   X.Column()
+                                                    .Text("是否改正")
+                                                    .Flex(1)
+                                                    .DataIndex("IsHandled"),
+
+                                                    //X.Column()
+                                                    //.Text("处理结果")
+                                                    //.Flex(1)
+                                                    //.DataIndex("HandleDes"),
+
+                                                   X.Column()
+                                                    .Text("异常编号")
+                                                    .Flex(1)
+                                                    .DataIndex("WarnLevel"),
+
+                                                   X.Column()
+                                                    .Text("异常类型")
+                                                    .Flex(1)
+                                                    .DataIndex("Mark"), 
+                                                            
+                                                    //X.Column()
+                                                    //.Text("异常描述")
+                                                    //.Flex(1)
+                                                    //.DataIndex("ExcepDes"),
+
+                                                    //X.Column()
+                                                    //.Text("异常处理建议")
+                                                    //.Flex(1)
+                                                    //.DataIndex("ExcepHandleSug").Hidden(true),
+
+                                                    X.Column()
+                                                .Text("审核结果")
+                                                .Flex(1)
+                                                .DataIndex("AuditResult"),
+                                                          
+                                                    X.Column()
+                                                    .Text("备注")
+                                                    .Flex(1)
+                                                    .DataIndex("Remark").Hidden(true),
+
+
+                                                X.CommandColumn().Flex(1).Commands(
+                                                      X.GridCommand().CommandName("handle").Icon(Icon.ApplicationCascade).Text("处理")).DirectEvents(de =>
+                                                            {
+                                                                de.Command.Url = Url.Action("FieldCheckHandle");
+                                                                de.Command.ExtraParams.Add(new Parameter("id", "record.get('ID')", ParameterMode.Raw));
+                                                                //de.Command.ExtraParams.Add(new Parameter("xa", "record.get('Xaxes')", ParameterMode.Raw));
+                                                                //de.Command.ExtraParams.Add(new Parameter("ya", "record.get('Yaxes')", ParameterMode.Raw));
+                                                    })                            
+                                            )
+                                         ))
+
+}

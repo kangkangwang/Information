@@ -1,0 +1,48 @@
+﻿@model DeerInformation.Models.T_GW_MarkInfo
+@{
+    ViewBag.Title = "FieldCheckHandleWin";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+    @(X.FormPanel().ID("BasicForm").Layout(LayoutType.Form).AutoScroll(true)
+            .Listeners(l => l.ValidityChange.Handler = "#{add}.setDisabled(!valid);")
+            .Items(
+            X.TextFieldFor(m=>m.ID).Hidden(true ),
+            X.TextFieldFor(m=>m.ProjectNo).ID("prono").Hidden(true),
+            X.TextFieldFor(m=>m.Xaxes).Hidden(true),
+            X.TextFieldFor(m=>m.Yaxes).Hidden(true),
+            X.TextFieldFor(m=>m.WorkPlace).Hidden(true),
+            X.TextFieldFor(m=>m.HandlePicPath).Hidden(true),
+            X.TextFieldFor(m=>m.ExcPicPath).Hidden(true),
+            X.TextFieldFor(m=>m.ReportMan).Hidden(true),
+            X.TextFieldFor(m=>m.ReportTime).Hidden(true),
+            X.TextFieldFor(m => m.HandleMan).Hidden(true),
+            X.TextFieldFor(m => m.HandleTime).Hidden(true),
+            X.TextFieldFor(m => m.AuditTime).Hidden(true),
+            X.TextFieldFor(m => m.AuditResult).Hidden(true),
+            X.TextFieldFor(m=>m.AuditMan).Hidden(true),
+            X.TextFieldFor(m => m.IsHandled).Hidden(true),
+            X.TextFieldFor(m => m.AuditMethod).Hidden(true),
+          Html.X().TextFieldFor(m=>m.WarnLevel).FieldLabel("异常编号").ReadOnly(true),
+          Html.X().TextFieldFor(m=>m.Mark).FieldLabel("异常类型").ReadOnly(true),
+          Html.X().TextAreaFor(m=>m.ExceptionDes).FieldLabel("异常描述").ReadOnly(true),
+          X.TextAreaFor(m=>m.ExceptionHandleSug).FieldLabel("异常处理建议").ReadOnly(true),
+          X.TextAreaFor(m => m.HandleDes).FieldLabel("处理结果").AllowBlank(false),
+          X.TextAreaFor(m=>m.Remark).ID("remark").FieldLabel("备注"),
+          X.FileUploadField().ID("filehandleup").EmptyText("请选择").FieldLabel("上传处理文件").ButtonText("选择").Icon(Icon.ImageAdd).AllowBlank(false) ) 
+       .Buttons(X.Button().ID("add").Disabled(true).Text("提交").DirectEvents(de =>
+        {
+            de.Click.Url = Url.Action("FCHandleSubmit");
+            de.Click.Success = "parent.App.window7.close()";
+            de.Click.EventMask.ShowMask = true;
+            de.Click.IsUpload = true;
+        }),
+         X.Button().Text("取消").Listeners(l => l.Click.Handler = "parent.App.window7.close()"))
+
+
+    )
+    
+    
+    }

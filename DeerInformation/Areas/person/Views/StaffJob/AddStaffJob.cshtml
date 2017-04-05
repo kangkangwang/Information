@@ -1,0 +1,100 @@
+﻿@model DeerInformation.Models.V_HR_StaffJobWithName
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var closewindow = function () {
+        parent.App.windowStaffJob.close()
+    };
+    var setJobName = function () {
+        var combo = App.JobName;
+        combo.setValue(App.JobID.getValue());
+    };
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddStaffJob</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.VBox)
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                    X.FieldSet().Title("员工基本信息").Layout(LayoutType.HBox).Items(
+                      X.Panel().Border(false).Items(
+                              X.TextFieldFor(m => m.StaffID).ID("StaffID").FieldLabel("工号").AllowBlank(false).Editable(false),
+                              X.TextFieldFor(m => m.SDepartMentName).FieldLabel("部门").Editable(false),
+                              X.ComboBoxFor(m => m.StaffType).FieldLabel("员工类型").Editable(true).Items(new ListItem("正式员工"), new ListItem("试用员工")).EmptyText("请选择...").AllowBlank(false),
+                              X.HiddenFor(m => m.SDepartMentId)
+                      ),
+                      X.Component().Width(10),
+                      X.Panel().Border(false).Items(
+                              X.TextFieldFor(m => m.Name).ID("Name").FieldLabel("姓名").Editable(false),
+                              X.TextFieldFor(m => m.EntryTime).FieldLabel("入职时间").Editable(false).FormatText("'Y-m-d'"),
+                              X.ComboBoxFor(m => m.ChangeType).FieldLabel("职位异动类型").Editable(true).Items(new ListItem("晋升"), new ListItem("降职"),
+                      new ListItem("转正")).EmptyText("请选择...").AllowBlank(false)
+                      )
+                   ),
+                   
+                    X.FieldSet().Title("职位信息").Layout(LayoutType.HBox).Items(
+                      X.Panel().Border(false).Items(
+                              X.ComboBox().ID("JobName").FieldLabel("职位名称").AllowBlank(false).Editable(false)
+                              .DisplayField("name")
+                              .ValueField("id")
+                              .EmptyText("请选择...")
+                              .Store(X.Store()
+                              .AutoLoad(true)
+                              .Model(X.Model()
+                              .IDProperty("Id")
+                              .Fields(
+                                      new ModelField("id", ModelFieldType.String) { Mapping = "JobID" },
+                                      new ModelField("name", ModelFieldType.String) { Mapping = "JobName" }
+                              )
+                              )
+                              .Proxy(X.AjaxProxy().Url(Url.Action("GetJob")).Reader(X.JsonReader().RootProperty("data"))
+                              )
+                              .Listeners(ls => ls.Load.Handler = "setJobName()")
+                              )
+                              .Listeners(l => l.Select.Handler = "App.direct.person.SetJobid(App.JobName.getValue());"),
+                              X.TextFieldFor(m => m.DutyType).ID("DutyType").FieldLabel("职务类型").AllowBlank(false).Editable(false),
+                              X.DateFieldFor(m => m.ValidTime).FieldLabel("生效时间").AllowBlank(false).Editable(false),
+                              X.TextFieldFor(m => m.JobID).ID("JobID").FieldLabel("职位ID").AllowBlank(false).Editable(false).Hidden(true),
+                              X.TextFieldFor(m => m.StaffJobID).ID("StaffJobID").FieldLabel("员工职位ID").AllowBlank(false).Editable(false).Hidden(true),
+                              X.HiddenFor(m => m.DutyID),
+                              X.HiddenFor(m => m.PositionCategoryID),
+                              X.HiddenFor(m => m.IsValid),
+                              X.HiddenFor(m => m.CreaterName),
+                              X.HiddenFor(m => m.CreateTime),
+                              X.HiddenFor(m => m.EditorName),
+                              X.HiddenFor(m => m.EditeTime)
+                      ),
+                      X.Component().Width(10),
+                      X.Panel().Border(false).Items(
+                              X.TextFieldFor(m => m.DutyName).ID("DutyName").FieldLabel("职务名称").AllowBlank(false).Editable(false),
+                              X.TextFieldFor(m => m.PositionCategoryName).ID("PCName").FieldLabel("职位类型").AllowBlank(false).Editable(false),
+                              X.TextFieldFor(m => m.Remark).FieldLabel("备注")
+                      )
+                   )
+       ),
+        X.Button().Text("保存").Icon(Icon.Accept).ID("save").FormBind(true).Disable(true)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("AddOrEditStaffJob");
+                        de.Click.EventMask.ShowMask = true;
+                    })
+    )
+</body>
+
+</html>
+
+

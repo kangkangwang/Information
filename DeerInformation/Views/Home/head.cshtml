@@ -1,0 +1,37 @@
+﻿@*Html("<div style='background:red; width:100%; height:100%  '></div>")*@
+
+
+<style>
+    .home_tittle {
+        /*  background: -moz-linear-gradient(top,#295AA5,#BDD3EF);
+      /*  background: -moz-linear-gradient(top, #295AA5 0%, #BDD3EF 100%); /*适合 FF3.6+*/
+        /*  background: -webkit- gradient(linear, left top, left bottom, color-stop(0%,#295AA5), color- stop(100%,#BDD3EF)); /*适合 Chrome,Safari4+ */
+        /*  background: -webkit-linear-gradient(top, #295AA5 0%,#BDD3EF 100%); /*适合Chrome10+,Safari5.1+*/
+        /*  background: -o-linear-gradient(top, #295AA5 0%,#BDD3EF 100%); /*适合Opera 11.10+*/
+        /*  background: -ms-linear-gradient(top, #295AA5 0%,#BDD3EF 100%); /*适合IE10+ */
+          /*background: linear-gradient(top, #295AA5 0%,#BDD3EF 100%); /*适合W3C*/
+        /*filter: glow(color=#049FF1，strength=20);*/
+
+
+        background: #19538b none repeat scroll 0 0;
+        background-image: url('../../Images/decorate.png') ;
+        background-repeat:no-repeat;
+        background-position: right;
+    }
+    .tittle_font{
+        font-family:STXingkai;
+        font-size:xx-large;
+        color:white;
+        line-height:70px;
+        margin-left:40px;
+    }
+</style>
+
+@(
+ Html.X().Panel()
+     .BodyCls("home_tittle")
+         .Items(li =>
+         {
+             li.Add(Html.X().Label().Cls("tittle_font").Text("德尔集团信息化平台"));
+         })
+)

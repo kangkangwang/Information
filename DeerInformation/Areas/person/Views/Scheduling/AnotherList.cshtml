@@ -1,0 +1,81 @@
+﻿@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var closewindow = function () {
+        parent.App.windowAnother.close()
+    };
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AnotherList</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.HBox)
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                   X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                      X.ComboBox().ID("SchList").FieldLabel("排班系列").AllowBlank(false).Editable(false)
+                           .DisplayField("name")
+                           .ValueField("id")
+                           .EmptyText("请选择...")
+                           .Store(X.Store()
+                           .AutoLoad(true)
+                           .Model(X.Model()
+                           .IDProperty("Id")
+                           .Fields(
+                              new ModelField("id", ModelFieldType.String) { Mapping = "ID" },
+                              new ModelField("name", ModelFieldType.String) { Mapping = "Name" }
+                           )
+                           )
+                           .Proxy(X.AjaxProxy().Url(Url.Action("GetSchList")).Reader(X.JsonReader().RootProperty("data")))
+                           .Parameters(ps => ps.Add(new StoreParameter("fromid", "App.FromID.getValue()", ParameterMode.Raw)))
+            //.Listeners(ls => ls.Load.Handler = "setDutyName()")
+                           )
+                          .Listeners(l => l.Select.Handler = "App.direct.person.SetSchlistTextBox(App.SchList.getValue());"),
+                          X.Panel().Layout(LayoutType.HBox).Items(
+                           X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                              X.TextField().ID("ID").Hidden(true),
+                              X.TextField().ID("FromID").Hidden(true),
+                                   X.TextField().ID("Name").FieldLabel("系列名称").Editable(false),
+                                           X.TextField().ID("AMTime").FieldLabel("上午上下班时间").Editable(false),
+                              X.TextField().ID("AMValidGoTime").FieldLabel("上午上班有效打卡时间").Editable(false),
+                              X.TextField().ID("AMValidOffTime").FieldLabel("上午下班有效打卡时间").Editable(false),
+                               X.TextField().ID("CreaterName").FieldLabel("创建人").Editable(false),
+                              X.TextField().ID("EditorName").FieldLabel("修改人").Editable(false)
+                           ),
+                           X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                      X.TextField().ID("PMTime").FieldLabel("下午下班时间").Editable(false),
+                                      X.TextField().ID("PMValidGoTime").FieldLabel("下午上班有效打卡时间").Editable(false),
+                                      X.TextField().ID("PMValidOffTime").FieldLabel("下午下班有效打卡时间").Editable(false),
+                                              X.TextField().ID("AttNum").FieldLabel("打卡次数").Editable(false),
+                                      X.TextField().ID("CreateTime").FieldLabel("创建时间").Editable(false),
+                                              X.TextField().ID("EditeTime").FieldLabel("修改时间").Editable(false)
+                           )
+                   )
+                   )
+       ),
+        X.Button().Text("保存").Icon(Icon.Accept).ID("save").FormBind(true)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("AddFromAnother");
+                        de.Click.ExtraParams.Add(new Parameter("id", "App.ID.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("fromid", "App.FromID.getValue()", ParameterMode.Raw));
+                        de.Click.EventMask.ShowMask = true;
+                    })
+    )
+</body>
+
+</html>

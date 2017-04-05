@@ -1,0 +1,27 @@
+﻿@model DeerInformation.Models.V_GM_FAApply
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+    @(
+         X.Panel().Title("固定资产申请单明细").Layout(LayoutType.HBox).AutoScroll(true).Items
+           (
+                X.Container().Layout(LayoutType.Anchor).Flex(2).DefaultAnchor("100%").MarginSpec("0 5 0 5").Items(
+                    X.TextFieldFor(m => m.ApplyNo).FieldLabel("申请单号").ReadOnly(true).Flex(1).LabelWidth(60),
+                    X.TextFieldFor(m => m.Applicant).FieldLabel("申请人").ReadOnly(true).Flex(1).LabelWidth(60),
+                    X.TextFieldFor(m => m.ApplicantSector).FieldLabel("申请部门").ReadOnly(true).Flex(1).LabelWidth(60),
+                    X.TextFieldFor(m => m.No_Date).FieldLabel("申请日期").ReadOnly(true).Flex(1).LabelWidth(60)),
+                 X.Container().Layout(LayoutType.Anchor).Flex(2).DefaultAnchor("100%").MarginSpec("0 5 0 5").Items(
+                    X.TextFieldFor(m => m.AuditProcess).FieldLabel("审核流程").ReadOnly(true).Flex(1).LabelWidth(60),
+                    X.TextFieldFor(m => m.Status).FieldLabel("申请状态").ReadOnly(true).Flex(1).LabelWidth(60),
+                    X.TextFieldFor(m => m.Name).FieldLabel("经办人").ReadOnly(true).Flex(1).LabelWidth(60),
+                    X.TextFieldFor(m => m.Remark).FieldLabel("备注").ReadOnly(true).Flex(1).LabelWidth(60))
+               )      
+    )
+    @(X.Panel().ID("panel"))
+}
+
+
+    

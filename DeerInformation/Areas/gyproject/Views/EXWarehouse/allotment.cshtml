@@ -1,0 +1,285 @@
+﻿@model DeerInformation.Areas.gyproject.Models.EXMaterial
+@{
+    ViewBag.Title = "allocation";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+    <script type="text/javascript">
+        var getSelectedGrid = function (grid) {
+            Ext.USE_NATIVE_JSON = true;
+
+            var result = grid.getSelectionModel().getSelection();
+
+            var datas = new Array();
+
+            for (var i = 0; i < result.length; i++) {
+                datas[i] = Ext.encode(result[i].data);
+            }
+            return Ext.encode(datas);
+            
+        }
+
+        var getGrid = function (grid) {
+            Ext.USE_NATIVE_JSON = true;
+
+            var result = grid.getStore();
+
+            var datas = new Array();
+
+            for (var i = 0; i < result.getCount() ; i++) {
+                datas[i] = Ext.encode(result.getAt(i).data);
+            }
+            return Ext.encode(datas);
+        }
+
+        var AddMaterials = function () {
+            var warehouse = App.EXWarehouse.getValue();
+            if (warehouse == null || warehouse === '') {
+                return;
+            }
+            var store = App.MaterialStock;
+            var proxy = store.getProxy();
+            proxy.extraParams = {
+                'warehouse': warehouse,
+                'materialName': '',
+                'materialSize': ''
+            };
+            store.reload();
+            App.MaterialWindow.show();
+        }
+
+        var PageValidFailure = function (title, content) {
+            X.Msg.alert(title, content).show();
+        }
+
+        var ExWarehouseDisable = function (combo) {
+            combo.readOnly = true;
+        }
+    </script>
+}
+
+@section content
+{
+    @{
+        var store = Html.X().Store().ID("ApplyStore")
+    .AutoLoad(false)
+    .Reader(Html.X().JsonReader().RootProperty("data"))
+    .PageSize(10)
+    .Model(
+        X.Model()
+        .IDProperty("MaterialID")
+        .Fields(
+        new ModelField("MaterialID", ModelFieldType.String),
+        new ModelField("MaterialName", ModelFieldType.String),
+        new ModelField("Size", ModelFieldType.String),
+        new ModelField("Unit", ModelFieldType.String),
+        new ModelField("VirtualAmount", ModelFieldType.String),
+        new ModelField("PurchaseAmount", ModelFieldType.String),
+        new ModelField("ApplyNumber", ModelFieldType.Object)
+                )
+        );
+
+
+        var grid = X.GridPanel()
+            .ID("ApplyGrid")
+            .Store(store)
+            .ColumnModel(
+                X.Column()
+                    .Text("物资编号")
+                    .Width(132)
+                    .DataIndex("MaterialID"),
+
+                X.Column()
+                    .Text("物资名称")
+                    .Width(132)
+                    .DataIndex("MaterialName"),
+
+                X.Column()
+                    .Text("型号")
+                    .Width(132)
+                    .DataIndex("Size"),
+
+                X.Column()
+                    .Text("单位")
+                    .Width(132)
+                    .DataIndex("Unit"),
+
+                X.Column()
+                    .Text("当前活动库存")
+                    .Width(132)
+                    .DataIndex("PurchaseAmount"),
+
+                X.ComponentColumn()
+                    .Editor(true)
+                    .DataIndex("ApplyNumber")
+                    .Text("请输入申请出库数量")
+                    .Width(135)
+                    .Flex(1)
+                    .Component(X.NumberField().MinValue(0)),
+
+                X.CommandColumn()
+                    .Text("操作")
+                    .Width(156).Flex(1)
+                    .Commands(
+                        Html.X().GridCommand()
+                            .MinWidth(156)
+                            .CommandName("Delete")
+                            .Icon(Icon.Delete)
+                            .Text("删除")
+                    ).Listeners(l =>
+                    {
+                        l.Command.Handler = "App.ApplyStore.remove(record);";
+                    })
+
+            )
+            .BottomBar(
+                Html.X().PagingToolbar().Items(X.Button().Text("单击添加物料").Icon(Icon.Add).Handler("AddMaterials();"))
+                    .HideRefresh(true)
+                    .DisplayInfo(true)
+                    .DisplayMsg("当前 {0} - {1} 总共： {2}")
+                    .EmptyMsg("没有数据可以显示")
+            );
+
+        var check = X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(
+            X.ComboBoxFor(m => m.CheckFlowId).Items(Model.CheckFlowItems).Editable(false)
+            );
+        var content =
+                X.FormPanel()
+                .Layout(LayoutType.Column)
+                .BodyPadding(10)
+                .Frame(true)
+                .FieldDefaults(l =>
+                {
+                    l.LabelWidth = 70; l.LabelAlign = LabelAlign.Right;
+                })
+                .Items(
+                    X.Container().ColumnWidth(1).Layout(LayoutType.HBox).Items(
+                    X.Container().Layout(LayoutType.Form).Flex(1).Items(X.TextFieldFor(m => m.AllotmentNo).Editable(false)),
+                    X.Container().Layout(LayoutType.Form).Flex(1).Items(X.ComboBox().ID("EXWarehouse").FieldLabel("出库仓库").Editable(false).Items(Model.Warehouse).Listeners(l => l.Select.Fn = "ExWarehouseDisable")),
+                    X.Container().Layout(LayoutType.Form).Flex(1).Items(X.ComboBox().ID("IMWarehouse").FieldLabel("入库仓库").Editable(false).Items(Model.Warehouse))
+                    ),
+                    X.Container().ColumnWidth(0.5).Layout(LayoutType.Form).Items(X.TextField().ID("Consignee").FieldLabel("收货人")),
+                    X.Container().ColumnWidth(0.5).Layout(LayoutType.Form).Items(X.DateFieldFor(m => m.EXDate)),
+                    X.Container().ColumnWidth(1).Layout(LayoutType.Fit).Items(grid),
+                    X.Container().ColumnWidth(1).Layout(LayoutType.Fit).Items(check)
+                    )
+            .Buttons(
+            X.Button().Text("关闭").Handler("parent.App.win.close();"),
+            X.Button().Text("提交").FormBind(true).ID("Submit").DirectEvents(l =>
+            {
+                l.Click.Action = "SubmitApply";
+                l.Click.ExtraParams.Add(new Parameter() { Name = "store", Value = "getGrid(App.ApplyGrid)", Mode = ParameterMode.Raw });
+                l.Click.ExtraParams.Add(X.Parameter().Mode(ParameterMode.Value).Name("action").Value("allotment"));
+            })
+            );
+
+    }
+
+@X.Window().ID("MaterialWindow").Title("选择物料").Maximized(true).Hidden(true).Layout(LayoutType.Border).Items(
+            X.FormPanel().Region(Region.North).Items(
+                X.Toolbar().Region(Region.Center).Layout(LayoutType.Column)
+                    .Border(false).Items(
+
+                        X.TextField().ID("MaterialName").LabelAlign(LabelAlign.Right).LabelWidth(100).FieldLabel("物资名称"),
+
+                        X.TextField().ID("MaterialSize").LabelAlign(LabelAlign.Right).LabelWidth(50).FieldLabel("型号"),
+
+                        //X.ToolbarFill().ColumnWidth(1),
+
+                        X.Button().Text("查询").Icon(Icon.Magnifier).Handler("select(App.MaterialStock)"),
+
+                        X.ToolbarFill().ColumnWidth(1),
+
+                        X.Button().Icon(Icon.Add).Text("选择").DirectEvents(de =>
+                        {
+                            de.Click.Action = "AddNewMaterial";
+                            de.Click.ExtraParams.Add(X.Parameter().Mode(ParameterMode.Raw).Name("materials").Value("getSelectedGrid(App.MaterialGrid)"));
+                            de.Click.ExtraParams.Add(X.Parameter().Mode(ParameterMode.Value).Name("desGridId").Value("ApplyStore"));
+                            de.Click.Success = "App.MaterialWindow.hide();";
+                        })
+                    )
+                ),
+            X.GridPanel()
+                .ID("MaterialGrid")
+                .Region(Region.Center)
+                .Store(
+                    X.Store().ID("MaterialStock")
+                        .PageSize(20)
+                        .Proxy(
+                            X.AjaxProxy().Url(Url.Action("StockFilter", "Material")).ExtraParams(l => l.Add(X.Parameter().Mode(ParameterMode.Value).Name("warehouse").Value(""))).Reader(X.JsonReader().RootProperty("data"))
+                        )
+                        .Model(
+                            X.Model()
+                                .IDProperty("ID")
+                                .Fields(
+                                    new ModelField("ID", ModelFieldType.String),
+                                    new ModelField("MaterialID", ModelFieldType.String),
+                                    new ModelField("MaterialName", ModelFieldType.String),
+                                    new ModelField("Size", ModelFieldType.String),
+                                    new ModelField("WarehouseName", ModelFieldType.String),
+                                    new ModelField("Unit", ModelFieldType.String),
+                                    new ModelField("CurAmount", ModelFieldType.String),
+                                    new ModelField("PicturePath", ModelFieldType.String)
+
+                                )
+                        )
+
+                )
+                .ColumnModel(
+
+                    X.Column()
+                        .Text("物资编号")
+                        .Width(154).Flex(1)
+                        .DataIndex("MaterialID"),
+
+                    X.Column()
+                        .Text("物资名称")
+                        .Width(154).Flex(1)
+                        .DataIndex("MaterialName"),
+
+                    X.Column()
+                        .Text("型号")
+                        .Width(154).Flex(1)
+                        .DataIndex("Size"),
+
+                    X.Column()
+                        .Text("仓库")
+                        .Width(154).Flex(1)
+                        .DataIndex("WarehouseName"),
+
+                    X.Column()
+                        .Text("当前库存")
+                        .Width(154).Flex(1)
+                        .DataIndex("CurAmount"),
+
+                    X.Column()
+                        .Text("单位")
+                        .Width(154)
+                        .DataIndex("Unit"),
+
+                    X.HyperlinkColumn()
+                        .Text("规格书")
+                        .DataIndex("MaterialName")
+                        .HrefTarget("_blank")
+                        .DataIndexHref("PicturePath")
+                )
+                .SelectionModel(
+                    X.CheckboxSelectionModel().Mode(SelectionMode.Multi)
+                ).BottomBar(
+                    Html.X().PagingToolbar()
+                        .DisplayInfo(true)
+                        .DisplayMsg("当前 {0} - {1} 总共： {2}")
+                        .EmptyMsg("没有数据可以显示")
+                )
+            )
+
+    @(X.Viewport().Layout(LayoutType.Border).AutoRender(true).Items(
+        content.Region(Region.Center).AutoScroll(true))
+    )
+
+}
+
+

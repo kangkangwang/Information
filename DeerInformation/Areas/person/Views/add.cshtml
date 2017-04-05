@@ -1,0 +1,57 @@
+﻿@model DeerInformation.Models.T_HR_WorkoverApply
+
+@{
+    ViewBag.Title = "AddStaffView";
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+      @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @(X.FormPanel().ID("FormPanel1").Frame(true).AutoScroll(true).Split(true)
+                .ModelValidation(true)
+                .Listeners(l => {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                .Padding(5)
+                .Items(
+                 X.TextFieldFor(m=>m.WorkoverApplyID),
+                 X.Container().Padding(5).Layout(LayoutType.Column).Items(
+                 ),
+                   X.Container().Padding(5).Layout(LayoutType.Column).Items(
+                 ),
+                   X.Container().Padding(5).Layout(LayoutType.Column).Items(
+                 ),
+                   X.Container().Padding(5).Layout(LayoutType.Column).Items(
+                   
+                 ),
+                   X.Container().Padding(5).Layout(LayoutType.Column).Items(
+                 ),
+
+
+                X.Button().Text("添加").Icon(Icon.Accept).ID("add")
+                    .DirectEvents(de =>
+                    {
+
+                        de.Click.Url = Url.Action("AddTravelDB");
+                        de.Click.EventMask.ShowMask = true;
+                        de.Click.FormID = "FormPanel1";
+                    })
+               )
+
+
+)
+                    
+
+
+            
+        
+</body>
+    
+</html>

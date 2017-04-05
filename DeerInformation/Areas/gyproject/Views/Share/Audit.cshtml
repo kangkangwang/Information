@@ -1,0 +1,79 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+@(X.Panel().Items(
+
+            X.FormPanel().Layout(LayoutType.Auto).AutoScroll(true).ID("storeform").Title(ViewBag.tit)
+            .Items(
+                X.TextField().Text(ViewBag.opreationid).ID("opreationlistid").Hidden(true),
+                 X.GridPanel().Height(150).AutoScroll(true).ID("GridPanel1")
+                 .Store(
+                        X.Store().ID("MaterialSelected").DataSource(Model)
+                        .PageSize(5).Model(X.Model().IDProperty("MaterialID")
+                        .Fields(
+                            new ModelField("MaterialID", ModelFieldType.String),
+                            new ModelField("MaterialName", ModelFieldType.String),
+                            new ModelField("Num", ModelFieldType.String),
+                            new ModelField("Size", ModelFieldType.String),
+                            new ModelField("Unit", ModelFieldType.String),
+                            new ModelField("Price", ModelFieldType.String))
+                                ).Reader(X.JsonReader().RootProperty("data")))           
+                 .ColumnModel(
+                        X.Column()
+                        .Text("物料编号")
+                        .Flex(1)
+                        .DataIndex("MaterialID"),
+
+                       X.Column()
+                        .Text("物料名称")
+                        .Flex(1)
+                        .DataIndex("MaterialName"),
+
+                        X.Column()
+                        .Text("数量")
+                        .Flex(1)
+                        .DataIndex("Num"),
+                       
+                       X.Column()
+                        .Text("型号")
+                        .Flex(1)
+                        .DataIndex("Size"),
+
+                       X.Column()
+                        .Text("单位")
+                        .Flex(1)
+                        .DataIndex("Unit"),
+
+                       X.Column()
+                        .Text("价格")
+                        .Flex(1)
+                        .DataIndex("Price")
+                             )
+                           ),
+                     X.Container().Layout(LayoutType.Form).Items(
+                        X.TextField().ID("des").FieldLabel("描述").Flex(1),
+                            X.ComboBox().ID("state").Items(new ListItem("审核通过", "2"), new ListItem("审核驳回", "3"), new ListItem("审核不通过", "4")).FieldLabel("审核状态").Editable(false).Flex(1).Value("4")
+                     ),
+                     X.Container().Layout(LayoutType.Form).Items(
+                        X.Button().Flex(1).Text("提交").Icon(Icon.Accept).DirectEvents(
+                                de =>
+                                {
+                                    de.Click.Url = Url.Action("AuditSubmit", "Share");
+                                    de.Click.ExtraParams.Add(new Parameter("state", "App.state.getValue()", ParameterMode.Raw));
+                                    de.Click.ExtraParams.Add(new Parameter("des", "App.des.getValue()", ParameterMode.Raw));
+                                    de.Click.ExtraParams.Add(new Parameter("opreationlistid", "App.opreationlistid.getValue()", ParameterMode.Raw));
+                                    de.Click.EventMask.ShowMask = true;
+                                }
+                        )
+                        )
+     )
+    
+     )
+    }
+
+ 

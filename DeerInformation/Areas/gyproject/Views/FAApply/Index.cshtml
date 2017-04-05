@@ -1,0 +1,138 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+<script>
+
+    var onSuccess = function (grid, data) {
+        grid.show();
+        grid.getStore().loadData(data);
+    };
+
+    var deleteapplyfa = function (id) {
+        Ext.MessageBox.confirm("提示", "确认删除该项？", function (but) {
+            if (but == "yes") {
+                App.direct.gyproject.DeleteApplyFixedAsset(id);
+                App.direct.gyproject.FAApplyReload();
+            }
+        });
+    };
+
+</script>
+    }
+
+@section content{
+
+@(X.Viewport().Layout(LayoutType.Auto).AutoScroll(true).Items(
+       X.Container().Layout(LayoutType.HBox).Items(
+           
+             X.TextField().ID("ApplyNo").FieldLabel("申请单号"),
+
+             X.Button().Icon(Icon.ApplicationGo).Text("查询").DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("Select");
+                    de.Click.Success = "onSuccess(App.GridPanel1, result.data);";
+                    de.Click.ExtraParams.Add(new Parameter("start", "App.ApplyNo.getValue()", ParameterMode.Raw));
+                    de.Click.EventMask.ShowMask = true;
+                }),
+                
+                X.Button().Icon(Icon.ApplicationAdd).Text("添加").DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("ApplyFixedAssetAddButton");
+                    de.Click.EventMask.ShowMask = true;
+                }) 
+      ),
+         X.FormPanel().Layout(LayoutType.Auto).Items( 
+         X.GridPanel().ID("GridPanel1")
+         .BottomBar(X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true)).Store(
+            X.Store().ID ("ApplyFixedAsset")
+             .DataSource(Model).PageSize(10).Model(
+                 X.Model().IDProperty("GID").Fields(
+                    new ModelField("GID", ModelFieldType.String),
+                    new ModelField("ApplyNo", ModelFieldType.String),
+                    new ModelField("Applicant", ModelFieldType.String),
+                    new ModelField("ApplicantSector", ModelFieldType.String),
+                    new ModelField("Status", ModelFieldType.String),
+                    new ModelField("Remark", ModelFieldType.String),
+                    new ModelField("Name", ModelFieldType.String),
+                    new ModelField("No_Date", ModelFieldType.String),
+                    new ModelField("Description", ModelFieldType.String),
+                    new ModelField("AuditProcess", ModelFieldType.String)
+                          )).Reader(X.JsonReader().RootProperty("data"))
+           )
+         .ColumnModel(
+         
+                X.Column().DataIndex("GID").Hidden(true),
+                
+               X.Column()
+                .Text("申请单号")
+                .Flex(2)
+                .DataIndex("ApplyNo"),               
+               X.Column()
+                .Text("申请人")
+                .Flex(1)
+                .DataIndex("Applicant"),
+               X.Column()
+                .Text("申请部门")
+                .Flex(1)
+                .DataIndex("ApplicantSector"),
+                X.Column()
+                .Text("申请日期")
+                .Flex(1)
+                .Renderer(RendererFormat.Date, new string[] { "'Y-n-j'"})
+                .DataIndex("No_Date"),
+                
+                X.Column()
+                .Text("订单状态")
+                .Flex(1)
+                .DataIndex("Status"),
+               X.Column()
+                .Text("备注")
+                .Flex(1)
+                .DataIndex("Remark"),
+                
+               X.Column()
+                .Text("经办人")
+                .Flex(1)
+                .DataIndex("Name"),
+             
+               X.Column()
+                .Text("审核流程")
+                .Flex(1)
+                .DataIndex("AuditProcess"), 
+                
+                X.Column()
+                .Text("审核状态")
+                .Flex(1)
+                .DataIndex("Description"),   
+                                             
+                X.CommandColumn().Text("查看物料详情").Flex(2).Commands(
+                            X.GridCommand().CommandName("detail").Icon(Icon.ApplicationCascade).Text("明细"))
+                                .DirectEvents(de =>
+                                {
+                                    de.Command.Url = Url.Action("MDetail","Share");
+                                    de.Command.ExtraParams.Add(new Parameter("gid", "record.data.GID", ParameterMode.Raw));
+                                    de.Command.ExtraParams.Add(new Parameter("title", "固定资产申请单明细", ParameterMode.Value));         
+                                }),
+
+                X.CommandColumn().Text("修改申请单").Flex(2).Commands(
+                                X.GridCommand().CommandName("modify").Icon(Icon.ApplicationEdit).Text("修改"))
+                                    .DirectEvents(de =>
+                                    {
+                                        de.Command.Url = Url.Action("ShareModify", "Share");
+                                        de.Command.ExtraParams.Add(new Parameter("gid", "record.data.GID", ParameterMode.Raw));
+                                        de.Command.ExtraParams.Add(new Parameter("controllername", "FAApply", ParameterMode.Value));
+                                                                           
+                                    }),
+                                                                                
+               X.CommandColumn().Text("删除记录").Hidden(true).Flex(2).Commands(
+                            X.GridCommand().CommandName("delete").Icon(Icon.ApplicationDelete).Text("删除"))
+                            .Listeners(l =>l.Command.Handler = "deleteapplyfa(record.data.GID);"))                                                                   
+        )
+                             )                                                                                          
+                         )
+   }

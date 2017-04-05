@@ -1,0 +1,100 @@
+﻿@model Node
+
+@{
+    ViewBag.Title = "Authority";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X=Html.X();
+}
+
+@section content
+{
+    @{
+        var btn = X.Toolbar().Flex(1)
+            .Shadow(true)
+            .ID("pnlPackEnd")
+            .Layout(LayoutType.HBox)
+            .Defaults(X.Parameter().Name("margin").Value("0 5 0 0").Mode(ParameterMode.Value))
+            .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Middle, Pack = BoxPack.End })
+            .Items(
+            X.Container().Flex(1).Items(X.Label().Text(ViewBag.name)),
+                X.Button().Text("保存").Icon(Icon.GroupAdd)
+                .Handler("App.treepanel.submitNodes();")
+                ,
+
+                X.Button().Text("更新").Icon(Icon.TableRefresh).DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("GetRoot");
+                })
+                ,
+                X.Button().Text("返回").Icon(Icon.PageBack).DirectClickAction("PageBack")
+                
+            );
+        var content = X.TreePanel()
+            .ID("treepanel")
+            .Frame(true)
+            .ColumnLines(true)
+            .RowLines(true)
+            .UseArrows(true)
+            .RootVisible(false)
+            .MultiSelect(true)
+            .FolderSort(true)
+            .SubmitUrl(Url.Action("SubmitNodes"))
+            .Fields(
+                X.ModelField().Name("ID"),
+                X.ModelField().Name("TextEN"),
+                X.ModelField().Name("TextCN"),
+                X.ModelField().Name("URL"),
+                X.ModelField().Name("Read").Type(ModelFieldType.Boolean),
+                X.ModelField().Name("Create").Type(ModelFieldType.Boolean),
+                X.ModelField().Name("Update").Type(ModelFieldType.Boolean),
+                X.ModelField().Name("Delete").Type(ModelFieldType.Boolean)
+            )
+            .ColumnModel(
+                X.TreeColumn()
+                    .Text("名称")
+                    .Flex(1)
+                    .DataIndex("TextCN"),
+
+                X.Column()
+                    .Text("TextEN")
+                    .Flex(1)
+                    .DataIndex("TextEN"),
+
+                X.CheckColumn()
+                    .Text("查看")
+                    .DataIndex("Read")
+                    .Width(70)
+                    .Editable(true)
+                    .StopSelection(false), 
+                    
+                X.CheckColumn()
+                    .Text("新增")
+                    .DataIndex("Create")
+                    .Width(70)
+                    .Editable(true)
+                    .StopSelection(false),
+
+                X.CheckColumn()
+                    .Text("修改")
+                    .DataIndex("Update")
+                    .Width(70)
+                    .Editable(true)
+                    .StopSelection(false),
+                    
+                X.CheckColumn()
+                    .Text("删除")
+                    .DataIndex("Delete")
+                    .Width(70)
+                    .Editable(true)
+                    .StopSelection(false)
+
+            )
+            .Root(Model);
+    }
+
+    @(X.Viewport().Layout(LayoutType.Border).Items(
+            X.Panel().Region(Region.North).Border(false).PaddingSpec("2 2 2 2").Items(btn),
+     X.Container().ID("system_main").Region(Region.Center).Layout(LayoutType.Anchor).AutoScroll(true)
+            .Items(content)
+    ))
+}

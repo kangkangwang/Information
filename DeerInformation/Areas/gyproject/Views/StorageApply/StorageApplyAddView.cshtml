@@ -1,0 +1,153 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+
+<script>
+
+    var success = function () {
+        parent.App.window4.close();
+    }
+
+</script>
+
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+      @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+     @(X.Panel().Layout(LayoutType.Form).Items(
+             
+       X.FormPanel().ModelValidation(true)
+       .Listeners(l => {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+       .Items(
+       
+       X.TextField().ID("ApplyNo").FieldLabel("申请单编号").AllowBlank(false).EmptyText("此项为必须填写项"),
+       X.TextField().ID("ApplyMan").FieldLabel("申请人").AllowBlank(false).EmptyText("此项为必须填写项"),
+       X.DateField().ID("ApplyDate").FieldLabel("申请日期").AllowBlank(false).EmptyText("此项为必须填写项"),
+       X.TextField().ID("Warehouse").FieldLabel("入库仓库").AllowBlank(false).EmptyText("此项为必须填写项"),
+       X.TextField().ID("Extra1").FieldLabel("备注")
+       ),
+       
+       
+       X.Button().Text("材料选择").Icon(Icon.ShapeSquareSelect)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("SelectMaterial");
+                        de.Click.EventMask.ShowMask = true;
+                        de.Click.FormID = "FormPanel1";
+                        
+                    }), 
+                    
+        X.FormPanel().Layout(LayoutType.Table).Items(
+       
+        X.GridPanel()
+         .Height(311)
+         .ID("GridPanel1")
+         .Title("已选材料")
+         .Store(
+            X.Store().ID ("MaterialSelected").AutoLoad(false)
+             
+             .PageSize(10)
+             .Model(
+                 X.Model()
+                  .IDProperty("MaterialID")
+                  .Fields(
+                    new ModelField("MaterialID", ModelFieldType.String ),
+                    new ModelField("MaterialName", ModelFieldType.String ),
+                    new ModelField("Size", ModelFieldType.String),
+                    new ModelField("Unit", ModelFieldType.String),
+                    new ModelField("Price", ModelFieldType.String),
+                    new ModelField("Extra", ModelFieldType.String),
+                    new ModelField("ApplyNumber", ModelFieldType.String)
+                          )
+                   )
+             .Reader(
+                    X.JsonReader().RootProperty("data")
+                   )
+           )
+         .ColumnModel(
+               X.Column()
+                .Text("物资编号")
+                .Width(132)
+                .DataIndex("MaterialID"),
+
+               X.Column()
+                .Text("物资名称")
+                .Width(132)
+                .DataIndex("MaterialName"),
+
+               X.Column()
+                .Text("型号")
+                .Width(132)
+                .DataIndex("Size"),
+                
+               X.Column()
+                .Text("单位")
+                .Width(132)
+                .DataIndex("Unit"),
+                
+               X.Column()
+                .Text("预算价（元）")
+                .Width(132)
+                .DataIndex("Price"),
+                
+               X.Column()
+                .Text("备注")
+                .Width(132)
+                .DataIndex("Extra"),
+                
+                
+                Html.X().ComponentColumn()
+                .Editor(true)
+                .DataIndex("ApplyNumber")
+                .Text("请输入申请入库数量")
+                .Width(135)
+                .Flex(1)
+                .Component(Html.X().TextField())
+       
+                     )
+           
+                     .SelectionModel(
+                                          X.SpreadsheetSelectionModel()
+                                           .ID("SpreadsheetSelectionModel1")
+                                           .ColumnSelect(true)
+                                           .PruneRemoved(false)
+                                           .Extensible(SpreadsheetExtensible.Y)
+
+                             )
+
+                    ),
+                    
+          X.Button().Text("入库信息提交").ID("add").Icon(Icon.ApplicationGet)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("AddMaterialStorageApply");
+                        de.Click.Success = "parent.App.window4.close()";
+                        de.Click.ExtraParams.Add(new Parameter("applyno", "App.ApplyNo.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("applyman", "App.ApplyMan.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("applydate", "App.ApplyDate.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("warehouse", "App.Warehouse.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("extra1", "App.Extra1.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("list", "App.MaterialSelected.collect('MaterialID')", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("record", "App.MaterialSelected.collect('ApplyNumber')", ParameterMode.Raw));
+                        de.Click.EventMask.ShowMask = true;
+                        de.Click.FormID = "FormPanel1";
+                        
+                    })
+              
+           )
+          
+     )
+                
+</body>
+</html>

@@ -1,0 +1,195 @@
+﻿@model RolesViewModle
+@{
+    ViewBag.Title = "角色管理";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+    <script>
+        var addjs = function () {
+            Ext.USE_NATIVE_JSON = true;
+
+            var result = App.Rolesgrid.getSelectionModel().getSelection();
+
+            var datas = new Array();
+            
+            for (var i = 0; i < result.length; i++) {
+                datas[i] = Ext.encode(result[i].data);
+            }
+            return Ext.encode(datas);
+        };
+
+        var refresh=function ()
+        {
+            App.direct.system.GetData();
+        }
+
+
+    </script>
+}
+
+@section content{
+    @{
+        var btn = X.Toolbar().Flex(1)
+            .Shadow(true)
+            .ID("pnlPackEnd")
+            .Layout(LayoutType.HBox)
+            .Defaults(X.Parameter().Name("margin").Value("0 5 0 0").Mode(ParameterMode.Value))
+            .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Middle, Pack = BoxPack.End })
+            .Items(
+                X.Button().Text("添加").Icon(Icon.GroupAdd)
+                .DirectEvents(de =>
+                {
+                    de.Click.Action = "add";
+                    de.Click.EventMask.ShowMask = true;
+                    de.Click.ExtraParams.Add(new Parameter()
+                    {
+                        Name = "selection",
+                        Mode = ParameterMode.Raw,
+                        Value = "addjs"
+                    }
+                        );
+                })
+                ,
+                X.Button().Text("修改").Icon(Icon.GroupEdit).DirectEvents(de =>
+                {
+                    de.Click.Action  = "edit";
+                    de.Click.EventMask.ShowMask = true;
+                    de.Click.ExtraParams.Add(new Parameter()
+                    {
+                        Name = "selection",
+                        Mode = ParameterMode.Raw,
+                        Value = "App.Rolesgrid.getSelectionModel().getSelection()[0].data.RoleID"
+
+                    }
+                        );
+                }),
+                X.Button().Text("删除").Icon(Icon.GroupDelete).DirectEvents(de =>
+                {
+                    de.Click.Action = "delete";
+                    de.Click.Success = "refresh";
+                    de.Click.EventMask.ShowMask = true;
+                    de.Click.Confirmation.ConfirmRequest = true;
+                    de.Click.Confirmation.Message = "是否确定删除选择项！";
+                    de.Click.ExtraParams.Add(new Parameter()
+                    {
+                        Name = "selection",
+                        Mode = ParameterMode.Raw,
+                        Value = "addjs"
+
+                    }
+                        );
+                }),
+                X.Button().Text("更新").Icon(Icon.TableRefresh).DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("GetData");
+                })
+
+            );
+    }
+    @(X.Viewport().ID("mother").Layout(LayoutType.Border).Items(
+    X.Panel().Region(Region.North).Border(false).PaddingSpec("2 2 2 2").Items(btn),
+    X.Container().ID("system_main").Region(Region.Center).Layout(LayoutType.Anchor)
+            .Items(X.GridPanel()
+                .ID("Rolesgrid")
+                .AnchorHorizontal("100%")
+                .Store(X.Store()
+                .ID("storedata")
+                    .PageSize(Model.pagenum)
+                    .Model(X.Model()
+                    .IDProperty("RoleID")
+                    .Fields("RoleID", "Description", "Creator", "CreatorID", "CreateTime", "Editor", "EditorID", "EditeTime")
+                    )
+                    .DataSource(Model.data)
+                    
+                )
+                .ColumnModel(
+                    X.Column()
+                        .Text("角色描述")
+                        .DataIndex("Description")
+                        .Resizable(false)
+                        .MenuDisabled(true)
+                        .Flex(1),
+
+                    X.Column()
+                        .Text("创建人")
+                        .Width(75)
+                        .DataIndex("Creator"),
+
+                     X.Column()
+                        .Text("创建人编号")
+                        .Width(75)
+                        .DataIndex("CreatorID"),
+
+                     X.Column()
+                        .Text("创建时间")
+                        .Width(175)
+                        .DataIndex("CreateTime"),
+                    X.Column()
+                    .Text("编辑人")
+                    .Width(75)
+                    .DataIndex("Editor"),
+
+                    X.Column()
+                    .Text("编辑人编号")
+                    .Width(75)
+                    .DataIndex("EditorID"),
+
+                    X.Column()
+                    .Text("编辑时间")
+                    .Width(175)
+                    .DataIndex("EditorTime"),
+                    
+                    X.CommandColumn()
+                    .Text("操作")
+                    .Width(200)
+                    .Commands(
+                        Html.X().GridCommand()
+                        .CommandName("查看")
+                        .Icon(Ext.Net.Icon.BookOpenMark)
+                        .Text("查看详细"),
+                        Html.X().GridCommand()
+                        .CommandName("更改组成员")
+                        .Icon(Ext.Net.Icon.BookOpenMark)
+                        .Text("更改组成员")
+                    )
+                    .DirectEvents(de =>
+                    {
+                        de.Command.Action = "Expand";
+                        de.Command.ExtraParams.Add(new Ext.Net.Parameter()
+                        {
+                            Name = "roleid",
+                            Value = "record.data.RoleID",
+                            Mode = Ext.Net.ParameterMode.Raw
+                        });
+                        de.Command.ExtraParams.Add(new Ext.Net.Parameter()
+                        {
+                            Name = "description",
+                            Value = "record.data.Description",
+                            Mode = Ext.Net.ParameterMode.Raw
+                        }
+                        );
+                        de.Command.ExtraParams.Add(new Ext.Net.Parameter()
+                        {
+                            Name = "command",
+                            Value = "command",
+                            Mode = Ext.Net.ParameterMode.Raw
+                        }
+                                                );
+                    }
+                    )
+                )
+                .BottomBar(X.PagingToolbar()
+                    .DisplayInfo(false)
+                    .HideRefresh(true)
+
+                )
+                .SelectionModel(
+                    X.CheckboxSelectionModel()
+                        .Mode(SelectionMode.Multi)
+                    )
+    )
+    )
+    )
+}

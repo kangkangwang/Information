@@ -1,0 +1,104 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    ViewBag.Title = "现场important资料管理";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+    <script>
+
+        var onSuccess = function (grid, data) {
+            grid.show();
+            grid.getStore().loadData(data);
+        };
+        //var onGroupCommand = function (column, command, group) {
+        //    if (command === 'SelectGroup') {
+        //        column.gridRef.getSelectionModel().select(group.items, true);
+        //        return;
+        //    }
+
+        //    Ext.Msg.alert(command, 'Group name: ' + group.getGroupKey() + '<br/>Count - ' + group.items.length);
+        //};
+        //var getAdditionalData = function (data, idx, record, orig) {
+        //    return {
+        //        rowBodyColspan: record.self.fields.length,
+        //        rowBody: Ext.String.format('<div style=\'padding:0 5px 5px 5px;\'>The {0} [{1}] requires light conditions of <i>{2}</i>.<br /><b>Price: {3}</b></div>', data.Common, data.Botanical, data.Light, Ext.util.Format.usMoney(data.Price))
+        //    };
+        //};
+    </script>
+}
+
+@section content{
+    <div>
+        @(X.Container().Layout(LayoutType.HBox).Items(
+            X.TextField().FieldLabel("项目编号").ID("no"),
+            X.Button().Text("查询").ID("btninquire").Icon(Icon.ApplicationGo).DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("FieldInquire");
+                        de.Click.Success = "onSuccess(App.GridPanel1, result.data);";
+                        de.Click.ExtraParams.Add(new Parameter("addno", "App.no.getValue()", ParameterMode.Raw)); ;
+                        de.Click.EventMask.ShowMask = true;
+                    }),
+
+                     X.Button().Icon(Icon.ApplicationAdd).Text("添加").DirectEvents(de =>
+                        {
+                            de.Click.Url = Url.Action("FieldDataAddButton");
+                            de.Click.EventMask.ShowMask = true;
+                        }))
+        )
+    </div>
+    @(X.FormPanel().Layout(LayoutType.Auto).Region(Region.Center).Items(
+                            X.GridPanel().ID("GridPanel1")
+                            .BottomBar(X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true)).Store(
+                                 X.Store().ID("FieldDataManagement").GroupField("ProjectNo").DataSource(Model).Model(
+                                     X.Model().IDProperty("ID").Fields("ID", "ProjectNo", "ProjectName", "TypeName", "UploadMan", "UploadTime", "AnnetPath"))
+                                        .Reader(X.JsonReader().RootProperty("data"))).ColumnModel(
+
+                                            X.Column().DataIndex("ID").Hidden(true),
+                                            X.Column()
+                                            .Text("项目编号")
+                                            .Flex(1)
+                                            .DataIndex("ProjectNo"),
+
+                                            X.Column()
+                                            .Text("项目名称")
+                                            .Flex(1)
+                                            .DataIndex("ProjectName").Hidden(true),
+
+                                            X.Column()
+                                            .Text("上传人")
+                                            .Flex(1)
+                                            .DataIndex("UploadMan"),
+
+                                            X.Column()
+                                            .Text("上传时间")
+                                            .Flex(1)
+                                            .DataIndex("UploadTime")
+                                            .Renderer(RendererFormat.Date, new string[] { "'Y-n-j'" }),
+
+
+                                            X.HyperlinkColumn().Flex(1).DataIndex("TypeName")
+                                            .DataIndexHref("AnnetPath").Text("查看附件").HrefTarget("_blank"),
+
+                                            X.CommandColumn().Text("下载附件").Flex(1).Commands(
+                                                            X.GridCommand().CommandName("download").Icon(Icon.ApplicationDelete).Text("下载"))
+                                                                .DirectEvents(de =>
+                                                                {
+                                                                    de.Command.Url = Url.Action("FileDownload");
+                                                                    de.Command.ExtraParams.Add(new Parameter("filePath", "record.data.AnnetPath", ParameterMode.Raw));
+                                                                    de.Command.IsUpload = true;
+
+                                                                }))
+                               //.SelectionModel(Html.X().CheckboxSelectionModel().RowSpan(2))
+                               //此处如果想展示项目编号+项目名称可以在后台赋值给某列让其拥有两个值
+                               .Features(
+                                    X.Grouping().HideGroupedHeader(true)
+                                    .GroupHeaderTplString("{columnName}: {name} ({[values.rows.length]} {[values.rows.length > 1 ? \"条记录\" : \"条记录\"]})")
+                                             //, Html.X().RowBody().GetAdditionalData("getAdditionalData")
+                                            )
+                                    )
+    )
+}
+    

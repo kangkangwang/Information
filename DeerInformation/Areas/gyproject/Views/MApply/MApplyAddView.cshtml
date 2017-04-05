@@ -1,0 +1,64 @@
+﻿@model DeerInformation.Models.T_GM_ApplyMaterial
+
+@{
+    ViewBag.Title = "添加申请单";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+    <script src="~/Scripts/base/share.js"></script>
+<script>
+    var setValidValue = function () {
+        var store = Ext.getCmp('storeform').down('gridpanel').store;
+        for (var i = 0; i < store.getCount() ; i++) {
+            var base = store.getAt(i).data.MinPurchase;
+            var value = store.getAt(i).data.Num;
+            store.getAt(i).set("Num", Math.ceil(value / base) * base);
+        }
+        store.commitChanges();
+    }
+</script>
+
+}
+
+@section content{
+
+    @( X.FormPanel().ID("BasicForm").Listeners(l => l.ValidityChange.Handler = "#{add}.setDisabled(!valid);")
+       .Layout(LayoutType.Anchor).DefaultAnchor("100%").Items(
+                X.Container().Layout(LayoutType.HBox).Items(
+                       X.Container().Layout(LayoutType.Form).Flex(1).MarginSpec("0 5 0 5").Items(
+                           X.TextFieldFor(m => m.ApplyMaterialNo).Text("SQMS" + new Random().Next(10000).ToString() + DateTime.Now.ToString("ddHHmm")).FieldLabel("申请单号").ReadOnly(true),
+                           X.ComboBoxFor(m => m.ProjectNo).FieldLabel("项目编号").AllowBlank(false).Items(ViewBag.prono),
+                           X.ComboBoxFor(m=>m.CheckProcess).FieldLabel("审核流程").Editable(false).AllowBlank(false).Items(ViewBag.audit)),
+                       X.Container().Layout(LayoutType.Form).Flex(1).MarginSpec("0 5 0 5").Items(
+                           X.TextFieldFor(m=>m.Tel).FieldLabel("申请人电话").AllowBlank(false),
+                           X.DateFieldFor(m=>m.PrepaidDay).FieldLabel("预交日期"),
+                           X.Button().Text("材料选择").Icon(Icon.ShapeSquareSelect)
+                            .DirectEvents(de =>
+                            {
+                                de.Click.Url = Url.Action("SM", "Share");
+                                de.Click.ExtraParams.Add(new Parameter("type", "M", ParameterMode.Value));
+                                de.Click.EventMask.ShowMask = true;
+                            }))),
+                X.TextFieldFor(m => m.Remark).FieldLabel("备注").MarginSpec("0 5 5 10").LabelWidth(30),
+
+                X.FormPanel().Layout(LayoutType.Auto).AutoScroll(true).ID("storeform").Title("已选材料")
+                .Buttons( 
+                    X.Button().Icon(Icon.ApplicationGet).ID("add").Text("提交").Disabled(true)
+                                .DirectEvents(de =>
+                                {
+                                    de.Click.Url = Url.Action("MApplyAdd");                                 
+                                    de.Click.ExtraParams.Add(new Parameter("list", "App.MaterialSelected.collect('MaterialID')", ParameterMode.Raw));
+                                    de.Click.ExtraParams.Add(new Parameter("record", "getGridValueArr('MaterialSelected','Num')", ParameterMode.Raw));
+                                    de.Click.ExtraParams.Add(new Parameter("pri", "getGridValueArr('MaterialSelected','Price')", ParameterMode.Raw));
+                                    de.Click.Success = "Judge('MaterialSelected','Num','Price');";
+                                    de.Click.EventMask.ShowMask = true;
+                                    de.Click.FormID = "BasicForm";
+                                }),
+
+                    X.Button().Icon(Icon.ApplicationGet).ID("cancel").Text("取消")
+                            .Listeners(l => l.Click.Handler = "parent.App.win.close()")))
+
+    )
+}

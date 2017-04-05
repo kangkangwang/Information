@@ -1,0 +1,62 @@
+﻿@model DeerInformation.Models.V_HR_TipsPeople
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.HBox).LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top })
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                   X.Panel().Flex(9).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Border(false).Items(
+                      X.TextFieldFor(m => m.StaffID).ID("StaffID").FieldLabel("工号").AllowBlank(false).Editable(false),
+                      X.TextFieldFor(m => m.Department).ID("Department").FieldLabel("部门").AllowBlank(false).Editable(false),
+                      X.TextFieldFor(m => m.ID).FieldLabel("ID").Hidden(true),
+                      X.HiddenFor(m => m.Valid),
+                      X.HiddenFor(m => m.CreaterName),
+                      X.HiddenFor(m => m.CreateTime),
+                      X.HiddenFor(m => m.EditorName),
+                      X.HiddenFor(m => m.EditeTime)
+                   ),
+                      X.Panel().Flex(9).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Border(false).Items(
+                      X.TextFieldFor(m => m.Name).ID("Name").FieldLabel("姓名").AllowBlank(false).Editable(false),
+                      X.TextFieldFor(m => m.Remark).FieldLabel("备注")
+                   ),
+                      X.Panel().Flex(2).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Border(false).Items(
+            //X.Panel().Border(false).Height(27),
+                        X.Button().Text("选择员工").ID("select")
+                            .DirectEvents(de =>
+                            {
+                                de.Click.Url = Url.Action("SelectStaff");
+                                //de.Click.EventMask.ShowMask = true;
+                            })
+                      )
+       ),
+        X.Button().Text("保存").Icon(Icon.Accept).ID("save").FormBind(true).Disable(true)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("EditPeople");
+                        de.Click.EventMask.ShowMask = true;
+                    })
+    )
+</body>
+
+</html>
+
+

@@ -1,0 +1,112 @@
+﻿@using OfficeOpenXml.FormulaParsing.Excel.Functions.Information
+@model DeerInformation.Areas.system.Models.CheckFlow
+
+@{
+    ViewBag.Title = "UpdateCheckFlow";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+
+
+@section headtag
+{
+    <style>
+        .search-item {
+            font: normal 11px tahoma, arial, helvetica, sans-serif;
+            padding: 3px 10px 3px 10px;
+            border: 1px solid #fff;
+            border-bottom: 1px solid #eeeeee;
+            white-space: normal;
+            color: #555;
+        }
+    </style>
+}
+
+
+
+@section content
+{
+    @(Html.X().Store().ID("CheckerStore")
+            .AutoLoad(true)
+            .Proxy(Html.X().AjaxProxy()
+                .Url(Url.Action("GetCheckers"))
+                .ActionMethods(am => am.Read = HttpMethod.POST)
+                .ExtraParams(l =>
+                {
+
+                    l.Add(new Parameter(){Name="checkers",Value =JSON.Serialize(Model.Checkers), Mode = ParameterMode.Auto});            
+
+                })
+                .Reader(Html.X().JsonReader().RootProperty("data"))
+            ).Model(Html.X().Model()
+                .Fields(
+                    Html.X().ModelField().Name("Name"),
+                    Html.X().ModelField().Name("ID")
+                )
+            ))
+    @{
+
+
+        var Frame = X.FormPanel()
+            .Region(Region.Center)
+            .Frame(true)
+            .BodyPadding(10)
+            .ModelValidation(true)
+            .AutoScroll(true)
+            .Layout(LayoutType.Form)
+            .Items(
+            X.Container().Layout(LayoutType.HBox).Items(X.TextFieldFor(m => m.Name).Flex(1), X.NumberFieldFor(m => m.TimeLimit).Flex(1)),
+            X.Container().ID("form").Items(l=>{
+
+
+                l.Add(X.Container().MarginSpec("5 0 5 0").Layout(LayoutType.HBox).Items(X.Label("审核人").Flex(1), X.Label("审核级别1").Flex(1), X.Label("审核级别2").Flex(1)));
+                for (int i = 0; i < Model.Checkers.Count; i++)
+                {
+                    l.Add(X.Container().MarginSpec("5 0 0 0").Frame(true).Layout(LayoutType.HBox).Items(
+                    X.ComboBox().Flex(1).AllowBlank(false)
+                    .TypeAhead(true).MinChars(0).HideTrigger(false).Name(string.Format("[{0}].ID", i)).Text(Model.Checkers[i].Name).Value(Model.Checkers[i].ID)
+                    .TriggerAction(TriggerAction.Query).DisplayField("Name").ValueField("ID")
+                    .ListConfig(X.BoundList().LoadingText("查找中...").ItemTpl(X.XTemplate()
+                        .Html(@<text>
+                        <div class="search-item">
+                            <h3>
+                                <span>姓名：{Name}</span> 工号：{ID}
+                            </h3>
+                        </div>
+                        </text>)))
+                    .StoreID("CheckerStore"),
+                X.NumberField().Value(Model.Checkers[i].lvl1).Name(string.Format("[{0}].lvl1", i)).AllowBlank(false).MinValue(1).Flex(1),
+                X.NumberField().Value(Model.Checkers[i].lvl2).Name(string.Format("[{0}].lvl2", i)).AllowBlank(false).MinValue(1).Flex(1)));
+                }
+                         }),
+
+
+                        X.Container().MarginSpec("5 0 5 0").Layout(LayoutType.HBox).LayoutConfig(new HBoxLayoutConfig() { Align = HBoxAlign.Middle }).Items(X.Button().Icon(Icon.Add).Text("新增审核人").DirectEvents(de => { de.Click.Action = "PlusCheckPerson"; }), X.Component().Flex(1), X.CheckboxFor(m => m.Disable)),
+                              X.Container().MarginSpec("5 0 5 0").Layout(LayoutType.HBox).Items(X.TextFieldFor(m => m.Creator).Flex(1), X.DateFieldFor(m => m.CreatTime).Flex(1)),
+                              X.Container().MarginSpec("5 0 5 0").Layout(LayoutType.HBox).Items(X.TextAreaFor(m => m.Description).Flex(1))
+           )
+                 .Buttons(
+                 Html.X().Button()
+                     .Text("Cancel")
+                     .DirectEvents(de =>
+                     {
+                         de.Click.Action = "Cancel";
+                         de.Click.Success = string.Format("parent.App.{0}.close()", ViewBag.winname);
+                         de.Click.EventMask.ShowMask = true;
+                     }
+                     ),
+                 Html.X().Button()
+                 .FormBind(true)
+                     .Text("Submit")
+                     .DirectEvents(de =>
+                     {
+                         de.Click.Action = "Submit";
+                         de.Click.Success = string.Format("parent.App.{0}.close()", ViewBag.winname);
+                         de.Click.EventMask.ShowMask = true;
+                     }
+                     )
+                 );
+    }
+    @(X.Viewport().Layout(LayoutType.Border).Items(Frame))
+}

@@ -1,0 +1,17 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    @RenderSection("meta", false)
+    <title>@ViewBag.Title</title>
+    @RenderSection("headtag", false)
+</head>
+<body>
+      @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig)
+      @RenderSection("content", true)
+</body>
+</html>

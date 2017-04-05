@@ -1,0 +1,26 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="@Url.Content("~/Css/Home/main.css")" />
+    <script src="~/Scripts/base/system.js"></script>
+    @RenderSection("headtag", false)
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig)
+    @{
+        Theme theme = Ext.Net.Theme.Default;
+
+        if (this.Session["Ext.Net.Theme"] != null)
+        {
+            theme = (Theme)this.Session["Ext.Net.Theme"];
+        }
+    }
+    @RenderSection("content", true)
+</body>
+</html>

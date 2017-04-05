@@ -1,0 +1,15 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    @RenderSection("headtag", false)
+</head>
+<body>
+      @RenderSection("content", true)
+</body>
+</html>

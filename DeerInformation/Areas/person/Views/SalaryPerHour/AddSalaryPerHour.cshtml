@@ -1,0 +1,53 @@
+﻿@model DeerInformation.Models.T_HR_SalaryPerHour
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var closewindow = function () {
+        parent.App.windowSalaryPerHour.close()
+    };
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddSalaryPerHour</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.HBox)
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                   X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                      X.TextFieldFor(m => m.ID).FieldLabel("ID").Hidden(true),
+                      X.ComboBoxFor(m => m.StaffStype).FieldLabel("员工类型").Editable(true).Items(new ListItem("间接员工"), new ListItem("直接员工")).EmptyText("请选择...").AllowBlank(false),
+                      X.DateFieldFor(m => m.ValidTime).FieldLabel("生效时间").AllowBlank(false).Editable(false).Format("Y-m-d"),
+                      X.HiddenFor(m => m.CreaterName),
+                      X.HiddenFor(m => m.CreateTime),
+                      X.HiddenFor(m => m.EditorName),
+                      X.HiddenFor(m => m.EditeTime)
+                   ),
+                   X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                      X.TextFieldFor(m => m.SalaryPerTime).FieldLabel("工资（元）").AllowBlank(false).Regex(@"^(\d{1,18}|\d{1,15}\.\d{1,3})$"),
+                      X.TextFieldFor(m => m.Remark).FieldLabel("备注").AllowBlank(true)
+                   )
+       ),
+        X.Button().Text("保存").Icon(Icon.Accept).ID("save").FormBind(true).Disable(true)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("AddOrEditSalaryPerHour");
+                        de.Click.EventMask.ShowMask = true;
+                    })
+    )
+</body>
+
+</html>
+

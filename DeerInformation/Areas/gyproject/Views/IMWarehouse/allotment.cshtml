@@ -1,0 +1,173 @@
+﻿@model DeerInformation.Areas.gyproject.Models.IMMaterial
+@{
+    ViewBag.Title = "allocation";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+    <script>
+        var getGrid = function (grid) {
+            Ext.USE_NATIVE_JSON = true;
+
+            var result = grid.getStore();
+
+            var datas = new Array();
+
+            for (var i = 0; i < result.getCount() ; i++) {
+                datas[i] = Ext.encode(result.getAt(i).data);
+            }
+            return Ext.encode(datas);
+        }
+
+    </script>
+}
+
+@section content
+{
+    @{
+        var store = Html.X().Store().ID("ApplyStore")
+    .AutoLoad(false)
+    .Reader(Html.X().JsonReader().RootProperty("data"))
+    .PageSize(10)
+    .Model(
+        X.Model()
+        .IDProperty("MaterialID")
+        .Fields(
+        new ModelField("MaterialID", ModelFieldType.String),
+        new ModelField("MaterialName", ModelFieldType.String),
+        new ModelField("Size", ModelFieldType.String),
+        new ModelField("Unit", ModelFieldType.String),
+        new ModelField("Num", ModelFieldType.Float),
+        new ModelField("IMNum", ModelFieldType.Float),
+        new ModelField("UIMNum", ModelFieldType.Float),
+        new ModelField("ApplyNumber", ModelFieldType.Object)
+                )
+        );
+
+
+        var grid = X.GridPanel()
+            .ID("ApplyGrid")
+            .Store(store)
+            .ColumnModel(
+                X.Column()
+                    .Text("物资编号")
+                    .Width(100)
+                    .DataIndex("MaterialID"),
+
+                X.Column()
+                    .Text("物资名称")
+                    .Flex(2)
+                    .DataIndex("MaterialName"),
+
+                X.Column()
+                    .Text("型号")
+                    .Flex(1)
+                    .DataIndex("Size"),
+
+                X.Column()
+                    .Text("单位")
+                    .Flex(1)
+                    .DataIndex("Unit"),
+
+                X.Column()
+                    .Text("调拨数量")
+                    .Flex(1)
+                    .DataIndex("Num"),
+
+                X.Column()
+                    .Text("已入库数量")
+                    .Flex(1)
+                    .DataIndex("IMNum"),
+
+                X.Column()
+                    .Text("剩余可入库数量")
+                    .Flex(1)
+                    .DataIndex("UIMNum"),
+
+                X.ComponentColumn()
+                    .Editor(true)
+                    .DataIndex("ApplyNumber")
+                    .Text("请输入申请入库数量")
+                    .Width(100)
+                    .Component(X.NumberField().MinValue(0)),
+
+                X.CommandColumn()
+                    .Text("操作")
+                    .Width(100)
+                    .Commands(
+                        Html.X().GridCommand()
+                            .MinWidth(100)
+                            .CommandName("Delete")
+                            .Icon(Icon.Delete)
+                            .Text("删除")
+                    ).Listeners(l =>
+                    {
+                        l.Command.Handler = "App.ApplyStore.remove(record);";
+                    })
+
+            )
+            .BottomBar(
+                Html.X().PagingToolbar()
+                    .HideRefresh(true)
+                    .DisplayInfo(true)
+                    .DisplayMsg("当前 {0} - {1} 总共： {2}")
+                    .EmptyMsg("没有数据可以显示")
+            );
+
+        var check = X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(
+            X.ComboBoxFor(m => m.CheckFlowId).Items(Model.CheckFlowItems).Editable(false)
+            );
+
+        var content =
+                    X.FormPanel()
+                    .Layout(LayoutType.Column)
+                    .BodyPadding(10)
+                    .Frame(true)
+                    .FieldDefaults(l =>
+                    {
+                        l.LabelWidth = 70; l.LabelAlign = LabelAlign.Right;
+                    })
+                    .Items(
+                        X.Container().ColumnWidth(1).Layout(LayoutType.HBox).Items(
+                        X.Container().Layout(LayoutType.Form).Flex(1).Items(X.ComboBoxFor(m => m.AllotmentNo).Editable(true).DisplayField("EXID").ValueField("EXID").MinChars(0).TypeAhead(true).TriggerAction(TriggerAction.Query).ListConfig(X.BoundList().LoadingText("Searching...").ItemTpl(X.XTemplate().Html(@<text>
+                            <div class="search-item">
+                                <h3><span>{EXID}</span></h3>
+                            </div>
+                    </text>))).Store(Html.X().Store()
+                    .AutoLoad(false)
+                    .Proxy(Html.X().AjaxProxy()
+                        .Url(Url.Action("GetAllocationNo"))
+                        .ActionMethods(am => am.Read = HttpMethod.POST)
+                        .Reader(Html.X().JsonReader().RootProperty("data")))
+                        .Model(X.Model().Fields("EXID"))
+                           )),
+                    X.Container().Layout(LayoutType.Form).Flex(1).Items(X.TextField().ID("EXWarehouse").FieldLabel("出库仓库").Editable(false)),
+                    X.Container().Layout(LayoutType.Form).Flex(1).Items(X.TextField().ID("IMWarehouse").FieldLabel("入库仓库").Editable(false)),
+                    X.Container().Layout(LayoutType.Form).Width(75).Items(X.Button().Icon(Icon.ShapeSquareSelect).Text("查询").DirectClickAction("FillDetailByAllotmentNo"))),
+                    X.Container().ColumnWidth(0.5).Layout(LayoutType.Form).Items(X.DateField().ID("EXDate").FieldLabel("出库日期")),
+                    X.Container().ColumnWidth(0.5).Layout(LayoutType.Form).Items(X.DateFieldFor(m => m.IMDate)),
+                    X.Container().ColumnWidth(1).Layout(LayoutType.Fit).Items(grid),
+                    X.Container().ColumnWidth(1).Layout(LayoutType.Fit).Items(check)
+
+                    )
+            .Buttons(
+            X.Button().Text("关闭").Handler("parent.App.win.close();"),
+            X.Button().Text("提交").FormBind(true).ID("Submit").DirectEvents(l =>
+            {
+                l.Click.Action = "SubmitApply";
+                l.Click.ExtraParams.Add(new Parameter() { Name = "store", Value = "getGrid(App.ApplyGrid)", Mode = ParameterMode.Raw });
+                l.Click.ExtraParams.Add(X.Parameter().Mode(ParameterMode.Value).Name("action").Value("allotment"));
+            })
+            );
+
+    }
+
+    @(X.Viewport().Layout(LayoutType.Border).AutoRender(true).Items(
+        content.Region(Region.Center).AutoScroll(true))
+    )
+
+}
+
+

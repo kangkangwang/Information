@@ -1,0 +1,35 @@
+﻿@model DeerInformation.Models.T_GM_CustomerInfo
+
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+
+     @(X.FormPanel().ID("FormPanel1").Listeners(l => l.ValidityChange.Handler = "#{add}.setDisabled(!valid);")
+       .Layout(LayoutType.Form).Items(
+            X.TextFieldFor(m => m.CustomerID).FieldLabel("客户ID").AllowBlank(false).EmptyText("此项为必须填写项"),
+            X.TextFieldFor(m => m.CustomerName).FieldLabel("客户名称").AllowBlank(false).EmptyText("此项为必须填写项"),
+            X.TextFieldFor(m=>m.CustomerAbbreviation).FieldLabel("客户简称").AllowBlank(false),
+            X.TextFieldFor(m=>m.SubsidiaryNumber).FieldLabel("子公司编号").AllowBlank(false),
+            X.TextFieldFor(m => m.Cooperation).FieldLabel("合作方向"),
+            X.TextFieldFor(m => m.Contact).FieldLabel("联系人"),
+            X.TextFieldFor(m=>m.Tel).FieldLabel("电话"),
+            X.TextFieldFor(m=>m.Fax).FieldLabel("传真"),
+            X.TextFieldFor(m=>m.Address).FieldLabel("地址"),
+            X.TextFieldFor(m => m.BankType).FieldLabel("开户行"),
+            X.TextFieldFor(m => m.BankAccount).FieldLabel("银行账户"),
+            X.TextFieldFor(m => m.TaxNo).FieldLabel("纳税识别号"),
+            X.TextFieldFor(m => m.Remark).FieldLabel("备注"))
+        .Buttons(
+                X.Button().Icon(Icon.ApplicationGet).ID("add").Text("确认").Disabled(true)
+                         .DirectEvents(de =>
+                            {
+                                de.Click.Url = Url.Action("CustomerAdd");
+                                de.Click.Success = "parent.App.window1.close()";
+                                de.Click.EventMask.ShowMask = true;
+                                de.Click.FormID = "FormPanel1";
+                            }))
+)
+}

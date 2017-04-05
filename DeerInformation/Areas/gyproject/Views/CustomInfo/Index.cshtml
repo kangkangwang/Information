@@ -1,0 +1,136 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+
+<script>
+
+    var onSuccess = function (grid, data) {
+        grid.show();
+        grid.getStore().loadData(data);
+    };
+
+    var deletecus = function (id) {
+        Ext.MessageBox.confirm("提示", "确认删除该项？", function (but) {
+            if (but == "yes") {
+                App.direct.gyproject.ClickDelete2(id);
+                App.direct.gyproject.CustomerInfoReload();
+            }
+        });
+    };
+</script>
+}
+
+@section content{
+       @(X.Viewport().AutoScroll(true).Layout(LayoutType.Auto).Items(
+       
+       X.Toolbar().Border(false).Frame(true).Layout(LayoutType.HBox).Items(
+       
+           X.TextField().ID("CustomerName").FieldLabel("客户名称"),
+  
+           X.Button().Icon(Icon.ApplicationGo).Text("查询").DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("SelectCustomer");
+                    de.Click.Success = "onSuccess(App.GridPanel1, result.data);";
+                    de.Click.ExtraParams.Add(new Parameter("CustomerName", "App.CustomerName.getValue()", ParameterMode.Raw));
+                    de.Click.EventMask.ShowMask = true;
+                }),
+                X.ToolbarFill().Flex(1),
+           X.Button().Icon(Icon.ApplicationAdd).Text("添加").DirectEvents(de =>
+                 {
+                     de.Click.Url = Url.Action("CustomerAddButton");
+                        de.Click.EventMask.ShowMask = true;
+                 })),
+                   
+        X.FormPanel().Items(
+                    X.GridPanel().ID("GridPanel1").Border(false)
+            .BottomBar(X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true)).Store(
+                    X.Store().ID("CustomerInfoSelect").DataSource(Model).PageSize(20).Model(
+                      X.Model().IDProperty("CustomerID").Fields(
+                         new ModelField("UID", ModelFieldType.String),
+                         new ModelField("CustomerName", ModelFieldType.String),
+                         new ModelField("Cooperation", ModelFieldType.String),
+                         new ModelField("CustomerID", ModelFieldType.String),
+                         new ModelField("CustomerAbbreviation", ModelFieldType.String),
+                         new ModelField("SubsidiaryNumber", ModelFieldType.String),
+                         new ModelField("Contact", ModelFieldType.String),
+                         new ModelField("Tel", ModelFieldType.String),
+                         new ModelField("Fax", ModelFieldType.String),
+                         new ModelField("Address", ModelFieldType.String),
+                         new ModelField("BankAccount", ModelFieldType.String),
+                         new ModelField("Remark", ModelFieldType.String)))    
+                .Reader(X.JsonReader().RootProperty("data"))     )
+         .ColumnModel(
+               X.Column().DataIndex("UID").Hidden(true), 
+               X.Column()
+                .Text("客户ID")
+                .Flex(1)
+                .DataIndex("CustomerID"),
+
+               X.Column()
+                .Text("客户名称")
+                .Flex(1)
+                .DataIndex("CustomerName"),
+                X.Column()
+                .Text("客户简称")
+                .Flex(1)
+                .DataIndex("CustomerAbbreviation"),
+
+               X.Column()
+                .Text("子公司编号")
+                .Flex(1)
+               .DataIndex("SubsidiaryNumber"),
+                X.Column()
+                .Text("合作方向")
+                .Flex(1)
+                .DataIndex("Cooperation"),
+
+               X.Column()
+                .Text("联系人")
+                .Flex(1)
+                .DataIndex("Contact"),
+                
+               X.Column()
+                .Text("电话")
+                .Flex(1)
+                .DataIndex("Tel"),
+                
+               X.Column()
+                .Text("传真")
+                .Flex(1)
+                .DataIndex("Fax"),
+                
+               X.Column()
+                .Text("地址")
+                .Flex(1)
+                .DataIndex("Address"),
+
+                X.Column()
+                .Text("银行账户")
+                .Flex(1)
+                .DataIndex("BankAccount"),
+                       
+                X.Column()
+                .Text("备注")
+                .Flex(1)
+                .DataIndex("Remark"),
+                
+                
+                X.CommandColumn().Flex(1).Commands(
+                        X.GridCommand().CommandName("update").Icon(Icon.CommentEdit).Text("修改"))
+                                .DirectEvents(de => {
+                                    //de.Command.Url = Url.Action("ClickEdit", "CustomInfo");
+                                    de.Command.Action = "ClickEdit";
+                                    de.Command.ExtraParams.Add(new Parameter("id", "record.data.UID", ParameterMode.Raw));
+                                }), 
+                                           
+                X.CommandColumn().Flex(1).Hidden(true).Commands(
+                         X.GridCommand().CommandName("delete").Icon(Icon.CommentDelete).Text("删除"))
+                         .Listeners(l =>l.Command.Handler = "deletecus(record.data.UID);")))    
+                     )           
+                )          
+}

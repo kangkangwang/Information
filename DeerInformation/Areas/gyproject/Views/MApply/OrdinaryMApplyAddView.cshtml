@@ -1,0 +1,97 @@
+﻿@model DeerInformation.Models.T_GM_ApplyMaterial
+
+@{
+    ViewBag.Title = "普通申请单";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+
+<script src="~/Scripts/base/share.js"></script>
+
+    <script>
+        var setValidValue = function () {
+            var store = Ext.getCmp('GridPanel2').store;
+            for (var i = 0; i < store.getCount() ; i++) {
+                var base = store.getAt(i).data.MinPurchase;
+                var value = store.getAt(i).data.Num2;
+                store.getAt(i).set("Num2", Math.ceil(value / base) * base);
+            }
+            store.commitChanges();
+        }
+    </script>
+}
+
+@section content{
+
+    @( X.Viewport().Layout(LayoutType.Auto).AutoScroll(true).Items(
+                X.FormPanel().ID("BasicForm").Listeners(l => l.ValidityChange.Handler = "#{add}.setDisabled(!valid);").Layout(LayoutType.HBox).Items(
+                       X.Container().Layout(LayoutType.Anchor).DefaultAnchor("100%").Flex(1).MarginSpec("3 5 0 5").Items(
+                           X.TextFieldFor(m => m.ApplyMaterialNo).Text("SQMO" + new Random().Next(10000).ToString() + DateTime.Now.ToString("ddHHmm")).FieldLabel("申请单号").ReadOnly(true).LabelWidth(60),
+                           X.FormPanel().Layout(LayoutType.HBox).Border(false).ID("fi").Listeners(l => l.ValidityChange.Handler = "#{get}.setDisabled(!valid);").Items(
+                               X.ComboBoxFor(m => m.ProjectNo).FieldLabel("项目编号").Flex(2).AllowBlank(false).ID("prono").Items(ViewBag.prono).LabelWidth(60),
+                               X.Button().Text("物料明细").Icon(Icon.Accept).ID("get").Disabled(true).Flex(1).DirectEvents(de => {
+                                   de.Click.Url = Url.Action("SeeMaterial","Share");
+                                   de.Click.ExtraParams.Add(new Parameter("prono", "App.prono.getValue()", ParameterMode.Raw));
+                                   de.Click.EventMask.ShowMask = true;
+                                   de.Click.Success = "App.get.setDisabled(true)";
+                                   de.Click.FormID = "fi";})),
+                           X.ComboBoxFor(m => m.CheckProcess).MarginSpec("5 0 0 0").FieldLabel("审核流程").Editable(false).AllowBlank(false).Items(ViewBag.audit).LabelWidth(60)),
+                       X.Container().Layout(LayoutType.Anchor).DefaultAnchor("100%").Flex(1).MarginSpec("3 5 0 5").Items(
+                           X.TextFieldFor(m => m.Tel).FieldLabel("申请人电话").AllowBlank(false).LabelWidth(70),
+                           X.DateFieldFor(m => m.PrepaidDay).FieldLabel("预交日期").LabelWidth(70),
+                           X.TextFieldFor(m => m.Remark).FieldLabel("申请备注").LabelWidth(70))),
+                X.Container().ID("projectm"),
+
+                X.FormPanel().Layout(LayoutType.Auto).Items(
+                    X.GridPanel().ID("GridPanel2").Title("已选物料").Store(
+                        X.Store().ID("DeployedMaterial").AutoLoad(false)
+                        .PageSize(10).Model(X.Model().IDProperty("MaterialID").Fields(
+                            new ModelField("Brand", ModelFieldType.String),
+                            new ModelField("MaterialID", ModelFieldType.String),
+                            new ModelField("MaterialName", ModelFieldType.String),
+                            new ModelField("Size", ModelFieldType.String),
+                            new ModelField("Unit", ModelFieldType.String),
+                            new ModelField("PurchaseCycle", ModelFieldType.String),
+                            new ModelField("MinPurchase", ModelFieldType.String),
+                            new ModelField("Price", ModelFieldType.String),
+                            new ModelField("Num2", ModelFieldType.String),
+                            new ModelField("Pri", ModelFieldType.String)))
+                            .Reader(X.JsonReader().RootProperty("data")))
+                            .ColumnModel(
+
+                        X.Column().Text("物料编号").Flex(3).DataIndex("MaterialID"),
+                        X.Column().Text("物料名称").Flex(4).DataIndex("MaterialName"),
+
+                        X.ComponentColumn().Editor(true).DataIndex("Num2").Text("申请数量").Flex(3)
+                        .Component(X.NumberField().AllowBlank(false).EmptyText("此项为必须填写项").Listeners(l=>l.FocusLeave.Fn="setValidValue")),
+
+                        X.Column().Text("品牌").Flex(3).DataIndex("Brand"),
+                        X.Column().Text("采购周期").Flex(3).DataIndex("PurchaseCycle"),
+                        X.Column().Text("最小采购量").Flex(3).DataIndex("MinPurchase"),
+                        X.Column().Text("型号").Flex(3).DataIndex("Size"),
+                        X.Column().Text("单位").Flex(3).DataIndex("Unit"),
+                        X.Column().DataIndex("Price").Text("预算价").Flex(3),
+
+                        X.CommandColumn().Text("取消选择").Flex(4).Commands(X.GridCommand().CommandName("selected").Icon(Icon.Delete).Text("取消"))
+                            .Listeners(l => l.Command.Handler = "App.DeployedMaterial.remove(record);")))
+                .Buttons(
+                            X.Button().Icon(Icon.ApplicationGet).ID("add").Text("确认").Disabled(true)
+                            .DirectEvents(de =>
+                            {
+                                de.Click.Url = Url.Action("OrdinaryMApplyAdd");
+                                de.Click.ExtraParams.Add(new Parameter("list", "App.DeployedMaterial.collect('MaterialID')", ParameterMode.Raw));
+                                de.Click.ExtraParams.Add(new Parameter("record", "getGridValueArr('DeployedMaterial','Num2')", ParameterMode.Raw));
+                                de.Click.ExtraParams.Add(new Parameter("pri", "getGridValueArr('DeployedMaterial','Price')", ParameterMode.Raw));
+                                de.Click.Success = "Judge('DeployedMaterial','Num2','Price');";
+                                de.Click.EventMask.ShowMask = true;
+                                de.Click.FormID = "BasicForm";
+                                de.Click.IsUpload = true;
+                            }),
+                            X.Button().Icon(Icon.Cancel).ID("cancel").Text("取消")
+                                .Listeners(l => l.Click.Handler = "parent.App.win.close()"))
+
+
+    ))
+}

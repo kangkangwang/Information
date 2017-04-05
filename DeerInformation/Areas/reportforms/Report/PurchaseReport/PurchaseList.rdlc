@@ -1,0 +1,3006 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:cl="http://schemas.microsoft.com/sqlserver/reporting/2010/01/componentdefinition" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/reportdefinition">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="PurchaseExcel">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>6cee7988-a6cd-4170-8b9e-91570c2f5a4e</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="PurchaseM">
+      <Query>
+        <DataSourceName>PurchaseExcel</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="NO">
+          <DataField>NO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Num">
+          <DataField>Num</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="Price">
+          <DataField>Price</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="MaterialName">
+          <DataField>MaterialName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Size">
+          <DataField>Size</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Unit">
+          <DataField>Unit</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="MaterialID">
+          <DataField>MaterialID</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="IsEnableNo">
+          <DataField>IsEnableNo</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Type">
+          <DataField>Type</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Remark">
+          <DataField>Remark</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="UID">
+          <DataField>UID</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="morfa">
+          <DataField>morfa</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Brand">
+          <DataField>Brand</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PicturePath">
+          <DataField>PicturePath</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="IsEnable">
+          <DataField>IsEnable</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>PurchaseExcel</rd:DataSetName>
+        <rd:SchemaPath>C:\latelycode\DeerInformation\DeerInformation\PurchaseExcel.xsd</rd:SchemaPath>
+        <rd:TableName>V_GM_DM</rd:TableName>
+        <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
+        <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
+        <rd:TableAdapterName>V_GM_DMTableAdapter</rd:TableAdapterName>
+      </rd:DataSetInfo>
+    </DataSet>
+  </DataSets>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <ReportItems>
+          <Textbox Name="Textbox41">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>采购订单</Value>
+                    <Style>
+                      <FontFamily>楷体</FontFamily>
+                      <FontSize>16pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox41</rd:DefaultName>
+            <Top>5.074cm</Top>
+            <Left>9.88564cm</Left>
+            <Height>0.97042cm</Height>
+            <Width>12.43354cm</Width>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Image Name="Logo">
+            <Source>Embedded</Source>
+            <Value>deerlogo</Value>
+            <Sizing>FitProportional</Sizing>
+            <Top>2.35541cm</Top>
+            <Left>1.10807cm</Left>
+            <Height>1.86662cm</Height>
+            <Width>1.87042cm</Width>
+            <ZIndex>1</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Image>
+          <Textbox Name="Textbox4">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>广东德尔智慧工厂科技有限公司</Value>
+                    <Style>
+                      <FontFamily>宋体</FontFamily>
+                      <FontSize>18pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox4</rd:DefaultName>
+            <Top>2.6162cm</Top>
+            <Left>5.11951cm</Left>
+            <Height>1.15604cm</Height>
+            <Width>16.44354cm</Width>
+            <ZIndex>2</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Tablix Name="Tablix4">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>8.5346cm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>0.92225cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox29">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>东莞市东城区牛山外经工业园伟兴路9号</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                    <FontSize>12pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox29</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.92225cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox40">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>电话：   0769-38850688</Value>
+                                  <Style>
+                                    <FontSize>12pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox40</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.92225cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox30">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>传真：   0769-38850688</Value>
+                                  <Style>
+                                    <FontSize>12pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox30</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <KeepWithGroup>After</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
+                  <KeepWithGroup>After</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
+                  <Group Name="详细信息1" />
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <Top>1.98499cm</Top>
+            <Left>24.42515cm</Left>
+            <Height>2.76675cm</Height>
+            <Width>8.5346cm</Width>
+            <ZIndex>3</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Tablix>
+          <Tablix Name="Tablix2">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>3.64102cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>3.64102cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>3.64102cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.5cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>3.42935cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>3.42935cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>3.42935cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.5cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>4.32893cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>3.08224cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.5cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.5cm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>2.36213cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox34">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>供应商:</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Parameters!Supplier.Value</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox33</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>4</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Tablix Name="Tablix1">
+                          <TablixBody>
+                            <TablixColumns>
+                              <TablixColumn>
+                                <Width>10.28805cm</Width>
+                              </TablixColumn>
+                            </TablixColumns>
+                            <TablixRows>
+                              <TablixRow>
+                                <Height>1.18106cm</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox81">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>订购日期：</Value>
+                                                <Style>
+                                                  <FontFamily>宋体</FontFamily>
+                                                </Style>
+                                              </TextRun>
+                                              <TextRun>
+                                                <Value>=Parameters!ApplyTime.Value</Value>
+                                                <Style>
+                                                  <FontFamily>宋体</FontFamily>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox81</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Color>LightGrey</Color>
+                                            <Style>Solid</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                </TablixCells>
+                              </TablixRow>
+                              <TablixRow>
+                                <Height>1.18106cm</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox63">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>结算方式：</Value>
+                                                <Style>
+                                                  <FontFamily>宋体</FontFamily>
+                                                </Style>
+                                              </TextRun>
+                                              <TextRun>
+                                                <Value>=Parameters!PayWay.Value</Value>
+                                                <Style>
+                                                  <FontFamily>宋体</FontFamily>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox63</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Color>LightGrey</Color>
+                                            <Style>Solid</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                </TablixCells>
+                              </TablixRow>
+                            </TablixRows>
+                          </TablixBody>
+                          <TablixColumnHierarchy>
+                            <TablixMembers>
+                              <TablixMember />
+                            </TablixMembers>
+                          </TablixColumnHierarchy>
+                          <TablixRowHierarchy>
+                            <TablixMembers>
+                              <TablixMember />
+                              <TablixMember />
+                            </TablixMembers>
+                          </TablixRowHierarchy>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Tablix>
+                        <ColSpan>3</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox1">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>采购订单编号：</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Parameters!OrderNO.Value</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox1</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>5</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>2.54734cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox26">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>地  址：</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Parameters!SupplierAddress.Value</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox25</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>4</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Tablix Name="Tablix3">
+                          <TablixBody>
+                            <TablixColumns>
+                              <TablixColumn>
+                                <Width>25.19922cm</Width>
+                              </TablixColumn>
+                            </TablixColumns>
+                            <TablixRows>
+                              <TablixRow>
+                                <Height>0.84911cm</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox57">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>送货方式：</Value>
+                                                <Style>
+                                                  <FontFamily>宋体</FontFamily>
+                                                </Style>
+                                              </TextRun>
+                                              <TextRun>
+                                                <Value>=Parameters!DeliverWay.Value</Value>
+                                                <Style>
+                                                  <FontFamily>宋体</FontFamily>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox57</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                </TablixCells>
+                              </TablixRow>
+                              <TablixRow>
+                                <Height>0.84911cm</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox56">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>项目名称：</Value>
+                                                <Style>
+                                                  <FontFamily>宋体</FontFamily>
+                                                </Style>
+                                              </TextRun>
+                                              <TextRun>
+                                                <Value>=Parameters!ProjectName.Value</Value>
+                                                <Style>
+                                                  <FontFamily>宋体</FontFamily>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox56</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                </TablixCells>
+                              </TablixRow>
+                              <TablixRow>
+                                <Height>0.84911cm</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox55">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>送货地址：</Value>
+                                                <Style>
+                                                  <FontFamily>宋体</FontFamily>
+                                                </Style>
+                                              </TextRun>
+                                              <TextRun>
+                                                <Value>=Parameters!FieldName.Value</Value>
+                                                <Style>
+                                                  <FontFamily>宋体</FontFamily>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox55</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                </TablixCells>
+                              </TablixRow>
+                            </TablixRows>
+                          </TablixBody>
+                          <TablixColumnHierarchy>
+                            <TablixMembers>
+                              <TablixMember />
+                            </TablixMembers>
+                          </TablixColumnHierarchy>
+                          <TablixRowHierarchy>
+                            <TablixMembers>
+                              <TablixMember />
+                              <TablixMember />
+                              <TablixMember />
+                            </TablixMembers>
+                          </TablixRowHierarchy>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Tablix>
+                        <ColSpan>8</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.95984cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox18">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>联系人:</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Parameters!SupplierContacts.Value</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox17</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox2">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>电  话：</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Parameters!Tel.Value</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox2</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox36">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>收货联系人：</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Parameters!Name.Value</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox32</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>3</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox3">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox3</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>5</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6291cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox6">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>序号</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox1</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox8">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>物料编号</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox3</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox12">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>物料名称  </Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox5</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox117">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>品牌</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox117</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox14">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>规格型号  </Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox7</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox16">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>数量</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox15</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox19">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>单位 </Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox13</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox5">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>单价（未税）</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox5</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox22">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>单价（含税）</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox11</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox37">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>总金额（含税）</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox9</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox70">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>交货日期 </Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox70</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox75">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>备注 </Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox75</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>1.3964cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox38">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=RowNumber("PurchaseM")</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox2</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="MaterialName2">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!MaterialID.Value</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>MaterialName</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Size2">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!MaterialName.Value</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Size</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Brand">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Brand.Value</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Brand</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Brand2">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Size.Value</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Brand</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Num1">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Num.Value</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Num1</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Num2">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Unit.Value</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Num</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox7">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox7</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Price2">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Price.Value</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Price</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox43">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Price.Value*Fields!Num.Value</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox10</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox71">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Parameters!PrepaidDay.Value</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                    <Format>yyyy/M/d</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox71</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox76">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox76</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.86459cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox60">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox60</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox120">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>税率：</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox120</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox124">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Parameters!Tax.Value</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                    <Format>0.00%</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox124</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox122">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>合计 ：人民币 （大写）</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox122</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox64">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Parameters!SumAmountChinese.Value</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox64</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>4</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox67">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Parameters!SumAmount.Value</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox67</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox68">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox68</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox85">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>条款:</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox85</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox86">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>1.请按我司要求开具相应税率的发票。                </Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox86</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>11</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox125">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox125</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox126">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>2.贵司送货时出示的送货单必须正确无误地填写我司的订单号码、项目编号、规格、数量。            </Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox126</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>11</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox115">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox115</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox116">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>3.送货时必须对每一款产品与采购订单名称，规格及数量相对应。                         </Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox116</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>11</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox105">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox105</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox106">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>4.请严格按质按量按时交货,若因贵司质量、数量、交货时间等非不可抗力原因影响我司的，我司有权追究责任；给我司造成损失的，我司有权向贵司进行索赔。</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox106</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>11</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox95">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox95</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox96">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>5.货物送至我司后，经我司检验合格且得到我司采购通知后，方可向我司出具当月发票。          </Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox96</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>11</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox135">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox135</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox136">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>6.凡是经检验不合格的产品应在2个工作日内补回，如未能及时补回给我司照成损失，我司有全向贵司要求索赔。如有特殊情况，应及时和采购沟通，并在协商日期内补回。</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox136</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>11</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>1.81708cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox127">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>采购员：</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Parameters!PurchaseStaff.Value</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox127</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox129">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>核准：</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox129</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>3</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox132">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>审批：</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox132</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox9">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox9</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox134">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>供应商签名盖章：</Value>
+                                  <Style>
+                                    <FontFamily>宋体</FontFamily>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox134</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>4</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <KeepWithGroup>After</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
+                  <KeepWithGroup>After</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
+                  <KeepWithGroup>After</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
+                  <KeepWithGroup>After</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
+                  <Group Name="详细信息2" />
+                  <TablixMembers>
+                    <TablixMember />
+                  </TablixMembers>
+                </TablixMember>
+                <TablixMember>
+                  <KeepWithGroup>Before</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
+                  <KeepWithGroup>Before</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
+                  <KeepWithGroup>Before</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
+                  <KeepWithGroup>Before</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
+                  <KeepWithGroup>Before</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
+                  <KeepWithGroup>Before</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
+                  <KeepWithGroup>Before</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
+                  <KeepWithGroup>Before</KeepWithGroup>
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>PurchaseM</DataSetName>
+            <Top>6.89815cm</Top>
+            <Left>1.10807cm</Left>
+            <Height>14.17648cm</Height>
+            <Width>38.62228cm</Width>
+            <ZIndex>4</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Tablix>
+          <Image Name="Image2">
+            <Source>Embedded</Source>
+            <Value>德尔1</Value>
+            <Sizing>FitProportional</Sizing>
+            <Top>19.83963cm</Top>
+            <Left>9.88564cm</Left>
+            <Height>4.49074cm</Height>
+            <Width>4.70146cm</Width>
+            <ZIndex>5</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Image>
+        </ReportItems>
+        <Height>10.02938in</Height>
+        <Style />
+      </Body>
+      <Width>15.88573in</Width>
+      <Page>
+        <PageHeight>29.7cm</PageHeight>
+        <PageWidth>21.59cm</PageWidth>
+        <LeftMargin>2cm</LeftMargin>
+        <RightMargin>2cm</RightMargin>
+        <TopMargin>2cm</TopMargin>
+        <BottomMargin>2cm</BottomMargin>
+        <ColumnSpacing>0.13cm</ColumnSpacing>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="ProjectName">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ProjectNO">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="OrderNO">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Supplier">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Tel">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="PrepaidDay">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Name">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="FieldName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ApplyTime">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="SupplierAddress">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="SupplierContacts">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Tax">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="SumAmount">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="SumAmountChinese">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ReceiveTel">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="DeliverWay">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="PayWay">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="PurchaseStaff">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <EmbeddedImages>
+    <EmbeddedImage Name="deerlogo">
+      <MIMEType>image/png</MIMEType>
+      <ImageData>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</ImageData>
+    </EmbeddedImage>
+    <EmbeddedImage Name="德尔1">
+      <MIMEType>image/jpeg</MIMEType>
+      <ImageData>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</ImageData>
+    </EmbeddedImage>
+  </EmbeddedImages>
+  <rd:ReportUnitType>Cm</rd:ReportUnitType>
+  <rd:ReportID>3d13a892-0683-4627-a342-f86c69b6bea8</rd:ReportID>
+</Report>

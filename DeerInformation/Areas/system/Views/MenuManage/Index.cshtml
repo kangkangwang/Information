@@ -1,0 +1,93 @@
+﻿@model Node
+
+@{
+    ViewBag.Title = "框架菜单";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+    <script>
+        var refreshTree = function (tree) {
+            App.direct.RefreshMenu({
+                success: function (node) {
+                    if (!Ext.isEmpty(node)) {
+                        tree.setRootNode(node);
+                    }
+                    else {
+                        tree.getRootNode().removeAll();
+                    }
+                }
+            });
+        };
+        
+    </script>
+}
+
+@section content
+{
+    @(
+ X.Viewport().Frame(true)
+    .Layout(LayoutType.Border)
+    .Items(
+    X.TreePanel()
+    .Frame(true)
+    .ForceFit(true)
+    .RootVisible(true)
+    .Region(Region.Center)
+    .SelectionModel(X.CheckboxSelectionModel().Mode(SelectionMode.Single))
+    .ColumnLines(true)
+    .RowLines(true)
+    .ID("treegrid")
+    .TopBarItem(
+        X.Toolbar()
+        .Flex(1)
+        .Shadow(true)
+        .Layout(LayoutType.HBox)
+        .Defaults(X.Parameter().Name("margin").Value("0 5 0 0").Mode(ParameterMode.Value))
+        .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Middle, Pack = BoxPack.End })
+        .Items(
+                X.Button().Icon(Icon.Add).Text("添加").Listeners(l =>
+                {
+                    l.Click.Handler = "#{DirectMethods}.AddButton( this.up('treepanel').getSelectionModel().getSelection()[0].data.ID)";
+                }),
+                X.Button().Icon(Icon.DatabaseEdit).Text("修改").Listeners(l =>
+                {
+                    l.Click.Handler = "#{DirectMethods}.DetailButton( this.up('treepanel').getSelectionModel().getSelection()[0].data.ID)";
+                }),
+                X.Button().Icon(Icon.Delete).Text("删除").Listeners(l => {
+                    l.Click.Handler = "#{DirectMethods}.DeteleButton( this.up('treepanel').getSelectionModel().getSelection()[0].data.ID)";
+                }
+            )
+        )
+    )
+    .Root(Model)
+    .Fields(
+    new ModelField("id"),
+    new ModelField("ID"),
+    new ModelField("TextEN"),
+    new ModelField("TextCN"),
+    new ModelField("URL"),
+    new ModelField("ImageURL"),
+    new ModelField("Visible"),
+    new ModelField("Creator"),
+    new ModelField("CreateTime")
+    )
+    .ColumnModel(
+        new TreeColumn() { Text = "Text", DataIndex = "text", Width = 200, Flex = 1 },
+            new Column() { Text = "TextEN", DataIndex = "TextEN", Flex = 1 },
+            new Column() { Text = "TextCN", DataIndex = "TextCN", Flex = 1 },
+            new Column() { Text = "URL", DataIndex = "URL", Flex = 1 },
+            new Column() { Text = "ImageURL", DataIndex = "ImageURL", Flex = 1 },
+            new Column() { Text = "Visible", DataIndex = "Visible", Flex = 1 },
+            new Column() { Text = "Creator", DataIndex = "Creator", Flex = 1 },
+            new Column() { Text = "CreateTime", DataIndex = "CreateTime", Flex = 1 }
+    )
+
+    )
+)
+
+
+
+}

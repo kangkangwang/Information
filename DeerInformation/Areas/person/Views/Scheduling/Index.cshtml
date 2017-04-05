@@ -1,0 +1,351 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var deletejs1 = function (grid) {
+        var store = grid.store,
+     records = grid.selModel.getSelection();
+        if (records != "") {
+            Ext.MessageBox.confirm("提示", "确认删除该项？", function (but) {
+                if (but == "yes") {
+                    exportData1(grid, true);
+                    //store.remove(records);
+                    //store.load(true);
+                }
+            });
+        }
+        else {
+            Ext.Msg.alert("提示", "未选择任何列！");
+        }
+    };
+    function exportData1(grid, selectedOnly) {
+        grid.submitData(
+            //serialization config
+            {
+                selectedOnly: selectedOnly
+            },
+
+            //request config
+            {
+                isUpload: true,
+                url: '@Url.Action("JSDeleteSch")'
+            }
+       );
+    }
+
+    var deletejs2 = function (grid) {
+        var store = grid.store,
+     records = grid.selModel.getSelection();
+        if (records != "") {
+            Ext.MessageBox.confirm("提示", "确认删除该项？", function (but) {
+                if (but == "yes") {
+                    exportData2(grid, true);
+                    //store.remove(records);
+                    //store.load(true);
+                }
+            });
+        }
+        else {
+            Ext.Msg.alert("提示", "未选择任何列！");
+        }
+    };
+    function exportData2(grid, selectedOnly) {
+        grid.submitData(
+            //serialization config
+            {
+                selectedOnly: selectedOnly
+            },
+
+            //request config
+            {
+                isUpload: true,
+                url: '@Url.Action("JSDeleteSchList")'
+            }
+       );
+    }
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Scheduling</title>
+</head>
+
+<body>
+    <div>
+        @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+
+        @(X.Viewport().ID("BackViewPort")
+        .Layout(LayoutType.Border)
+        .Items(
+      X.Panel().AutoScroll(true).Region(Region.Center).Layout(LayoutType.Border).Title("排班").Items(
+       X.FormPanel().Layout(LayoutType.Column).Region(Region.North).Items(
+                   X.TextField().ID("Month")
+                   .FieldLabel("排班月份").Regex(@"^\d{6}$").EmptyText("例：201609"),
+                   //X.DateField().FieldLabel("qwe").Format("Y-m"),
+           X.Button().Text("查询").DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("Getalldata");
+                    //de.Click.Success = "onSuccess(App.SchedulingGridPanal, result.data);";
+                    de.Click.ExtraParams.Add(new Parameter("starttime", "App.Month.getValue()", ParameterMode.Raw));
+                    de.Click.EventMask.ShowMask = true;
+                })
+       ),
+       X.Panel().Region(Region.Center).Layout(LayoutType.HBox).Defaults(X.Parameter().Name("margin").Value("0 0 0 0").Mode(ParameterMode.Value))
+            .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Stretch  }).Items(
+         X.Panel().Layout(LayoutType.Border).Title("休息日").Flex(1).Items(
+                         X.FormPanel().Layout(LayoutType.HBox)
+                         .Defaults(X.Parameter().Name("margin").Value("0 5 0 0").Mode(ParameterMode.Value))
+                         .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Middle, Pack = BoxPack.End })
+                         .Region(Region.North).Items(
+                                 X.Button().Text("添加")
+                                    .DirectEvents(de =>
+                                      {
+                                          de.Click.Url = Url.Action("Add");
+                                          de.Click.ExtraParams.Add(new Parameter("type", "1", ParameterMode.Raw));
+                                      }),
+                                    X.Button().Text("删除").Listeners(l =>
+                                {
+                                    l.Click.Handler = "deletejs1(App.SchedulingGridPanal);";
+                                })
+                         ),
+                         X.GridPanel().ID("SchedulingGridPanal").AutoScroll(true).ColumnLines(true).Region(Region.Center)
+                                                      .Store(
+                                                         X.Store().ID("SchedulingStore").PageSize(20)
+                                                                  .AutoLoad(false)
+                                                                  //.DataSource(Model)
+                                                           .Model(
+                                                                     X.Model().IDProperty("ID").Fields("ID","StartTime", "HolidayType1", "EndTime","HolidayType2"
+                              , "Remark", "CreaterName", "CreateTime","EditorName","EditeTime")
+                                                                  )
+                                                          .Reader(
+                                                                      X.JsonReader().RootProperty("data")
+                                                                      )
+                                                  )
+                                                      .SelectionModel(
+                                                                  X.CheckboxSelectionModel().Mode(SelectionMode.Multi)
+                                                       )
+                                                        .ViewConfig(X.GridView().TrackOver(false))
+                                                                .BottomBar(
+                                                        Html.X().PagingToolbar().HideRefresh(true)
+                                                    )
+                                                .ColumnModel(
+                                                        X.Column()
+                                                        .Text("ID")
+                                                        .Width(80)
+                                                        .DataIndex("ID").Hidden(true),
+
+                                                        X.Column()
+                                                       .Text("开始日期")
+                                                       .Width(155)
+                                                       .Renderer(RendererFormat.Date, new string[] { "'Y-m-d'" })
+                                                       .DataIndex("StartTime"),
+                                                       
+                                                       X.Column()
+                                                       .Text("开始时间")
+                                                       .Width(155)
+                                                       .DataIndex("HolidayType1").Hidden(true),
+
+                                                       X.Column()
+                                                       .Text("结束日期")
+                                                       .Width(155)
+                                                       .Renderer(RendererFormat.Date, new string[] { "'Y-m-d'" })
+                                                       .DataIndex("EndTime"),
+
+                                                       X.Column()
+                                                       .Text("结束时间")
+                                                       .Width(155)
+                                                       .DataIndex("HolidayType2").Hidden(true),                            
+
+                                                      X.Column()
+                                                      .Text("备注")
+                                                      .Width(155)
+                                                      .DataIndex("Remark"),
+
+                                                      X.Column()
+                                      .Text("创建人")
+                                      .Width(80)
+                                      .DataIndex("CreaterName"),
+                                      
+                                      X.DateColumn()
+                                       .Text("创建时间")
+                                       .Width(80)
+                                       .Format("yyyy-MM-dd HH:mm:ss")
+                                       .DataIndex("CreateTime"),
+
+                                      X.Column()
+                                      .Text("修改人")
+                                      .Width(80)
+                                      .DataIndex("EditorName"),
+                                      
+                                      X.DateColumn()
+                                       .Text("修改时间")
+                                       .Width(80)
+                                       .Format("yyyy-MM-dd HH:mm:ss")
+                                       .DataIndex("EditeTime"),
+
+                                                      X.CommandColumn()
+                                                      .Width(80)
+                                                      .Commands(
+                                                                 Html.X().GridCommand()
+                                                                .CommandName("update")
+                                                                .Icon(Icon.UserEdit)
+                                                                .Text("修改")
+                                                            )
+                                                           .DirectEvents(de =>
+                                                           {
+                                                               de.Command.Url = Url.Action("Update");
+                                                               de.Command.ExtraParams.Add(new Parameter("id", "record.data.ID", ParameterMode.Raw));
+                                                               de.Command.ExtraParams.Add(new Parameter("type", "1", ParameterMode.Raw));
+                                                           })
+
+                                                )//
+         ),
+         X.Component().Width(5),
+         X.Panel().Layout(LayoutType.Border).Title("上班时间").Flex(1).Items(
+                         X.FormPanel().Layout(LayoutType.HBox)
+                         .Defaults(X.Parameter().Name("margin").Value("0 5 0 0").Mode(ParameterMode.Value))
+                         .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Middle, Pack = BoxPack.End })
+                         .Region(Region.North).Items(
+                                 X.Button().Text("添加")
+                                    .DirectEvents(de =>
+                                      {
+                                          de.Click.Url = Url.Action("Add");
+                                          de.Click.ExtraParams.Add(new Parameter("type", "2", ParameterMode.Raw));
+                                      }),
+                                      X.Button().Text("添加员工")
+                                    .DirectEvents(de =>
+                                      {
+                                          de.Click.Url = Url.Action("AddSchStaff");
+                                          de.Click.ExtraParams.Add(new Parameter("id", "App.WorkTimeGridPanal.getSelectionModel().getSelection()[0].data.ID", ParameterMode.Raw));
+                                      }),
+                                    X.Button().Text("删除").Listeners(l =>
+                                {
+                                    l.Click.Handler = "deletejs2(App.WorkTimeGridPanal);";
+                                })
+                         ),
+                         X.GridPanel().ID("WorkTimeGridPanal").AutoScroll(true).ColumnLines(true).Region(Region.Center)
+                                                              .Store(
+                                                                 X.Store().ID("WorkTimeStore").PageSize(20)
+                                                                          .AutoLoad(false)
+                                                                          //.DataSource(Model)
+                                                                   .Model(
+                                                                             X.Model().IDProperty("ID").Fields("ID","Name", "AMTime", "AMValidGoTime","AMValidOffTime"
+                              , "PMTime", "PMValidGoTime","PMValidOffTime","Two","Four", "CreaterName", "CreateTime","EditorName","EditeTime")
+                                                                          )
+                                                                  .Reader(
+                                                                              X.JsonReader().RootProperty("data")
+                                                                              )
+
+                                                          )
+                                                              .SelectionModel(
+                                                                          X.CheckboxSelectionModel().Mode(SelectionMode.Multi)
+                                                               )
+                                                                .ViewConfig(X.GridView().TrackOver(false))
+                                                                        .BottomBar(
+                                                        Html.X().PagingToolbar().HideRefresh(true)
+                                                    )
+                                                        .ColumnModel(
+                                                                X.Column()
+                                                                .Text("ID")
+                                                                .Width(80)
+                                                                .DataIndex("ID").Hidden(true),
+
+                                                                X.Column()
+                                                               .Text("系列名称")
+                                                               .Width(155)
+                                                               .DataIndex("Name"),
+
+                                                               X.Column()
+                                                               .Text("上午上下班时间")
+                                                               .Width(155)
+                                                               .DataIndex("AMTime"),
+                                                               
+                                                               X.Column()
+                                                               .Text("上午上班有效打卡时间")
+                                                               .Width(155)
+                                                               .DataIndex("AMValidGoTime"),
+                                                               
+                                                               X.Column()
+                                                               .Text("上午下班有效打卡时间")
+                                                               .Width(155)
+                                                               .DataIndex("AMValidOffTime"),
+
+                                                               X.Column()
+                                                               .Text("下午上下班时间")
+                                                               .Width(155)
+                                                               .DataIndex("PMTime"),
+                                                               
+                                                               X.Column()
+                                                               .Text("下午上班有效打卡时间")
+                                                               .Width(155)
+                                                               .DataIndex("PMValidGoTime"),
+
+                                                               X.Column()
+                                                               .Text("下午下班有效打卡时间")
+                                                               .Width(155)
+                                                               .DataIndex("PMValidOffTime"),           
+                                                               
+                                                               X.CheckColumn()
+                                                               .Text("2次卡")
+                                                               .Width(155)
+                                                                .DataIndex("Two"),                                                   
+
+                                                                 X.CheckColumn()
+                                                               .Text("4次卡")
+                                                               .Width(155)
+                                                                .DataIndex("Four"),
+
+                                                                      X.Column()
+                                              .Text("创建人")
+                                              .Width(80)
+                                              .DataIndex("CreaterName"),
+
+                                              X.DateColumn()
+                                               .Text("创建时间")
+                                               .Width(80)
+                                               .Format("yyyy-MM-dd HH:mm:ss")
+                                               .DataIndex("CreateTime"),
+
+                                              X.Column()
+                                              .Text("修改人")
+                                              .Width(80)
+                                              .DataIndex("EditorName"),
+
+                                              X.DateColumn()
+                                               .Text("修改时间")
+                                               .Width(80)
+                                               .Format("yyyy-MM-dd HH:mm:ss")
+                                               .DataIndex("EditeTime"),
+
+                                                              X.CommandColumn()
+                                                              .Width(80)
+                                                              .Commands(
+                                                                         Html.X().GridCommand()
+                                                                        .CommandName("update")
+                                                                        .Icon(Icon.UserEdit)
+                                                                        .Text("修改")
+                                                                    )
+                                                                   .DirectEvents(de =>
+                                                                   {
+                                                                       de.Command.Url = Url.Action("Update");
+                                                                       de.Command.ExtraParams.Add(new Parameter("id", "record.data.ID", ParameterMode.Raw));
+                                                                       de.Command.ExtraParams.Add(new Parameter("type", "2", ParameterMode.Raw));
+                                                                   })
+
+                                                        )//
+         )
+                       )
+         )
+        )
+        )
+
+
+    </div>
+</body>
+</html>

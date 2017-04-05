@@ -1,0 +1,141 @@
+﻿@model DeerInformation.Areas.person.Models.Department
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var closewindow = function () {
+        parent.App.windowDepartment.close()
+    };
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddDepartment</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                   X.FieldSet().ID("BaseList").Title("上级部门").Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                   X.Panel().Layout(LayoutType.HBox).Items(
+                   X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                           X.ComboBoxFor(m => m.ID1).ID("ID1").FieldLabel("公司").AllowBlank(true).Editable(false)
+                           .DisplayField("name")
+                           .ValueField("id")
+                           .EmptyText("请选择...")
+                           .Store(X.Store()
+                           .AutoLoad(true)
+                           .Model(X.Model()
+                           .IDProperty("Id")
+                           .Fields(
+                              new ModelField("id", ModelFieldType.String) { Mapping = "ID1" },
+                              new ModelField("name", ModelFieldType.String) { Mapping = "Department1Name" }
+                           )
+                           )
+                           .Proxy(X.AjaxProxy().Url(Url.Action("GetID1")).Reader(X.JsonReader().RootProperty("data")))
+                           )
+                          .Listeners(l => l.Select.Handler = "App.ID2.clearValue();App.ID2.getStore().load();App.ID3.clearValue();App.ID4.clearValue();"),
+                          X.ComboBoxFor(m => m.ID3).ID("ID3").FieldLabel("部门").AllowBlank(true).Editable(false)
+                           .DisplayField("name")
+                           .ValueField("id")
+                           .EmptyText("请选择...")
+                           .Store(X.Store().ID("ID3Store")
+                           .AutoLoad(true)
+                           .Model(X.Model()
+                           .IDProperty("Id")
+                           .Fields(
+                              new ModelField("id", ModelFieldType.String) { Mapping = "ID3" },
+                              new ModelField("name", ModelFieldType.String) { Mapping = "Department3Name" }
+                           )
+                           )
+                           .Proxy(X.AjaxProxy().Url(Url.Action("GetID3")).Reader(X.JsonReader().RootProperty("data")))
+                           .Parameters(ps => ps.Add(new StoreParameter("id2", "App.ID2.getValue()", ParameterMode.Raw)))
+            //.Listeners(ls => ls.Load.Handler = "setDutyName()")
+                           )
+                          .Listeners(l => l.Select.Handler = "App.ID4.clearValue();App.ID4.getStore().load();")
+            //.Listeners(l => l.Select.Handler = "App.ID5.clearValue();App.ID5.getStore().load();"),
+                           
+                   ),
+                   X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                           X.ComboBoxFor(m => m.ID2).ID("ID2").FieldLabel("中心").AllowBlank(true).Editable(false)
+                           .DisplayField("name")
+                           .ValueField("id")
+                           .EmptyText("请选择...")
+                           .Store(X.Store().ID("ID2Store")
+                           .AutoLoad(true)
+                           .Model(X.Model()
+                           .IDProperty("Id")
+                           .Fields(
+                              new ModelField("id", ModelFieldType.String) { Mapping = "ID2" },
+                              new ModelField("name", ModelFieldType.String) { Mapping = "Department2Name" }
+                           )
+                           )
+                           .Proxy(X.AjaxProxy().Url(Url.Action("GetID2")).Reader(X.JsonReader().RootProperty("data")))
+                           .Parameters(ps => ps.Add(new StoreParameter("id1", "App.ID1.getValue()", ParameterMode.Raw)))
+            //.Listeners(ls => ls.Load.Handler = "setDutyName()")
+                           )
+                          .Listeners(l => l.Select.Handler = "App.ID3.clearValue();App.ID3.getStore().load();App.ID4.clearValue();"),
+                          X.ComboBoxFor(m => m.ID4).ID("ID4").FieldLabel("组").AllowBlank(true).Editable(false)
+                           .DisplayField("name")
+                           .ValueField("id")
+                           .EmptyText("请选择...")
+                           .Store(X.Store().ID("ID4Store")
+                           .AutoLoad(true)
+                           .Model(X.Model()
+                           .IDProperty("Id")
+                           .Fields(
+                              new ModelField("id", ModelFieldType.String) { Mapping = "ID4" },
+                              new ModelField("name", ModelFieldType.String) { Mapping = "Department4Name" }
+                           )
+                           )
+                           .Proxy(X.AjaxProxy().Url(Url.Action("GetID4")).Reader(X.JsonReader().RootProperty("data")))
+                           .Parameters(ps => ps.Add(new StoreParameter("id3", "App.ID3.getValue()", ParameterMode.Raw)))
+            //.Listeners(ls => ls.Load.Handler = "setDutyName()")
+                           )
+                   )
+                   )
+       ),
+
+               X.FieldSet().ID("JobList").Title("部门信息").Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+               X.Panel().ID("JobPanel").Layout(LayoutType.HBox).Items(
+                           X.Panel().ID("JobPanel1").Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                            X.TextFieldFor(m => m.ID).FieldLabel("ID").Hidden(true),
+                                            X.TextFieldFor(m => m.PreID).FieldLabel("ID").Hidden(true),
+                                            X.TextFieldFor(m => m.No).FieldLabel("部门编号"),
+                                            X.NumberFieldFor(m=>m.DOrder).FieldLabel("序号").MaxValue(9999).MinValue(0).Value(1).AllowBlank(false).Editable(false),
+                                            X.HiddenFor(m => m.Level),
+                                            X.HiddenFor(m => m.CreaterName),
+                           X.HiddenFor(m => m.CreateTime),
+                           X.HiddenFor(m => m.EditorName),
+                           X.HiddenFor(m => m.EditeTime)
+                           ),
+                           X.Panel().ID("JobPanel2").Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                        X.TextFieldFor(m => m.Name).FieldLabel("部门名称").AllowBlank(false)
+                           )
+                           )
+               )
+
+       ),
+        X.Button().Text("保存").Icon(Icon.Accept).ID("save").FormBind(true).Disable(true)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("AddOrEditDepartment");
+                        de.Click.EventMask.ShowMask = true;
+                    })
+    )
+</body>
+
+</html>
+
+
+

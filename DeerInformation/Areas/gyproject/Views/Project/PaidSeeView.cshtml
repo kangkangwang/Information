@@ -1,0 +1,71 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+    <script>
+
+        var onSuccess = function (grid, data) {
+            grid.show();
+            grid.getStore().loadData(data);
+        };
+
+    </script>
+}
+
+@section content{
+    @(
+ X.Viewport().Layout(LayoutType.Auto).Items(
+            X.Container().Layout(LayoutType.Auto).Items(
+                X.TextField().FieldLabel("项目已付总金额").Text(ViewBag.total)
+            ),
+
+         X.FormPanel().Layout(LayoutType.Auto).Items(
+                X.GridPanel().ID("GridPanel1").Collapsible(true).Store(
+                    X.Store().ID("BudgetSelect").DataSource(Model).PageSize(10).Model(
+                            X.Model().IDProperty("UID").Fields(
+                               "ProjectName","SupplierName", "ProjectNo", "ReceivePMNo", "PurchaseMNo", "ApplyMaterialNo"))
+             .Reader(X.JsonReader().RootProperty("data")))
+         .ColumnModel(
+              
+               X.Column()
+                .Text("项目编号")
+                .Flex(3)
+                .DataIndex("ProjectNo"),
+               X.Column()
+                 .Text("项目名称")
+                 .Flex(2)
+                 .DataIndex("ProjectName"),
+               X.Column()
+                .Text("供货商")
+                .Flex(2)
+                .DataIndex("SupplierName"),
+                X.Column()
+                .Text("收货单号")
+                .Flex(3)
+                .DataIndex("ReceivePMNo"),
+                X.Column()
+                .Text("采购单号")
+                .Flex(3)
+                .DataIndex("PurchaseMNo"),
+
+                X.Column()
+                .Text("申请单号").Flex(3)
+                .DataIndex("ApplyMaterialNo"),
+
+                X.CommandColumn().Flex(2).Text("查看物料").Commands(
+                    X.GridCommand().CommandName("see").Icon(Icon.ApplicationViewDetail).Text("明细"))
+                        .DirectEvents(de =>
+                        {
+                            de.Command.Url = Url.Action("MDetail", "Share");
+                            de.Command.ExtraParams.Add(new Parameter("title", "到货物料详情", ParameterMode.Value));
+                            de.Command.ExtraParams.Add(new Parameter("gid", "record.data.ReceivePMNo", ParameterMode.Raw));
+                        })
+                             )
+                         )
+                    )
+    )
+}

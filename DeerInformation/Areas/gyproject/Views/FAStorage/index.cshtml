@@ -1,0 +1,125 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    ViewBag.Title = "固定资产入库管理界面";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+    <script>
+        var deleteFAStorage = function (id) {
+            Ext.MessageBox.confirm("提示", "确认删除该项？", function (but) {
+                if (but == "yes") {
+                    App.direct.gyproject.DeleteFAStorage(id);
+                    App.direct.gyproject.FAStorageReload();
+                }
+            });
+        };      
+        var onSuccess = function (grid, data) {
+            grid.show();
+            grid.getStore().loadData(data);
+        };
+    </script>
+}
+
+@section content{
+        @(X.Viewport().Layout(LayoutType.Auto).AutoScroll(true).Items(
+        X.Container().Layout(LayoutType.HBox).Region(Region.Center).Items(
+            X.TextField().FieldLabel("入库单号").ID("no").Flex(3),
+            X.TextField().FieldLabel("入库类型").ID("field").Flex(3),
+            X.DateField().FieldLabel("开始时间").ID("start").Flex(3),
+            X.DateField().FieldLabel("结束时间").ID("end").Flex(3),
+            X.Button().Text("查询").ID("btninquire").Icon(Icon.ApplicationGo).Flex(1).DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("FAStorageQuery");
+                        de.Click.Success = "onSuccess(App.GridPanel1, result.data);";
+                        de.Click.ExtraParams.Add(new Parameter("addno", "App.no.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("addfield", "App.field.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("start", "App.start.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("end", "App.end.getValue()", ParameterMode.Raw));
+                        de.Click.EventMask.ShowMask = true;
+                    }),
+                    
+                    X.Button().Text("增加").Region(Region.North).Flex(1).Icon(Icon.Add).DirectEvents(de=>{
+                        de.Click.Url = Url.Action("FAStorageAddbtn");
+                        de.Click.EventMask.ShowMask = true;
+                    })
+
+    ),
+    
+    X.Panel().ID("testpanel"),
+            X.FormPanel().Layout(LayoutType.Auto).Items(
+            X.GridPanel().ID("GridPanel1")
+            .BottomBar(X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true)).Store(
+                      X.Store().ID("FAStorageStore").DataSource(Model).PageSize(20).Model(
+                                X.Model().IDProperty("GID").Fields(
+                                            new ModelField("GID", ModelFieldType.String),
+                                            new ModelField("StorageNo", ModelFieldType.String),
+                                            new ModelField("PurchaseFNo", ModelFieldType.String),
+                                            new ModelField("WarehouseName", ModelFieldType.String),
+                                            new ModelField("AuditProcess", ModelFieldType.String),
+                                            new ModelField("StorageType", ModelFieldType.String),
+                                            new ModelField("Name", ModelFieldType.String),
+                                            new ModelField("Status", ModelFieldType.String),
+                                            new ModelField("Description", ModelFieldType.String),
+                                            new ModelField("No_Date", ModelFieldType.String)
+                                    )).Reader(X.JsonReader().RootProperty("data")))
+                                    .ColumnModel(
+                                X.Column().DataIndex("GID").Hidden(true),                                     
+                                                 
+                                X.Column().Text("入库单号").Flex(3).DataIndex("StorageNo"),
+                                X.Column().Text("采购单号").Flex(3).DataIndex("PurchaseFNo"),
+                                
+                                    X.Column()
+                                    .Text("仓库").Flex(3).DataIndex("WarehouseName"),
+
+                                    X.Column()
+                                    .Text("审核流程").Flex(2)
+                                    .DataIndex("AuditProcess"),
+                                     X.Column()
+                                    .Text("审核状态").Flex(2)
+                                    .DataIndex("Description"),
+                                    
+                                    X.Column()
+                                    .Text("入库单状态").Flex(2)
+                                    .DataIndex("Status"),
+
+                                    X.Column()
+                                    .Text("入库类型")
+                                    .Flex(2)
+                                    .DataIndex("StorageType"),                                    
+                                            
+                                    X.Column()
+                                    .Text("入库日期").Flex(3)
+                                    .DataIndex("No_Date"),
+
+                                    X.Column()
+                                    .Text("操作员")
+                                    .Flex(3).Flex(3)
+                                    .DataIndex("Name"),
+
+                                    X.CommandColumn().Region(Region.Center).Text("查看固定资产详情").Flex(3).Commands(
+                                                    X.GridCommand().CommandName("detail").Icon(Icon.ApplicationCascade).Text("明细"))
+                                                        .DirectEvents(de =>
+                                                        {
+                                                            de.Command.Url = Url.Action("MDetail", "Share");
+                                                            de.Command.ExtraParams.Add(new Parameter("gid", "record.data.GID", ParameterMode.Raw));
+                                                            de.Command.ExtraParams.Add(new Parameter("title", "入库固定资产详情", ParameterMode.Value));
+                                                        }),
+                                    X.CommandColumn().Text("修改固定资产入库单").Flex(3).Commands(
+                                        X.GridCommand().CommandName("modify").Icon(Icon.ApplicationEdit).Text("修改"))
+                                            .DirectEvents(de =>
+                                            {
+                                                de.Command.Url = Url.Action("ShareModify", "Share");
+                                                de.Command.ExtraParams.Add(new Parameter("gid", "record.data.GID", ParameterMode.Raw));
+                                                de.Command.ExtraParams.Add(new Parameter("controllername", "FAStorage", ParameterMode.Value));
+
+                                            }),
+                                   X.CommandColumn().Region(Region.Center).Text("删除固定资产入库单").Hidden(true).Flex(3).Commands(
+                                                    X.GridCommand().CommandName("delete").Icon(Icon.ApplicationDelete)
+                                                .Text("删除")).Listeners(l =>l.Command.Handler = "deleteFAStorage(record.data.GID);"))
+                            )
+                            )
+    )
+}

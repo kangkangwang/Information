@@ -1,0 +1,141 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+
+<script>
+
+    var onSuccess = function (grid, data) {
+        grid.show();
+        grid.getStore().loadData(data);
+    };
+
+    var showResult = function () {
+        Ext.Msg.notify("Warning", "客户ID必须唯一！");
+    };
+
+    var deletesupply = function (id) {
+        Ext.MessageBox.confirm("提示", "确认删除该项？", function (but) {
+            if (but == "yes") {
+                App.direct.gyproject.DeleteSupply(id);
+                App.direct.gyproject.SupplierInfoReload();
+            }
+        });
+    };
+
+</script>
+    }
+
+@section content{
+    @(X.Viewport().Layout(LayoutType.Auto).AutoScroll(true).Items(
+        X.Toolbar().Border(false).Layout(LayoutType.HBox).Items(
+       
+           X.TextField().ID("SupplierName").FieldLabel("供应商名称"),
+           X.Button().Icon(Icon.ApplicationGo).Text("查询").DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("SelectSupplier");
+                    de.Click.Success = "onSuccess(App.GridPanel1, result.data);";
+                    de.Click.ExtraParams.Add(new Parameter("suppliername", "App.SupplierName.getValue()", ParameterMode.Raw));
+                    de.Click.EventMask.ShowMask = true;
+                }),     
+                X.ToolbarFill().Flex(1),
+           X.Button().Icon(Icon.ApplicationAdd).Text("添加").DirectEvents(de =>
+                 {
+                        de.Click.Url = Url.Action("SupplierAddButton");
+                        de.Click.EventMask.ShowMask = true;
+                 })), 
+                     
+            X.FormPanel().Layout(LayoutType.Auto).Items(   
+                     
+            X.GridPanel().Border(false).ID("GridPanel1")
+            .BottomBar(X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true)).Store(
+                  X.Store().ID ("SupplierInfoSelect").DataSource(Model).PageSize(20).Model(
+                      X.Model().IDProperty("SupplierID").Fields(
+                         new ModelField("UID", ModelFieldType.String),
+                         new ModelField("SupplierID", ModelFieldType.String ),
+                         new ModelField("SupplierName", ModelFieldType.String ),
+                         new ModelField("Contact", ModelFieldType.String),
+                         new ModelField("Tel", ModelFieldType.String),
+                         new ModelField("Fax", ModelFieldType.String),
+                         new ModelField("Address", ModelFieldType.String),
+                         new ModelField("BankAccount", ModelFieldType.String),
+                         new ModelField("MainProduct", ModelFieldType.String),
+                                  
+                         new ModelField("Remark", ModelFieldType.String)))                   
+                .Reader(X.JsonReader().RootProperty("data")))     
+        .ColumnModel(
+                X.Column().DataIndex("UID").Hidden(true),
+        
+               X.Column()
+                .Text("供应商ID")
+                .Flex(1)
+                .DataIndex("SupplierID"),
+
+               X.Column()
+                .Text("供应商名称")
+                .Flex(1)
+                .DataIndex("SupplierName"),
+
+               X.Column()
+                .Text("联系人")
+                .Flex(1)
+                .DataIndex("Contact"),
+                
+               X.Column()
+                .Text("电话")
+                .Flex(1)
+                .DataIndex("Tel"),
+                
+               X.Column()
+                .Text("传真")
+                .Flex(1)
+                .DataIndex("Fax"),
+                
+               X.Column()
+                .Text("地址")
+                .Flex(1)
+                .DataIndex("Address"),
+
+                X.Column()
+                .Text("银行账户")
+                .Flex(1)
+                .DataIndex("BankAccount"),
+                        X.Column()
+                .Text("主营产品")
+                .Flex(1)
+                .DataIndex("MainProduct"),
+                
+            //    X.Column()
+            //.Text("银行类别")
+            //.Flex(1)
+            //.DataIndex("Bank"),
+            //    X.Column()
+            //        .Text("结算周期")
+            //.Flex(1)
+            //.DataIndex("PaymentCycle"),
+                        
+                
+                        X.Column()
+                .Text("备注")
+                .Flex(1)
+                .DataIndex("Remark"),
+                
+                
+                X.CommandColumn().Flex(1).Commands(
+                      X.GridCommand().CommandName("update").Icon(Icon.CommentEdit).Text("修改"))
+                                .DirectEvents(de => {
+                                    de.Command.Url = Url.Action("ClickEdit", "Supplier");
+                                    de.Command.ExtraParams.Add(new Parameter("id", "record.data.UID", ParameterMode.Raw));
+                                }), 
+                                           
+               X.CommandColumn().Flex(1).Hidden(true).Commands(
+                       X.GridCommand().CommandName("delete").Icon(Icon.CommentDelete).Text("删除"))
+                       .Listeners(l =>l.Command.Handler = "deletesupply(record.data.UID);"))                                                 
+                         )         
+                     )                            
+                )          
+}

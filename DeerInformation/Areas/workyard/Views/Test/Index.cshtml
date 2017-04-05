@@ -1,0 +1,275 @@
+﻿@model System.Collections.IEnumerable
+@{
+    //ViewBag.Title = "Scatter Chart Basic - Ext.NET MVC Examples";
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<style>
+   
+    .ex-panel
+    {
+        filter:alpha(opacity=50);     
+        -moz-opacity:0.5;             
+        opacity: 0.5; 
+    }
+
+    .bg {
+        background-image: url('../../../../Images/aa.png');
+        /*position: absolute;*/
+        background-size:cover;
+        background-position:center;
+        background-repeat:no-repeat;
+
+    }
+</style>
+<script>
+    //var resetPanZoom = function () {
+    //    var panel = this.up('panel'),
+    //        chart = panel.down('cartesian'),
+    //        axes = chart.getAxes();
+
+    //    axes[0].setVisibleRange([0, 1]);
+    //    axes[1].setVisibleRange([0, 1]);
+    //    chart.redraw();
+    //};
+
+    function getMousePos(event) {
+        var e = event || window.event;
+        var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+        var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+        var x = e.pageX || e.clientX + scrollX;
+        var y = 600 - scrollY - e.pageY || e.clientY;
+        //alert('x: ' + x + '\ny: ' + y);
+        //return { 'x': x, 'y': y };
+        //Ext.MessageBox.prompt({
+        //    title: "示例窗口2",
+        //    msg: "Please enter your address:",
+        //    multiline: true,
+        //    height: 200,
+        //    width: 300,
+        //    buttons: Ext.MessageBox.OKCANCEL,
+        //    fn: function (btn, val) {
+        //        alert("你选择了" + btn + ",你输入的内容是：" + val);
+        //    }
+        //});
+
+        var combostore = new Ext.data.ArrayStore({
+               fields: ['id', 'name'],
+               data: [[1, '物品摆放不规则'], [2, '物料浪费'], [3, '其他']]
+          });
+
+       var win1= Ext.create("Ext.window.Window", {
+            //id: "win2",
+            title: "标记",
+            height: 200,
+            width: 300,
+            items: [{
+                xtype: "combobox",name: "mark",id:"mark",
+                fieldLabel: '错误', store: combostore, displayField: 'name', valueField: 'id', blankText: '请选择',
+                triggerAction: 'all', emptyText: '请选择...', allowBlank: false, editable: false, mode: 'local'
+            },
+                { id:"extra", name: "extra", xtype: 'textarea', fieldLabel: "备注" }, ],
+
+            buttons: [{
+                text: '确定',//disabled: true,
+                listeners: {//添加监听事件 可以结合handler测试这两个事件哪个最先执行
+                    "click": function () {
+                        alert("You clicked the " + Ext.getCmp("extra").getRawValue() + " button" + " " + Ext.getCmp("mark").getValue() + "," + x + "," + y);
+                        App.direct.workyard.ClickSubmit(Ext.getCmp("extra").getRawValue(), Ext.getCmp("mark").getValue(), x, y); win1.close();
+                    }
+                },
+                //handle: function () {
+                //    //App.direct.workyard.ClickSubmit(mark.getValue(), extra.getValue(), x, y);
+                //    //alert("You clicked the " + mark.getValue() + " button" + " " + extra.getValue()+","+x+","+y); 
+                //    // Ext.Msg.alert(Ext.getCmp("extra").getValue() + "," + Ext.getCmp("mark").getValue());
+                //    alert('x: ' + x + '\ny: ' + y); win1.close();
+                //}
+            },
+                { text: '取消', handler: function () { win1.close(); } }],
+            autoShow: true
+        });
+    };
+
+    function getviewsingle(event) {
+        var win2 = Ext.create("Ext.window.Window", {
+            //id: "win2",
+            title: "查看详细",
+            height: 200,
+            width: 300,
+            items: [
+                { id: "rem", xtype: 'textfield', fieldLabel: "标识" },
+                { id: "tra", name: "extra", xtype: 'textfield', fieldLabel: "备注" }],
+
+            buttons: [
+               { text: '取消', handler: function () { win2.close(); } }
+            //,{
+            //    text: 'xiazai', handler: function () {
+            //        var selected = sm.getSelections(); if (selected.length == 1) {
+            //            var recordselected = sm.getSelected();
+            //            var attachment = recordselected.get("purchaserecordattachmenturl");
+            //            if (null != attachment || "" != attachment) {
+            //                var downUrl = "download/download?filename=" + attachment + "&inputPath=" + attachment;
+            //                window.location.href = downUrl;
+            //            } else { Ext.Msg.show({ title: '提示', msg: '该合同暂无附件,无法下载', icon: Ext.MessageBox.INFO, buttons: { yes: '确定' } }); }
+            //        } else {
+            //            Ext.Msg.show({
+            //                title: '提示', msg: '您需要选择一条合同数据后,才能执行添加操作',
+            //                icon: Ext.MessageBox.INFO,
+            //                buttons: { yes: '确定' }
+            //            });
+            //        }
+            //    }
+            //}
+            ],
+            autoShow: true
+        });
+
+        //Ext.Ajax.request({
+        //    url: 'xxx',
+        //    method: 'GET',
+        //    success: function (response) {
+        //        var respText = Ext.decode(response.responseText);
+        //        //调用文本域的方法，设置它的值~
+        //        Ext.getCmp('tra').setValue(respText);
+        //    }
+        //});
+    }
+
+    //var showResult = function (btn) {
+    //    Ext.Msg.notify("Button Click", "You clicked the " + btn + " button");
+    //};
+
+    //var showResultText = function (btn, text) {
+    //    Ext.Msg.notify("Button Click", "You clicked the " + btn + 'button and entered the text "' + text + '".');
+    //};
+
+</script>
+
+
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    @*<div style="background:url('../../../../Images/aa.png')no-repeat;height:100%;width:100%;" onclick="getMousePos(event)">*@
+    <div ondblclick="getMousePos(event)">
+        @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+        @(X.Panel().Height(600).Width(600).BaseCls("bg")
+                //.Layout(LayoutType.Center)
+                 .LayoutConfig(new VBoxLayoutConfig { Pack = BoxPack.Center, Align = VBoxAlign.Stretch })
+                .Items(
+                //X.Image().Src("~/Images/aa.png").BaseCls("ex-panel"),
+
+                X.CartesianChart()
+                    .ID("Chart1")
+                    .Height(600).Width(600)
+                    .BaseCls("ex-panel")
+                    //.InsetPadding(40)
+                            .Store(X.Store().DataSource(Model).ID ("MarkTable")
+                            .Model(
+                            //X.Model().Fields("Xaxes", "Yaxes"))
+                            //    .Data(Model)
+                                     X.Model()
+                                      .IDProperty("ID")
+                                      .Fields(
+                                              new ModelField("ID", ModelFieldType.String),
+                                            new ModelField("Xaxes", ModelFieldType.Int),
+                                            new ModelField("Yaxes", ModelFieldType.Int),
+                                            new ModelField("Mark", ModelFieldType.String),
+                                            new ModelField("Remark", ModelFieldType.String)                                        
+                                              )
+                                       )
+                                 .Reader(X.JsonReader().RootProperty("data"))
+                            )
+                    .Interactions(
+                        X.PanZoomInteraction().ZoomOnPanGesture(true),
+                        X.ItemHighlightInteraction()
+                    )
+                            .Axes(
+                                X.NumericAxis().Position(Position.Bottom).Fields("Xaxes").Grid(false).Hidden(true).Maximum(600).Minimum(0),
+                                X.NumericAxis().Position(Position.Left).Fields("Yaxes").Grid(false).Hidden(true).Maximum(600).Minimum(0)
+                    )
+                    .Items().Series(X.ScatterSeries()
+                                .XField("Xaxes")
+                                .YField("Yaxes")
+                        .Marker(X.CircleSprite().Radius(4))
+                        .HighlightDefaults(X.CircleSprite().FillStyle("yellow").Radius(7).LineWidth(2))
+                //                        .Label(X.ChartLabel()
+                //                            .Field("x")
+                //                            .Display(SeriesLabelDisplay.Over)
+                //                            .Renderer(r => r.Fn = @"function(text, label, labelCfg, data, index) {
+                //                                                var record = data.store.getAt(index);
+                //                                                return record.get('x') + ',' + record.get('y');
+                //                                            }")
+                //                                )
+                .Tooltip(X.ChartTip().TrackMouse(true).Width(140).Height(28)
+                                                .Renderer(r => r.Handler = "toolTip.setHtml(record.get('Xaxes') + ',' + record.get('Yaxes') + ',' +record.get('Mark') );"))
+                            )
+
+                        )
+//                        .Listeners(events => events.BeforeRender.Handler = @"var panzoom = this.down('cartesian').getInteractions()[0];
+//                                                             this.down('toolbar').add(panzoom.getModeToggleButton());")
+        )
+    </div>
+
+    <form id="fileUpload" enctype="multipart/form-data" >
+        @(X.FormPanel()
+            .ID("BasicForm") 
+            .Frame(true)
+            .Title("File Upload Form")
+            .PaddingSpec("10px 10px 0 10px")
+            .FieldDefaults(fd => fd.LabelWidth = 100)
+            .Defaults(d =>
+            {
+                d.Add(new Parameter("anchor", "95%", ParameterMode.Value));
+                d.Add(new Parameter("allowBlank", "false", ParameterMode.Raw));
+                d.Add(new Parameter("msgTarget", "side", ParameterMode.Value));
+            })
+            .Items(
+            
+            
+                   
+                X.FileUploadField()
+                    .ID("FileUploadField1")
+                    .EmptyText("请选择")
+                    .FieldLabel("上传文件")
+                    .ButtonText("")
+                    .Icon(Icon.ImageAdd)
+            )
+            .Listeners(l => l.ValidityChange.Handler = "#{SaveButton}.setDisabled(!valid);")
+            .Buttons(
+                X.Button()
+                    .ID("SaveButton")
+                    .Text("Save")
+                    .Disabled(true)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("UploadClick");
+                        de.Click.FormID = "fileUpload";
+                        de.Click.Before = @"if (!#{BasicForm}.getForm().isValid()) { return false; }
+                            Ext.Msg.wait('Uploading your photo...', 'Uploading');";
+                        de.Click.Failure = @"Ext.Msg.show({
+                                title   : 'Error',
+                                msg     : 'Error during uploading',
+                                minWidth: 200,
+                                modal   : true,
+                                icon    : Ext.Msg.ERROR,
+                                buttons : Ext.Msg.OK
+                            });";
+                    }),
+
+                X.Button()
+                    .Text("Reset")
+                    .OnClientClick("#{BasicForm}.getForm().reset();")
+
+            )                                         
+        )
+    </form>
+
+   
+</body>
+</html>   

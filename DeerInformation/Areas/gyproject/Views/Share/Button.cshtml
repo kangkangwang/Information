@@ -1,0 +1,38 @@
+﻿@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+    <script>
+
+    var getGridValueArr = function (gridname, mem) {
+        var grid_data = Ext.getStore(gridname);
+        var count = grid_data.getCount();
+        var arr = new Array(count);
+        for (var i = 0 ; i < count ; i++) {
+            arr[i] = grid_data.getAt(i).data[mem];
+        }
+        return arr;
+    };
+
+    </script>
+}
+
+@section content{
+    @(
+        X.Container().Layout(LayoutType.Fit).Items(
+                X.Button().Flex(1).Text("提交").Icon(Icon.Accept).DirectEvents(
+                                    de =>
+                                    {
+                                        de.Click.Url = Url.Action("ModifySubmit", "Share");
+                                        de.Click.ExtraParams.Add(new Parameter("list", "App.DeployedMaterial.collect('MaterialID')", ParameterMode.Raw));
+                                        de.Click.ExtraParams.Add(new Parameter("record", "getGridValueArr('DeployedMaterial','Num2')", ParameterMode.Raw));
+                                        de.Click.ExtraParams.Add(new Parameter("price", "getGridValueArr('DeployedMaterial','Price')", ParameterMode.Raw));
+                                        de.Click.EventMask.ShowMask = true;
+                                        de.Click.FormID = "form1";
+                                    }
+                                )
+        )    
+    )
+}

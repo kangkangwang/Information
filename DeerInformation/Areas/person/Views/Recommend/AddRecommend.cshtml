@@ -1,0 +1,76 @@
+﻿@model DeerInformation.Models.V_HR_RecommendWithName
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var closewindow = function () {
+        parent.App.windowRecommend.close()
+    };
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddRecommend</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.HBox)
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                   X.Panel().Flex(9).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Border(false).Items(
+                      X.TextFieldFor(m => m.StaffID).ID("StaffID").FieldLabel("推荐人工号").AllowBlank(false).Editable(false),
+                      X.TextFieldFor(m => m.ReStaffID).ID("ReStaffID").FieldLabel("被推荐人工号").AllowBlank(false).Editable(false),
+                      X.TextFieldFor(m => m.Relation).FieldLabel("关系").AllowBlank(false),
+                      X.DateFieldFor(m => m.YearMonth).FieldLabel("第一次应发月").Editable(false).AllowBlank(false).Format("Y-n"),
+                      X.CheckboxFor(m=>m.IsDe).FieldLabel("是否已发放"),
+                      X.TextFieldFor(m => m.ID).FieldLabel("ID").Hidden(true),
+                      X.HiddenFor(m => m.Valid),
+                      X.HiddenFor(m => m.CreaterName),
+                      X.HiddenFor(m => m.CreateTime),
+                      X.HiddenFor(m => m.EditorName),
+                      X.HiddenFor(m => m.EditeTime)
+                   ),
+                      X.Panel().Flex(9).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Border(false).Items(
+                      X.TextFieldFor(m => m.Name).ID("Name").FieldLabel("推荐人姓名").AllowBlank(false).Editable(false),
+                      X.TextFieldFor(m => m.ReName).ID("ReName").FieldLabel("被推荐人姓名").AllowBlank(false).Editable(false),
+                      X.TextFieldFor(m => m.Money).FieldLabel("伯乐奖金额").AllowBlank(false).Regex(@"^(\d{1,18}|\d{1,15}\.\d{1,2})$"),
+                      X.DateFieldFor(m => m.YearMonth1).FieldLabel("第二次应发月").Editable(false).AllowBlank(false).Format("Y-n"),
+                      X.TextFieldFor(m => m.Remark).FieldLabel("备注")
+                   ),
+                      X.Panel().Flex(2).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Border(false).Items(
+            //X.Panel().Border(false).Height(27),
+                        X.Button().Text("选择员工").ID("select")
+                            .DirectEvents(de =>
+                            {
+                                de.Click.Url = Url.Action("SelectStaff");
+                                de.Click.ExtraParams.Add(new Parameter("type", "1", ParameterMode.Raw));
+                            }),
+                            X.Button().Text("选择员工").ID("selectre")
+                            .DirectEvents(de =>
+                            {
+                                de.Click.Url = Url.Action("SelectStaff");
+                                de.Click.ExtraParams.Add(new Parameter("type", "2", ParameterMode.Raw));
+                            })
+                      )
+       ),
+        X.Button().Text("保存").Icon(Icon.Accept).ID("save").FormBind(true).Disable(true)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("AddOrEditRecommend");
+                        de.Click.EventMask.ShowMask = true;
+                    })
+    )
+</body>
+
+</html>
+
+

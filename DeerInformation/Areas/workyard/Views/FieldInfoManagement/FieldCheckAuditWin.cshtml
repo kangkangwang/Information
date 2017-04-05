@@ -1,0 +1,79 @@
+﻿@model DeerInformation.Models.T_GW_MarkInfo
+@{
+    ViewBag.Title = "FieldCheckAuditWin";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+    @(X.Panel().Items(
+    X.FormPanel().ID("BasicForm").Layout(LayoutType.Form).AutoScroll(true)
+            .Items(
+                   X.TextFieldFor(m => m.ID).Hidden(true),
+                    X.TextFieldFor(m => m.ProjectNo).ID("prono").Hidden(true),
+                    X.TextFieldFor(m => m.Xaxes).Hidden(true),
+                    X.TextFieldFor(m => m.Yaxes).Hidden(true),
+                    X.TextFieldFor(m => m.WorkPlace).Hidden(true),
+                    X.TextFieldFor(m => m.HandlePicPath).Hidden(true),
+                    X.TextFieldFor(m => m.ExcPicPath).Hidden(true),
+                    X.TextFieldFor(m => m.ReportMan).Hidden(true),
+                    X.TextFieldFor(m => m.ReportTime).Hidden(true),
+                    X.TextFieldFor(m => m.HandleMan).Hidden(true),
+                    X.TextFieldFor(m => m.HandleTime).Hidden(true),
+                    X.TextFieldFor(m => m.AuditTime).Hidden(true),
+                    X.TextFieldFor(m => m.AuditResult).Hidden(true),
+                    X.TextFieldFor(m => m.AuditMan).Hidden(true),
+                    X.TextFieldFor(m=>m.IsHandled).Hidden(true),
+                    X.TextFieldFor(m=>m.AuditMethod).Hidden(true),
+          Html.X().TextFieldFor(m => m.WarnLevel).FieldLabel("异常编号").ReadOnly(true),
+          Html.X().TextFieldFor(m => m.Mark).FieldLabel("异常类型").ReadOnly(true),
+          Html.X().TextAreaFor(m => m.ExceptionDes).FieldLabel("异常描述").ReadOnly(true),
+          X.TextAreaFor(m => m.ExceptionHandleSug).FieldLabel("异常处理建议").ReadOnly(true),
+          X.TextAreaFor(m => m.HandleDes).FieldLabel("处理结果").ReadOnly(true),
+          X.TextAreaFor(m => m.Remark).ID("remark").FieldLabel("备注"))
+          .Items(l =>
+                  {
+                      if (Model.ExcPicPath != null)
+                          l.Add(X.HyperlinkButton().Text("异常标记的附件").Icon(Icon.Attach).HrefTarget("_blank").Href(Url.Content(Model.ExcPicPath)));
+                      if (Model.HandlePicPath!= null)
+                          l.Add(X.HyperlinkButton().Text("异常处理的附件").Icon(Icon.Attach).HrefTarget("_blank").Href(Url.Content(Model.HandlePicPath)));
+                  })
+
+//          X.FormPanel().Layout(LayoutType.HBox).Items(
+          
+//          X.FileUploadField().ID("filehandleup").EmptyText("请选择").FieldLabel("上传处理文件").ButtonText("选择").Icon(Icon.ImageAdd),
+//           X.Button().ID("SaveButton").Text("上传")
+//                    .DirectEvents(de =>
+//                    {
+//                        de.Click.Url = Url.Action("UploadCheckAdd");
+//                        de.Click.ExtraParams.Add(new Parameter("id", "filehandleup"));
+//                        de.Click.ExtraParams.Add(new Parameter("path", "~/Areas/workyard/CheckMarkHandle/"));
+//                        de.Click.FormID = "fileUpload";
+//                        de.Click.Before = @"if (!#{BasicForm}.getForm().isValid()) { return false; }
+//                            Ext.Msg.wait('Uploading your photo...', 'Uploading');";
+//                        de.Click.Failure = @"Ext.Msg.show({
+//                                title   : 'Error',
+//                                msg     : 'Error during uploading',
+//                                minWidth: 200,
+//                                modal   : true,
+//                                icon    : Ext.Msg.ERROR,
+//                                buttons : Ext.Msg.OK
+//                            });";
+//                    }))
+
+        .Buttons(X.Button().ID("add").Text("审核通过").DirectEvents(de =>
+        {
+            de.Click.Url = Url.Action("FCAuditSubmit");
+            de.Click.ExtraParams.Add(new Parameter("asu", "审核通过", ParameterMode.Value));
+            de.Click.Success = "parent.App.window8.close()";
+            de.Click.EventMask.ShowMask = true;
+        }),
+         X.Button().Text("审核驳回").DirectEvents(de=>{
+              de.Click.Url = Url.Action("FCAuditSubmit");
+            de.Click.ExtraParams.Add(new Parameter("asu", "审核驳回",ParameterMode.Value));
+            de.Click.Success = "parent.App.window8.close()";
+            de.Click.EventMask.ShowMask = true;
+         }))
+         ))
+
+}

@@ -1,0 +1,42 @@
+﻿@{
+  var X = Html.X();
+}
+@( 
+
+ Html.X().Window().ID("win1").Constrain(true)
+    .Width(350)
+    .Height(450)
+    .Icon(Icon.Clock)
+    .Title("现场异常标记")
+    .CloseAction(CloseAction.Destroy).Items(
+    X.FormPanel().ID("BasicForm").Layout(LayoutType.Form).AutoScroll(true)
+         .Listeners(l => l.ValidityChange.Handler = "#{add}.setDisabled(!valid);").Items(
+        //Html.X().TextField().ID("pn").FieldLabel("项目编号"),
+        //Html.X().TextField().ID("fn").FieldLabel("现场名称"),
+          Html.X().TextField().ID("warnlevel").FieldLabel("异常编号").AllowBlank(false).EmptyText("必填"),
+          Html.X().ComboBox().ID("mark").Items("物品摆放不规则", "物料浪费", "其他").FieldLabel("异常类型").AllowBlank(false),
+          Html.X().TextArea().ID("excdes").FieldLabel("异常描述").AllowBlank(false),
+          X.TextArea().ID("excsug").FieldLabel("异常处理建议").AllowBlank(false),
+          X.TextArea().ID("remark").FieldLabel("备注"),
+          X.FileUploadField().ID("fileup").EmptyText("请选择").FieldLabel("上传文件").ButtonText("选择文件").Icon(Icon.ImageAdd).AllowBlank(false)
+
+        ).Buttons(X.Button().Text("提交").Disabled(true).ID("add").DirectEvents(de =>
+        {
+            de.Click.Url = Url.Action("FCAddSubmit");
+            de.Click.Success = "App.win1.close(),App.direct.workyard.FieldCheckAddReload()";
+            //de.Click.ExtraParams.Add(new Parameter("pn1", "App.pn.getValue()", ParameterMode.Raw));
+            //de.Click.ExtraParams.Add(new Parameter("fn1", "App.fn.getValue()", ParameterMode.Raw));
+            de.Click.ExtraParams.Add(new Parameter("wl1", "App.warnlevel.getValue()", ParameterMode.Raw));
+            de.Click.ExtraParams.Add(new Parameter("ma1", "App.mark.getValue()", ParameterMode.Raw));
+            de.Click.ExtraParams.Add(new Parameter("ed1", "App.excdes.getValue()", ParameterMode.Raw));
+            de.Click.ExtraParams.Add(new Parameter("es1", "App.excsug.getValue()", ParameterMode.Raw));
+            de.Click.ExtraParams.Add(new Parameter("rm1", "App.remark.getValue()", ParameterMode.Raw));
+            de.Click.IsUpload = true;
+            de.Click.EventMask.ShowMask = true;
+        }),
+                X.Button().Text("取消").Listeners(l => { l.Click.Handler = "App.win1.close()"; }))
+        ))
+  
+
+
+

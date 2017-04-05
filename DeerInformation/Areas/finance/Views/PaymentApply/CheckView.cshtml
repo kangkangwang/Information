@@ -1,0 +1,51 @@
+﻿@model PaymentApply 
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+    @{
+        var content = 
+                X.FormPanel()
+                .Layout(LayoutType.Form)
+                .BodyPadding(10)
+                .Frame(true)
+                .Items(
+                X.TextFieldFor(m => m.ID),
+                   X.TextFieldFor(m => m.CustomerName).Listeners(l => { l.Focus.Handler = "App.Window1.show();Ext.getCmp('ApplyDate').focus();"; }),
+                   X.TextFieldFor(m => m.BudgetID),
+                   X.TextFieldFor(m => m.ProjectID),
+                   X.TextFieldFor(m => m.CompletionPercent),
+                   X.TextFieldFor(m => m.InvoiceOrnot),
+                   X.TextFieldFor(m => m.InvoiceType),
+                   X.TextFieldFor(m => m.InvoiceAmount),
+                   X.TextFieldFor(m => m.BudgetSum),
+                   X.TextFieldFor(m => m.HaveReceive),
+                   X.TextFieldFor(m => m.RestAmount),
+                   X.CheckboxFor(m => m.Creator),
+                   X.TextAreaFor(m => m.CreateDate),
+                   X.ComboBoxFor(m => m.PaymentState).Items("未收款", "已收款"),
+                   X.TextAreaFor(m => m.Remark)
+                ).Items(l =>
+                {
+                    if (Model.AnnetPath != null)
+                        l.Add(X.HyperlinkButton().Text("附件").Icon(Icon.Attach).HrefTarget("_blank").Href(Url.Content(Model.AnnetPath)));
+                })
+                .Buttons(X.Button()
+                .Text("提交")
+                        .DirectEvents(de =>
+                        {
+                            de.Click.Action = "CheckSubmit";
+                            de.Click.ExtraParams.Add(new { id=Model.ID });
+                            de.Click.Success = "parent.App.win.close();";
+                        })
+                );
+    }
+
+    @(X.Viewport().Layout(LayoutType.Border).Items(
+        content.Region(Region.Center).AutoScroll(true))
+    )
+
+}

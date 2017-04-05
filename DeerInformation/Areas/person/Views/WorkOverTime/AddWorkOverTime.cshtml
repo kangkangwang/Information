@@ -1,0 +1,71 @@
+﻿@model DeerInformation.Models.V_HR_WorkOverTime
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var closewindow = function () {
+        parent.App.windowWorkOverTime.close()
+    };
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddWorkOverTime</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.HBox)
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                   X.Panel().Flex(7).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                   X.TextFieldFor(m => m.StaffID).ID("StaffID").FieldLabel("工号").AllowBlank(false).Editable(false),
+                   X.TextFieldFor(m => m.Department).ID("Department").FieldLabel("部门").AllowBlank(false).Editable(false),
+                   X.TextFieldFor(m => m.LastYear).FieldLabel("上年度延续可调休时数（H）").AllowBlank(false).Regex(@"^(\d{1,18}|\d{1,15}\.\d{1,2})$"),
+                   X.TextFieldFor(m => m.Personal).FieldLabel("个人调休时数").AllowBlank(false).Regex(@"^(\d{1,18}|\d{1,15}\.\d{1,2})$"),
+                   X.HiddenFor(m => m.ID),
+                   X.HiddenFor(m => m.CurrentYearLast),
+                   X.HiddenFor(m => m.CurrentYearSum),
+                   X.HiddenFor(m => m.Valid),
+                   X.HiddenFor(m => m.CreaterName),
+                      X.HiddenFor(m => m.CreateTime),
+                      X.HiddenFor(m => m.EditorName),
+                      X.HiddenFor(m => m.EditeTime)
+                   ),
+                   X.Panel().Flex(7).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                   X.TextFieldFor(m => m.Name).ID("Name").FieldLabel("姓名").AllowBlank(false).Editable(false),
+                   X.NumberFieldFor(m=>m.Year).ID("Year").FieldLabel("年度").MaxValue(9999).MinValue(1).AllowBlank(false).Editable(false).Selectable(false),
+                   X.TextFieldFor(m => m.CurrentYear).FieldLabel("本年度累计可调休时数（H）").AllowBlank(false).Regex(@"^(\d{1,18}|\d{1,15}\.\d{1,2})$"),
+                   X.TextFieldFor(m => m.Company).FieldLabel("公司调休时数").AllowBlank(false).Regex(@"^(\d{1,18}|\d{1,15}\.\d{1,2})$")
+                   ),
+                   X.Panel().ID("Select").Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                        X.Button().Text("选择员工").ID("select")
+                            .DirectEvents(de =>
+                            {
+                                de.Click.Url = Url.Action("SelectStaff");
+                            })
+                      )
+       ),
+        X.Button().Text("保存").Icon(Icon.Accept).ID("save").FormBind(true).Disable(true)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("AddOrEditWorkOverTime");
+                        de.Click.EventMask.ShowMask = true;
+                    })
+    )
+</body>
+
+</html>
+
+
+
+
+

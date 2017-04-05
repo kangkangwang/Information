@@ -1,0 +1,169 @@
+﻿@model DeerInformation.Models.T_GM_Budget
+@{
+    ViewBag.Title = "添加报价单";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+    <script src="~/Scripts/base/share.js"></script>
+<script>
+    function takefunc(v, record) {
+        return record.Price * record.Num2;
+    }
+
+    function CostCalculation() {
+        var store = Ext.getStore('DeployedMaterial');
+        var Mcost = 0;
+        var Lcost = 0;
+        var Ocost = 0;
+        for (var i = 0; i < store.getCount() ; i++) {
+            var recorddata = store.getAt(i).data;
+            var cost = recorddata.Num * recorddata.Price;
+            switch (recorddata.CostType) {
+                case '材料成本':
+                    Mcost += cost;
+                    break;
+                case '人工成本':
+                    Lcost += cost;
+                    break;
+                case '其他费用成本':
+                    Ocost += cost;
+                    break;
+                default:
+            }
+        }
+        App.MaterialCost.setValue(Mcost);
+        App.LaborCost.setValue(Lcost);
+        App.OtherFeeCost.setValue(Ocost);
+        App.CostMoney.setValue(Mcost + Lcost + Ocost);
+        var offermoney = App.OfferMoney.getValue();
+        var RateMargin = (offermoney - Mcost - Lcost - Ocost) / offermoney;
+        var NetMargin = (offermoney - Mcost - Lcost - Ocost) / (Mcost + Lcost + Ocost);
+        App.RateMargin.setValue(RateMargin.toFixed(2));
+        App.NetMargin.setValue(NetMargin.toFixed(2));
+    }
+</script>
+}
+
+@section content{
+    @{
+        var first = X.FormPanel().ID("FormPanel1").Frame(true).Layout(LayoutType.Accordion)
+            .Listeners(l => l.ValidityChange.Handler = "#{add}.setDisabled(!valid);").Items(
+                X.Panel().Title("基本信息").Layout(LayoutType.Anchor).DefaultAnchor("100%").Items(
+                X.TextFieldFor(m=>m.GID).Hidden(true),
+                X.DateFieldFor(m=>m.AgentDate).Hidden(true),
+                X.TextFieldFor(m=>m.AgentMan).Hidden(true),
+                X.HiddenFor(m=>m.OfferDate),
+                X.HiddenFor(m=>m.AttachmentPath),
+                X.HiddenFor(m=>m.Version),
+                   X.TextFieldFor(m => m.QuotationNo).FieldLabel("报价编号").ReadOnly(true).LabelWidth(60),
+                   X.TextFieldFor(m => m.ProjectNo).FieldLabel("项目编号").ReadOnly(true).LabelWidth(60),
+                   X.Container().Layout(LayoutType.HBox).Items(
+                       X.Container().Layout(LayoutType.Anchor).DefaultAnchor("100%").Flex(1).Items(
+                           X.TextFieldFor(m => m.ProjectName).FieldLabel("项目名称").ReadOnly(true).AllowBlank(false).EmptyText("此项为必须填写项").LabelWidth(60),
+                           X.TextFieldFor(m => m.ClientName).FieldLabel("客户名称").ReadOnly(true).LabelWidth(60)),
+                       X.Container().Layout(LayoutType.Anchor).DefaultAnchor("100%").Flex(1).MarginSpec("0 0 0 5").Items(
+                           X.TextFieldFor(m => m.AuditProgress).FieldLabel("审核流程").ReadOnly(true).LabelWidth(60),
+                           X.ComboBoxFor(m => m.TaxRate).FieldLabel("税率").Items("3%", "6%", "11%", "17%").LabelWidth(60))),
+                   X.TextFieldFor(m => m.Extra).FieldLabel("报价备注").LabelWidth(60),
+                   X.FileUploadField().ID("ModifyAttachmentPath").EmptyText("附件大小请不要超过20M").Icon(Icon.Attach).LabelWidth(60).FieldLabel("重传附件").ButtonText("选择文件")
+                   ),
+
+              X.Panel().Title("报价和成本").Layout(LayoutType.HBox).Collapsible(true).Items(
+                  X.Container().Layout(LayoutType.Anchor).DefaultAnchor("100%").Flex(1).MarginSpec("5 5 0 5").Items(
+                      X.TextFieldFor(m => m.OfferMoney).FieldLabel("报价总额（元）").AllowBlank(false).EmptyText("此项为必须填写项").EnableKeyEvents(true).Listeners(l => l.KeyUp.Fn = "CostCalculation"),
+                      X.TextFieldFor(m => m.MaterialOffer).FieldLabel("材料报价（元）"),
+                      X.TextFieldFor(m => m.LaborOffer).FieldLabel("人工报价（元）"),
+                      X.TextFieldFor(m => m.OtherFeeOffer).FieldLabel("其他费用报价"),
+                      X.TextFieldFor(m => m.RateMargin).FieldLabel("毛利率")),
+                  X.Container().Layout(LayoutType.Anchor).DefaultAnchor("100%").Flex(1).MarginSpec("5 5 0 0").Items(
+                      X.TextFieldFor(m => m.CostMoney).FieldLabel("成本总额（元）").Listeners(l => l.Focus.Fn = "CostCalculation"),
+                      X.TextFieldFor(m => m.MaterialCost).FieldLabel("材料成本（元）"),
+                      X.TextFieldFor(m => m.LaborCost).FieldLabel("人工成本（元）"),
+                      X.TextFieldFor(m => m.OtherFeeCost).FieldLabel("其他费用成本"),
+                      X.TextFieldFor(m => m.NetMargin).FieldLabel("净利率"))
+                  ),
+                  
+                  X.Panel().Title("待选择物料").Border(false).Layout(LayoutType.Fit).ID("storeform"),
+
+                                    X.GridPanel().ID("GridPanel2").Title("已选物料").Store(
+                                        X.Store().ID("DeployedMaterial").AutoLoad(false)
+                                        .PageSize(10).Model(X.Model().IDProperty("MaterialID").Fields(
+                                            new ModelField("Brand", ModelFieldType.String),
+                                            new ModelField("MaterialID", ModelFieldType.String),
+                                            new ModelField("MaterialName", ModelFieldType.String),
+                                            new ModelField("Size", ModelFieldType.String),
+                                            new ModelField("Unit", ModelFieldType.String),
+                                            new ModelField("PurchaseCycle", ModelFieldType.String),
+                                            new ModelField("MinPurchase", ModelFieldType.String),
+                                            new ModelField("Price", ModelFieldType.String),
+                                            new ModelField("Num", ModelFieldType.String),
+                                            new ModelField("Pri", ModelFieldType.String),
+                                            new ModelField("CostType", ModelFieldType.String))
+                                            ).Reader(X.JsonReader().RootProperty("data"))
+                                            )
+                                            .ColumnModel(
+
+                                        X.Column()
+                                        .Text("物料编号")
+                                        .Flex(3)
+                                        .DataIndex("MaterialID"),
+
+                                        X.Column()
+                                        .Text("物料名称")
+                                        .Flex(4)
+                                        .DataIndex("MaterialName"),
+
+                                        X.ComponentColumn()
+                                        .Editor(true).DataIndex("Num")
+                                        .Text("申请数量").Flex(3)
+                                        .Component(X.NumberField().AllowBlank(false).EmptyText("此项为必须填写项")),
+
+                                        X.Column().Text("品牌").Flex(3).DataIndex("Brand"),
+                                        X.Column().Text("采购周期").Flex(3).DataIndex("PurchaseCycle"),
+                                        X.Column().Text("最小采购量").Flex(3).DataIndex("MinPurchase"),
+
+                                        X.Column()
+                                        .Text("型号")
+                                        .Flex(3)
+                                        .DataIndex("Size"),
+
+                                        X.Column()
+                                        .Text("单位")
+                                        .Flex(3)
+                                        .DataIndex("Unit"),
+
+                                        X.Column()
+                                        .DataIndex("Price")
+                                        .Text("预算价")
+                                        .Flex(3),
+
+                                        //X.ComponentColumn()
+             //.Editor(true).Text("实际价格").ID("PriChange")
+             //.DataIndex("Pri").Flex(3)
+             //.Component(X.NumberField().AllowBlank(false).EmptyText("价格不能为空")),
+
+                                        X.CommandColumn().Text("取消选择").Flex(4).Commands(X.GridCommand().CommandName("selected").Icon(Icon.Delete).Text("取消"))
+                                            .Listeners(l => l.Command.Handler = "App.DeployedMaterial.remove(record);")))
+                                .Buttons(
+                                            X.Button().Icon(Icon.ApplicationGet).ID("add").Text("确认").Disabled(true)
+                                            .DirectEvents(de =>
+                                            {
+                                                de.Click.Url = Url.Action("BudgetEdit", "ProjectBudget");
+                                                de.Click.ExtraParams.Add(new Parameter("list", "App.DeployedMaterial.collect('MaterialID')", ParameterMode.Raw));
+                                                de.Click.ExtraParams.Add(new Parameter("record", "getGridValueArr('DeployedMaterial','Num')", ParameterMode.Raw));
+                                                de.Click.ExtraParams.Add(new Parameter("pri", "getGridValueArr('DeployedMaterial','Price')", ParameterMode.Raw));
+                                                de.Click.Success = "Judge('DeployedMaterial','Num','Price');";
+                                                de.Click.EventMask.ShowMask = true;
+                                                de.Click.FormID = "FormPanel1";
+                                                de.Click.IsUpload = true;
+                                            }),
+                                            X.Button().Icon(Icon.Cancel).ID("cancel").Text("取消")
+                                                .Listeners(l => l.Click.Handler = "parent.App.win.close()")
+                  );
+    }
+
+
+    @X.Viewport().Layout(LayoutType.Border).AutoScroll(true).Items(first.Region(Region.Center))
+}

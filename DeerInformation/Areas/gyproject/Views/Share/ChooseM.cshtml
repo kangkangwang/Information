@@ -1,0 +1,72 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+
+<script>
+
+    var onSuccess = function (grid, data) {
+        grid.show();
+        grid.getStore().loadData(data);
+    };
+
+</script>
+
+}
+
+@section content{
+    @X.Viewport().Layout(LayoutType.Border).AutoScroll(true).Items(       
+        X.Toolbar().Frame(true).Region(Region.North	).ID("Ser_contaniner").Layout(LayoutType.HBox).Items(
+            X.TextField().FieldLabel("物料名称").ID("size"),
+            X.Button().Text("检索").Icon(Icon.Magnifier).DirectEvents(de =>
+            {
+                de.Click.Url = Url.Action("SearchMaterial", "Share");
+                de.Click.Success = "onSuccess(App.GridPanel1, result.data);";
+                de.Click.ExtraParams.Add(new Parameter("size", "App.size.getValue()", ParameterMode.Raw));
+                de.Click.EventMask.ShowMask = true;
+            })),
+        //X.FormPanel().Layout(LayoutType.Auto).Items(
+                    X.GridPanel().Region(Region.Center).Border(false).ID("GridPanel1")
+            //.Title(ViewBag.tit)
+                .BottomBar(X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true)).Store(
+                    X.Store().ID("AppliedMaterial").AutoLoad(false).PageSize(6).Model(
+                        X.Model().IDProperty("MaterialID").Fields(
+                            new ModelField("Brand", ModelFieldType.String),
+                            new ModelField("MaterialID", ModelFieldType.String),
+                            new ModelField("MaterialName", ModelFieldType.String),
+                            new ModelField("Size", ModelFieldType.String),
+                            new ModelField("Unit", ModelFieldType.String),
+                            new ModelField("PicturePath", ModelFieldType.String),
+                            new ModelField("PurchaseCycle", ModelFieldType.String),
+                            new ModelField("MinPurchase", ModelFieldType.String),
+                            new ModelField("Price", ModelFieldType.String),
+                            new ModelField("Num", ModelFieldType.String),
+                            new ModelField("CurAmount", ModelFieldType.String),
+                            new ModelField("CostType", ModelFieldType.String))
+                        ).Reader(X.JsonReader().RootProperty("data")))
+                .ColumnModel(
+
+                    X.Column().Text("物料编号").Flex(3).DataIndex("MaterialID"),
+                    X.Column().Text("物料名称").Flex(3).DataIndex("MaterialName"),
+                    X.Column().Text("总数量").Flex(3).DataIndex("Num").ID("NumChange"),
+                    X.Column().Text("库存数量").Flex(3).DataIndex("CurAmount").ID("NumStock").Hidden(true),
+                    X.Column().Text("品牌").Flex(3).DataIndex("Brand"),
+                    X.Column().Text("采购周期").Flex(3).DataIndex("PurchaseCycle"),
+                    X.Column().Text("最小采购量").Flex(3).DataIndex("MinPurchase"),
+                    X.Column().Text("型号").Flex(3).DataIndex("Size"),
+                    X.Column().Text("单位").Flex(3).DataIndex("Unit"),
+                    X.Column().Text("价格").Flex(3).DataIndex("Price"),
+                                        
+                    X.HyperlinkColumn().Flex(4).DataIndex("MaterialName").DataIndexHref("PicturePath").Text("技术规格书").HrefTarget("_blank").ID("path"),
+
+                    X.CommandColumn().Text("确认选择").ID("Confirm").Flex(4).Commands(X.GridCommand().CommandName("select").Icon(Icon.Add).Text("确认"))
+                        .Listeners(l => l.Command.Handler = "parent.App.DeployedMaterial.insert(0,record);"))
+            //)
+        )
+
+}
+

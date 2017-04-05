@@ -1,0 +1,76 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    ViewBag.Title = "现场异常添加";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+<style>
+    .ex-panel {
+        filter: alpha(opacity=30);
+        -moz-opacity: 0.3;
+        opacity: 0.3;
+    }
+
+    .bg {
+        background-image: url('@ViewBag.cls1');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+</style>
+
+<script>
+    function getMousePos(event) {
+        var e = event || window.event;
+        var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+        var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+        var x = e.pageX || e.clientX + scrollX;
+        var y = 620 - scrollY - e.pageY || e.clientY;
+        App.direct.workyard.RenderWin(x, y); 
+    };
+</script>
+}
+
+@section content{
+    @(X.Container().Layout(LayoutType.HBox).Items(
+                X.TextField().ID("pn").Text(ViewBag.prono).FieldLabel("项目编号").ReadOnly(true),
+                X.TextField().ID("fn").Text(ViewBag.fieldname).FieldLabel("现场名称").ReadOnly(true)))
+ 
+    <div ondblclick="getMousePos(event)"> 
+        @(
+        X.Panel().Width(600).ID("FieldAddPanel").LayoutConfig(new VBoxLayoutConfig { Pack = BoxPack.Center, Align = VBoxAlign.Stretch })
+            .BaseCls("bg").Items(
+                    X.CartesianChart().ID("Chart1").Height(600).Width(600)
+                    .BaseCls("ex-panel").Store(
+                                X.Store().DataSource(Model).ID("MarkTable").Model(
+                                         X.Model().IDProperty("ID").Fields(
+                                                new ModelField("ID", ModelFieldType.String),
+                                                new ModelField("Xaxes", ModelFieldType.Int),
+                                                new ModelField("Yaxes", ModelFieldType.Int),
+                                                new ModelField("Mark", ModelFieldType.String),
+                                                new ModelField("IsHandled", ModelFieldType.String),
+                                                new ModelField("AuditResult", ModelFieldType.String),
+                                                new ModelField("WarnLevel", ModelFieldType.String),
+                                                new ModelField("Remark", ModelFieldType.String)))
+                                     .Reader(X.JsonReader().RootProperty("data")))           
+                        //.Interactions(
+                        //    X.PanZoomInteraction().ZoomOnPanGesture(true),
+                        //    X.ItemHighlightInteraction())
+                        .Axes(
+                            X.NumericAxis().Position(Position.Bottom).Fields("Xaxes").Grid(false).Hidden(true).Maximum(600).Minimum(0),
+                            X.NumericAxis().Position(Position.Left).Fields("Yaxes").Grid(false).Hidden(true).Maximum(600).Minimum(0)) 
+                        .Items().Series(
+                            X.ScatterSeries().XField("Xaxes").YField("Yaxes").Marker(
+                                X.Sprite().SpriteType(SpriteType.Cross).FillStyle("red").Opacity(100))
+                                .HighlightDefaults(
+                                    X.Sprite().FillStyle("yellow").Radius(20).LineWidth(5)).Tooltip(
+                                        X.ChartTip().TrackMouse(true).Width(200).Height(28)
+                                        .Renderer(r => r.Handler = "toolTip.setHtml(record.get('WarnLevel') + ',' + record.get('IsHandled') + ',' + record.get('AuditResult') + ',' +record.get('Mark') );")))
+                            )
+)
+    </div>
+
+}

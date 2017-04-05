@@ -1,0 +1,70 @@
+﻿@model CollectionPlan
+
+@{
+    ViewBag.Title = "CreateView";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+   
+    <script>
+        var set = function (com) {
+            CPlan.finance._SetPoInfo(com.getValue());
+        };
+    </script>
+}
+
+@section content
+{
+    @{
+        var content =
+                X.FormPanel()
+                .ID("form1")
+                .Layout(LayoutType.Column)
+                .BodyPadding(10)
+                .Frame(true)
+                .FieldDefaults(l => { l.LabelWidth = 70; l.LabelAlign = LabelAlign.Right; })
+                .Items(
+                X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(
+                X.ComboBoxFor(m => m.ProjectID).ID("ProjectID").AllowBlank(false).Editable(true).PageSize(5)
+                .Items(Model.ProjectItems)
+                   .Listeners(l => l.Select.Handler = "set(App.ProjectID);")),
+
+                X.Container().ColumnWidth(0.5).Layout(LayoutType.Form).Items(X.TextFieldFor(m => m.ProjectName).ID("ProjectName").Editable(false)),
+                X.Container().ColumnWidth(0.5).Layout(LayoutType.Form).Items(X.TextFieldFor(m => m.CustomerNo).ID("CustomerNo").Editable(false)),
+                X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(X.TextFieldFor(m => m.CustomerName).ID("ClientName").Editable(false)),
+                X.Container().ColumnWidth(0.5).Layout(LayoutType.Form).Items(X.TextFieldFor(m => m.ContactSum).ID("OfferMoney").Editable(false)),
+                X.Container().ColumnWidth(0.5).Layout(LayoutType.Form).Items(X.DateFieldFor(m => m.CreateTime).Editable(false).Value(DateTime.Now)),
+                X.Container().ColumnWidth(1).Layout(LayoutType.Column).Items(
+                X.TextField().Name("plan").Editable(false).Hidden(true).ID("collectionplan").ColumnWidth(0.1).Value(0),
+                
+                X.Button().Text("添加收款计划").MarginSpec("0 0 4 0").Icon(Icon.Add).ColumnWidth(1).DirectEvents(l => 
+                { l.Click.Action = "AddPlan"; l.Click.ExtraParams.Add(new Parameter() { Name = "num", Value = "App.collectionplan.getValue()", Mode = ParameterMode.Raw }); })),
+                X.Container().ID("plans").ColumnWidth(1).Layout(LayoutType.Column).Items(
+                X.Container().ColumnWidth(1).Layout(LayoutType.Column).Items(
+                X.ComboBox().ID("plantype").FieldLabel("收款类型").Name("DetailPlans[0].CollectionType").Items(Model.PlanTypeItems).ColumnWidth(0.25),
+                X.TextField().ID("CompletePercent").FieldLabel("项目进度").Name("DetailPlans[0].ProjectSchedule").ColumnWidth(0.25).Regex("^(\\d|[1-9]\\d|100)$"),
+                X.NumberField().FieldLabel("收款比例").Name("DetailPlans[0].CollectionRatio").AllowBlank(false).ColumnWidth(0.25).Regex("^(\\d|[1-9]\\d|100)$"),
+                X.NumberField().FieldLabel("金额").Name("DetailPlans[0].CollectionAmount").AllowBlank(false).ColumnWidth(0.25))),
+                
+                X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(X.FileUploadField().ID("AnnetPath").Icon(Icon.Attach).Width(260).FieldLabel("附件").Text("选择文件")),
+                X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(X.TextAreaFor(m => m.Remark))
+                )
+                .Buttons(
+                X.Button().Text("关闭").Handler("parent.App.win.close();"),
+                X.Button().Text("提交").FormBind(true).ID("Submit").DirectEvents(l =>
+                {
+                    l.Click.Action = "Submit";
+                    l.Click.Before = @"if (!#{form1}.getForm().isValid()) { return false; }
+                                Ext.Msg.wait('正在提交...', '上传中');";
+                    l.Click.FormID = "form1";
+                })
+            );
+    }
+
+    @(X.Viewport().Layout(LayoutType.Border).Items(
+        content.Region(Region.Center).AutoScroll(true))
+    )
+}

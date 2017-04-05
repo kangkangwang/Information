@@ -1,0 +1,133 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    ViewBag.Title = "收货单管理界面";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+    <script>
+        var deletemreceipt = function (id) {
+            Ext.MessageBox.confirm("提示", "确认删除该项？", function (but) {
+                if (but == "yes") {
+                    App.direct.gyproject.DeleteMReceipt(id);
+                    App.direct.gyproject.MReceiptReload();
+                }
+            });
+        };
+       
+        var onSuccess = function (grid, data) {
+            grid.show();
+            grid.getStore().loadData(data);
+        };
+    </script>
+}
+
+@section content{
+        @(X.Viewport().Layout(LayoutType.Auto).Items(
+        X.Toolbar().Frame(true).Border(false).Layout(LayoutType.HBox).AutoScroll(true).Items(
+            X.TextField().FieldLabel("项目编号").ID("no").Flex(3),
+            X.TextField().FieldLabel("收货单号").ID("field").Flex(3),
+            X.DateField().FieldLabel("开始时间").ID("start").Flex(3),
+            X.DateField().FieldLabel("结束时间").ID("end").Flex(3),
+            X.Button().Text("查询").ID("btninquire").Icon(Icon.ApplicationGo).Flex(1).DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("MReceiptQuery");
+                        de.Click.Success = "onSuccess(App.GridPanel1, result.data);";
+                        de.Click.ExtraParams.Add(new Parameter("addno", "App.no.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("addfield", "App.field.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("start", "App.start.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("end", "App.end.getValue()", ParameterMode.Raw));
+                        de.Click.EventMask.ShowMask = true;
+                    }),
+                    
+                    X.Button().Text("增加").Region(Region.North).Flex(1).Icon(Icon.Add).DirectEvents(de=>{
+                        de.Click.Url = Url.Action("MReceiptAddbtn");
+                        de.Click.EventMask.ShowMask = true;
+                    })),
+                    
+            X.FormPanel().Layout(LayoutType.Auto).Items(
+                X.GridPanel().ID("GridPanel1").Border(false)
+                .BottomBar(X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true)).Store(
+                      X.Store().ID("MReceiptStore").DataSource(Model).PageSize(15).Model(
+                                X.Model().IDProperty("ReceivePMNo").Fields(
+                                            new ModelField("PMNo", ModelFieldType.String),
+                                            new ModelField("PurchaseMNo", ModelFieldType.String),
+                                            new ModelField("SupplierName", ModelFieldType.String),
+                                            new ModelField("ProjectNo", ModelFieldType.String),
+                                            new ModelField("RMTotalPrice", ModelFieldType.String),
+                                            new ModelField("ApplyMaterialNo", ModelFieldType.String),
+                                            new ModelField("ReceivePMNo", ModelFieldType.String),
+                                            new ModelField("ReceivingCase", ModelFieldType.String),
+                                            new ModelField("Name", ModelFieldType.String),
+                                            new ModelField("ConfirmTime", ModelFieldType.String),
+                                            new ModelField("CheckStateLst", ModelFieldType.String)
+                                    )).Reader(X.JsonReader().RootProperty("data")))
+                                 .ColumnModel(
+
+                                     X.Column()
+                                    .Text("收货单号").Flex(3)
+                                    .DataIndex("ReceivePMNo"),
+                                
+                                    X.Column()
+                                    .Text("采购单主键").Flex(3)
+                                    .DataIndex("PMNo").Hidden(true),
+                                    
+                                     X.Column()
+                                    .Text("采购单号").Flex(3)
+                                    .DataIndex("PurchaseMNo"),
+
+                                    X.Column()
+                                    .Text("供货商").Flex(2)
+                                    .DataIndex("SupplierName"),
+                                            
+                                    X.Column()
+                                    .Text("项目编号").Flex(3)
+                                    .DataIndex("ProjectNo"),
+                                    
+                                    X.Column()
+                                    .Text("货物总额").Flex(3)
+                                    .DataIndex("RMTotalPrice"),
+
+                                    X.Column()
+                                    .Text("申请单号")
+                                    .Flex(2)
+                                    .DataIndex("ApplyMaterialNo"),
+
+                                    X.Column()
+                                    .Text("是否收货")
+                                    .Flex(2)
+                                    .DataIndex("ReceivingCase"),
+                                                    
+                                    X.Column()
+                                    .Text("审核状态")
+                                    .Flex(2)
+                                    .DataIndex("CheckStateLst"),
+                                    
+                                    X.Column()
+                                    .Text("经办人")
+                                    .Flex(2)
+                                    .DataIndex("Name"),
+                                    
+                                    X.Column()
+                                    .Text("收货时间")
+                                    .Flex(2).Renderer(RendererFormat.Date, new string[] { "'Y-n-j'" })
+                                    .DataIndex("ConfirmTime"),
+
+                                    X.CommandColumn().Region(Region.Center).Text("查看收货单详情").Flex(2).Commands(
+                                                    X.GridCommand().CommandName("detail").Icon(Icon.ApplicationCascade).Text("明细"))
+                                                        .DirectEvents(de =>
+                                                        {
+                                                            de.Command.Url = Url.Action("MDetail","Share");
+                                                            de.Command.ExtraParams.Add(new Parameter("gid", "record.data.ReceivePMNo", ParameterMode.Raw));
+                                                            de.Command.ExtraParams.Add(new Parameter("title", "收货物料详情", ParameterMode.Value));
+                                                        }),
+
+                                 X.CommandColumn().Region(Region.Center).Text("删除收货单").Hidden(true).Flex(2).Commands(
+                                                    X.GridCommand().CommandName("delete").Icon(Icon.ApplicationDelete).Text("删除"))
+                                                    .Listeners(l =>l.Command.Handler = "deletemreceipt(record.data.ReceivePMNo);"))
+                            )
+                            )
+    )
+}

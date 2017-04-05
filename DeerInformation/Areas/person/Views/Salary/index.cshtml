@@ -1,0 +1,95 @@
+﻿@model DeerInformation.Areas.person.Models.SalaryModel
+@{
+    ViewBag.Title = "index";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+
+}
+
+@section content
+{
+@{
+    var content = X.FormPanel()
+        .Region(Region.Center)
+        .Frame(true)
+        .BodyPadding(10)
+        .ModelValidation(true)
+        .Layout(LayoutType.HBox)
+        .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top, Pack = BoxPack.Center })
+        .PaddingSpec("20 0 0 0")
+        .FieldDefaults(l =>
+        {
+            l.LabelWidth = 100;
+            l.LabelAlign = LabelAlign.Right;
+        })
+        .Items(
+        X.Container().Layout(LayoutType.Form).Items(
+
+        X.Toolbar().Layout(LayoutType.HBox).Border(false)
+        .Items(X.ComboBoxFor(m => m.EmployeeId).AllowBlank(false)
+        .TypeAhead(true).MinChars(0).TriggerAction(TriggerAction.Query).ValueField("ID").DisplayField("Name")
+        .ListConfig(X.BoundList().LoadingText("查找中...").ItemTpl(X.XTemplate()
+        .Html(@<text>
+        <div class="search-item">
+        <h3><span>姓名：{Name}</span> 工号：{ID}</h3>
+        </div>
+        </text>)))
+        .Store(X.Store().ID("CheckerStore")
+                    .AutoLoad(false)
+                    .Proxy(Html.X().AjaxProxy()
+                        .Url(Url.Action("GetEmployee"))
+                        .ActionMethods(am => am.Read = HttpMethod.POST)
+                        .Reader(Html.X().JsonReader().RootProperty("data"))
+                    ).Model(Html.X().Model()
+                        .Fields(
+                            Html.X().ModelField().Name("Name"),
+                            Html.X().ModelField().Name("ID")
+                        )
+                    )).Flex(3),
+        X.NumberFieldFor(m => m.Year).Flex(1).MinValue(2016).MaxValue(2050), X.NumberFieldFor(m => m.Month).Flex(1).MinValue(1).MaxValue(12),
+        X.Button().Text("查询").FormBind(true).Icon(Icon.Magnifier).DirectClickAction("Select"),
+        X.Button().Text("修改").FormBind(true).Icon(Icon.PageSave).DirectEvents(l =>
+        {
+            l.Click.Action = "Save";
+            l.Click.Confirmation.ConfirmRequest = true;
+            l.Click.Confirmation.Title = "提示";
+            l.Click.Confirmation.Message = "确认修改员工本月工资吗？";
+        }
+        ))
+
+        ).Items(l =>
+        {
+            for (int i = 0; i < Model.SalaryItems.Count / 3; i++)
+            {
+                l.Add(X.Container().MarginSpec("20 0 0 0").Layout(LayoutType.HBox)
+                            .Items(X.NumberField().Hidden(true).Name(string.Format("Salarys[{0}].SalayId", i * 3)).Value(Model.SalaryItems[i * 3 + 0].Id), X.NumberField().AllowDecimals(true).DecimalPrecision(3).ID("Salaryitem" + Model.SalaryItems[i * 3 + 0].Id).Name(string.Format("Salarys[{0}].SalaryValue", i * 3)).FieldLabel(Model.SalaryItems[i * 3 + 0].Name).Value(Model.SalaryItems[i * 3 + 0].Value),
+                                 X.NumberField().Hidden(true).Name(string.Format("Salarys[{0}].SalayId", i * 3 + 1)).Value(Model.SalaryItems[i * 3 + 1].Id), X.NumberField().AllowDecimals(true).DecimalPrecision(3).ID("Salaryitem" + Model.SalaryItems[i * 3 + 1].Id).Name(string.Format("Salarys[{0}].SalaryValue", i * 3 + 1)).FieldLabel(Model.SalaryItems[i * 3 + 1].Name).Value(Model.SalaryItems[i * 3 + 1].Value),
+                                 X.NumberField().Hidden(true).Name(string.Format("Salarys[{0}].SalayId", i * 3 + 2)).Value(Model.SalaryItems[i * 3 + 2].Id), X.NumberField().AllowDecimals(true).DecimalPrecision(3).ID("Salaryitem" + Model.SalaryItems[i * 3 + 2].Id).Name(string.Format("Salarys[{0}].SalaryValue", i * 3 + 2)).FieldLabel(Model.SalaryItems[i * 3 + 2].Name).Value(Model.SalaryItems[i * 3 + 2].Value)
+                                  ));
+            }
+
+            l.Add(X.Container().MarginSpec("20 0 0 0").Layout(LayoutType.HBox)
+                          .Items(ls =>
+                          {
+                              int beforeCount = Model.SalaryItems.Count - Model.SalaryItems.Count % 3;
+                              for (int i = 0; i < Model.SalaryItems.Count % 3; i++)
+                              {
+                                  ls.Add(X.NumberField().Hidden(true).Name(string.Format("Salarys[{0}].SalayId", beforeCount + i)).Value(Model.SalaryItems[beforeCount + i].Id));
+                                  ls.Add(X.NumberField().AllowDecimals(true).DecimalPrecision(3).ID("Salaryitem" + Model.SalaryItems[beforeCount + i].Id).Name(string.Format("Salarys[{0}].SalaryValue", beforeCount + i)).FieldLabel(Model.SalaryItems[beforeCount + i + 0].Name).Value(Model.SalaryItems[beforeCount + i + 0].Value));
+
+                              }
+                          }
+                              ));
+
+
+        })
+        );
+
+}
+
+@(X.Viewport().Layout(LayoutType.Border).Items(content))
+}

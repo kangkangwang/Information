@@ -1,0 +1,155 @@
+﻿@model UserManage
+@{
+    ViewBag.Title = "index";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+    <script type="text/javascript">
+        var getselections = function () {
+
+            var grid = Ext.getCmp("grid").getSelectionModel().getSelection();
+            var result = new Array();
+            for (var i = 0; i < grid.length ; i++) {
+                result.push(grid[i].data);
+            }
+            var jsonstr = Ext.encode(result);
+            return jsonstr;
+        }
+        Ext.onReady(getselections);
+    </script>
+}
+
+@section content
+{
+    @{
+        var btn = X.Toolbar().Flex(1)
+                .Shadow(true)
+                .ID("pnlPackEnd")
+                .Layout(LayoutType.HBox)
+                .Defaults(X.Parameter().Name("margin").Value("0 5 0 0").Mode(ParameterMode.Value))
+                .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Middle, Pack = BoxPack.End })
+                .Items(
+                    X.Container().Flex(1).Layout(LayoutType.HBox).Items(
+                    X.ComboBoxFor(m => m.RoleID).Items(Model.RoleNameItems),
+                    X.TextFieldFor(m => m.SearchWord),
+                    X.Button().Text("查询").Icon(Icon.Find)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Action = "Select";
+                        de.Click.EventMask.ShowMask = true;
+                    })
+                    ),
+                    X.Button().Text("添加").Icon(Icon.GroupAdd)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Action = "Create";
+                        de.Click.EventMask.ShowMask = true;
+
+                    }),
+                    X.Button().Text("查看").Icon(Icon.GroupGo)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Action = "Deatil";
+                        de.Click.ExtraParams.Add(new Parameter("id", "Ext.getCmp('grid').getSelectionModel().getSelection()[0].data.UserID", ParameterMode.Raw));
+                        de.Click.EventMask.ShowMask = true;
+
+                    }),
+                    X.Button().Text("启用").Icon(Icon.Group).DirectEvents(de =>
+                    {
+                        de.Click.Action = "Enable";
+                        de.Click.EventMask.ShowMask = true;
+                        de.Click.Confirmation.ConfirmRequest = true;
+                        de.Click.Confirmation.Message = "是否确定启用选择项！";
+                        de.Click.ExtraParams.Add(new Parameter()
+                        {
+                            Name = "select",
+                            Mode = ParameterMode.Raw,
+                            Value = "getselections"
+
+                        }
+                            );
+                    }),
+                    X.Button().Text("禁用").Icon(Icon.GroupDelete).DirectEvents(de =>
+                    {
+                        de.Click.Action = "Forbid";
+                        de.Click.EventMask.ShowMask = true;
+                        de.Click.Confirmation.ConfirmRequest = true;
+                        de.Click.Confirmation.Message = "是否确定禁用选择项！";
+                        de.Click.ExtraParams.Add(new Parameter()
+                        {
+                            Name = "select",
+                            Mode = ParameterMode.Raw,
+                            Value = "getselections"
+
+                        }
+                            );
+                    }),
+                    X.Button().Text("更新").Icon(Icon.TableRefresh).DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("Select");
+                        de.Click.EventMask.ShowMask = true;
+                    })
+
+                );
+    }
+
+    @(X.Viewport().AutoRender(true).Layout(LayoutType.Border).Items(
+    X.FormPanel().Region(Region.North).Border(false).PaddingSpec("2 2 2 2").Items(btn),
+    X.Container().ID("system_main").Region(Region.Center).Layout(LayoutType.Anchor).AutoScroll(true)
+            .Items(X.GridPanel()
+                .ID("grid")
+                .AnchorHorizontal("100%")
+                .Store(X.Store()
+                .ID("storedata")
+                .PageSize(34)
+                    .Model(X.Model()
+                    .IDProperty("UserID")
+                    .Fields("UserID", "UserName","EmployeeID", "Activity", "Creator", "CreateTime","RoleID", "Description")
+                    )
+                    .DataSource(Model.Users)
+
+                )
+                .ColumnModel(
+                    X.Column()
+                    .Text("角色描述")
+                    .Flex(1)
+                    .DataIndex("Description"),
+                    
+                    X.Column()
+                    .Text("工号")
+                    .Flex(1)
+                    .DataIndex("EmployeeID"),
+
+                    X.Column()
+                    .Text("用户名")
+                    .Flex(1)
+                    .DataIndex("UserName"),
+
+                     X.Column()
+                    .Text("已激活")
+                    .Flex(1)
+                    .DataIndex("Activity"),
+
+                    X.Column()
+                    .Text("创建人")
+                    .Flex(1)
+                    .DataIndex("Creator"),
+
+                    X.DateColumn()
+                    .Text("创建时间")
+                    .Flex(1)
+                    .DataIndex("CreateTime")
+                    .Format("yyyy-MM-dd")
+
+                    )
+                    .SelectionModel(X.CheckboxSelectionModel().Mode(SelectionMode.Multi))
+                    .BottomBar(
+                            Html.X().PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true)
+                    )
+
+    )
+))
+}

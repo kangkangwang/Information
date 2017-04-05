@@ -1,0 +1,211 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var reload = function () {
+        App.direct.person.OWApplyReload();
+    };
+    var onSuccess = function (grid, data) {
+        grid.show();
+        grid.getStore().loadData(data);
+    };
+    var toggleRowSelect = function () {
+        App.SpreadsheetSelectionModel1.setRowSelect(false);
+        App.SpreadsheetSelectionModel1.setRowSelect(true);
+    };
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>OverWorkApply</title>
+</head>
+
+<body>
+    <div>
+        @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+
+        @(X.Viewport().ID("BackViewPort")
+        .Layout(LayoutType.Border)
+        .Items(
+      X.Panel().Region(Region.Center).Layout(LayoutType.Border).Title("可调休加班时数申请").Items(
+      X.Panel().Region(Region.West).Width(200).Collapsible(false).AutoScroll(true).Items(
+        X.TreePanel().ID("jiagou").RootVisible(true).UseArrows(true).AutoLoad(true)
+                           .DirectEvents(
+                           de =>
+                           {
+                               de.ItemClick.Url = Url.Action("DepClick");
+                               de.ItemClick.ExtraParams.Add(
+                                   new Parameter("dep", "record.data.id", ParameterMode.Raw, true));
+                               de.ItemClick.Success = "onSuccess(App.OverWorkApplyGridPanal, result.data);";
+                               de.ItemClick.EventMask.ShowMask = true;
+                           }
+                      )
+                      .Root(ViewData["root"] as Node)
+      ),
+      X.Panel().AutoScroll(true).Region(Region.Center).Items(
+       X.FormPanel().Layout(LayoutType.Column).Items(
+                   X.TextField().ID("StaffID")
+                   .FieldLabel("工号"),
+                   X.TextField().ID("Name")
+                   .FieldLabel("姓名"),
+           X.Button().Text("查询").DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("Getalldata");
+                    de.Click.Success = "onSuccess(App.OverWorkApplyGridPanal, result.data);";
+                    de.Click.ExtraParams.Add(new Parameter("staffid", "App.StaffID.getValue()", ParameterMode.Raw));
+                    de.Click.ExtraParams.Add(new Parameter("name", "App.Name.getValue()", ParameterMode.Raw));
+                    de.Click.EventMask.ShowMask = true;
+                }),
+                     X.Button().Text("添加")
+                            .DirectEvents(de =>
+                              {
+                                  de.Click.Url = Url.Action("Add");
+                              }),
+                //X.Button().Text("审核")
+                //            .DirectEvents(de =>
+                //              {
+                //                  de.Click.Url = Url.Action("Check");
+                //                  de.Click.ExtraParams.Add(new Parameter("id", "App.OverWorkApplyGridPanal.getSelectionModel().getSelection()[0].data.ID", ParameterMode.Raw));
+                //              }),
+                              X.Button().Text("详细")
+                            .DirectEvents(de =>
+                              {
+                                  de.Click.Url = Url.Action("Detail");
+                                  de.Click.ExtraParams.Add(new Parameter("id", "App.OverWorkApplyGridPanal.getSelectionModel().getSelection()[0].data.ID", ParameterMode.Raw));
+                              })
+                        ),
+                       X.GridPanel().ID("OverWorkApplyGridPanal").AutoScroll(true).ColumnLines(true)
+                                      .Store(
+                                         X.Store().ID("OverWorkApplyStore").PageSize(20)
+                                                  .AutoLoad(true)
+                                                  .DataSource(Model)
+                                           .Model(
+                                                     X.Model().IDProperty("ID").Fields("ID","StaffID", "Name", "Department"
+                              , "StartTime", "EndTime","TimeSpan","CheckTimeSpan","Valid","Remark", "CreaterName", "CreateTime", "EditorName","EditeTime","OperationListID")
+                                                  )
+                                          .Reader(
+                                                      X.JsonReader().RootProperty("data")
+                                                      )
+
+                                  )
+                                      .SelectionModel(
+                                          X.CheckboxSelectionModel().Mode(SelectionMode.Multi)
+                                       )
+                                        .ViewConfig(X.GridView().TrackOver(false))
+                                          .BottomBar(
+                                                Html.X().PagingToolbar().HideRefresh(true)
+                                            )
+                                .ColumnModel(
+                                       X.Column()
+                                       .Text("ID")
+                                       .Width(80)
+                                       .DataIndex("ID").Hidden(true),
+
+                                       X.Column()
+                                       .Text("工号")
+                                       .Width(80)
+                                       .DataIndex("StaffID"),
+
+                                       X.Column()
+                                       .Text("姓名")
+                                       .Width(80)
+                                       .DataIndex("Name"),
+
+                                       X.Column()
+                                       .Text("部门")
+                                       .Width(80)
+                                       .DataIndex("Department"),
+
+                                       X.DateColumn()
+                                      .Text("调休加班开始时间")
+                                      .Width(80)
+                                      .Format("yyyy-MM-dd HH:mm:ss")
+                                      .DataIndex("StartTime"),
+                                      
+                                      X.DateColumn()
+                                      .Text("调休加班结束时间")
+                                      .Width(80)
+                                      .Format("yyyy-MM-dd HH:mm:ss")
+                                      .DataIndex("EndTime"),
+
+                                       X.Column()
+                                       .Text("可调休加班时数")
+                                       .Width(80)
+                                       .DataIndex("TimeSpan"),
+                                       
+                                       X.Column()
+                                       .Text("审核时数")
+                                       .Width(80)
+                                       .DataIndex("CheckTimeSpan"),
+
+                                       X.CheckColumn()
+                                       .Text("有效")
+                                       .Width(80)
+                                       .DataIndex("Valid").Hidden(true),
+
+                                      X.Column()
+                                      .Text("备注")
+                                      .Width(80)
+                                      .DataIndex("Remark"),
+
+                                      X.Column()
+                                      .Text("申请人")
+                                      .Width(80)
+                                      .DataIndex("CreaterName"),
+
+                                      X.DateColumn()
+                                      .Text("申请时间")
+                                      .Width(80)
+                                      .Format("yyyy-MM-dd HH:mm:ss")
+                                      .DataIndex("CreateTime"),
+
+                                      X.Column()
+                                      .Text("修改人")
+                                      .Width(80)
+                                      .DataIndex("EditorName"),
+
+                                      X.DateColumn()
+                                       .Text("修改时间")
+                                       .Width(80)
+                                       .Format("yyyy-MM-dd HH:mm:ss")
+                                       .DataIndex("EditeTime"),
+
+                                      X.Column()
+                                        .Text("审核ID")
+                                        .Width(80)
+                                        .DataIndex("OperationListID").Hidden(true),
+
+                                      X.CommandColumn()
+                                      .Width(80)
+                                      .Commands(
+                                                 Html.X().GridCommand()
+                                                .CommandName("update")
+                                                .Icon(Icon.UserEdit)
+                                                .Text("修改")
+                                            )
+                                           .DirectEvents(de =>
+                                           {
+                                               de.Command.Url = Url.Action("Update");
+                                               de.Command.ExtraParams.Add(new Parameter("id", "record.data.ID", ParameterMode.Raw));
+                                               de.Command.ExtraParams.Add(new Parameter("opid", "record.data.OperationListID", ParameterMode.Raw));
+                                           })
+
+                                )
+                  )
+         )
+        )
+        )
+
+
+    </div>
+</body>
+</html>
+
+
+

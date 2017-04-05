@@ -1,0 +1,156 @@
+﻿@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+
+    var onSuccess = function (grid, data) {
+        grid.show();
+        grid.getStore().loadData(data);
+    };
+
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ShowStaffsTable</title>
+</head>
+
+<body>
+    <div>
+       @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default) 
+       @(X.Panel().Height(600).Items(
+       X.FormPanel().Layout(LayoutType.Column).Region(Region.North).Items(
+            X.TextField().ID("staffname")
+           .FieldLabel("姓名"),
+
+           X.TextField().ID("company")
+           .FieldLabel("公司"),
+
+
+           X.Button().Text("查询").DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("Getdata");
+                    de.Click.Success = "onSuccess(App.ShowConTractGrid, result.data);";
+                    de.Click.ExtraParams.Add(new Parameter("staffname", "App.staffname.getValue()", ParameterMode.Raw));
+                    de.Click.ExtraParams.Add(new Parameter("company", "App.company.getValue()", ParameterMode.Raw));
+                    de.Click.EventMask.ShowMask = true;
+                }),
+            X.FormPanel().ID("form")
+         
+
+       ),
+                       X.GridPanel().ID("ShowConTractGrid").Title("").AutoScroll(true).ColumnLines(true)
+                                      .Store(
+                                         X.Store().ID("StaffsStore")
+                                                  .AutoLoad(true)
+                                                  .DataSource(Model)
+                                           .Model(
+                                                      X.Model().Fields(w =>
+                                                     {
+
+                                                         foreach (var dd in TempData["HashGetV_HR_Absence"] as List<DeerInformation.Areas.person.Models.HashMap.HashMapbase>)
+                                                         {
+                                                             if (dd.IsNeed)
+                                                             {
+
+                                                                 if (dd.type.Contains("date"))
+                                                                 {
+                                                                     w.Add(new ModelField(dd.Id, ModelFieldType.Date));
+                                                                 }
+                                                                 else if (dd.type == "int")
+                                                                 {
+                                                                     w.Add(new ModelField(dd.Id, ModelFieldType.Int));
+                                                                 }
+                                                                 else
+                                                                 {
+                                                                     w.Add(new ModelField(dd.Id, ModelFieldType.String));
+                                                                 }
+                                                             }
+                                                         }
+                                                     }
+                                                     )
+                                                  )
+                                          .Reader(
+                                                      X.JsonReader().RootProperty("data")
+                                )
+
+                                  )
+                                      .SelectionModel(
+                                          X.SpreadsheetSelectionModel()
+                                           .ID("SpreadsheetSelectionModel1")
+                                           .ColumnSelect(true)
+                                           .CheckboxSelect(true)
+                                           .PruneRemoved(false)
+                                           .Extensible(SpreadsheetExtensible.Y)
+                                       )
+                                        .ViewConfig(X.GridView().TrackOver(false))
+
+                                .Plugins(
+                                             X.FilterHeader()
+                                       )
+                                .ColumnModel(w =>
+                                {
+
+                                    foreach (var dd in TempData["HashGetV_HR_Absence"] as List<DeerInformation.Areas.person.Models.HashMap.HashMapbase>)
+                                    {
+                                        if (dd.IsNeed)
+                                        {
+                                            var pp = new Column();
+                                            pp.DataIndex = dd.Id;
+                                            pp.Text = dd.Name;
+                                            if (!dd.Isshow)
+                                                pp.Hidden = true;
+                                            if (dd.type == "date")
+                                            {
+                                                pp.Renderer.Format = RendererFormat.Date;
+                                                pp.Renderer.FormatArgs = new string[] { "'Y-m-d'" };
+                                            }
+                                            if (dd.type == "datetime")
+                                            {
+                                                pp.Renderer.Format = RendererFormat.Date;
+                                                pp.Renderer.FormatArgs = new string[] { "'Y-m-d H:m'" };
+                                            }
+                                            if (dd.render.Length > 0)
+                                            {
+                                                pp.Renderer.Handler = "return value +'" + dd.render + "';";
+                                            }
+
+                                            w.Add(pp);
+
+
+                                        }
+                                    }
+
+                                    var zz = Html.X().CommandColumn().Width(80)
+                                        .Commands(
+                                             Html.X().GridCommand()
+                                            .CommandName("update")
+                                            .Icon(Icon.ApplicationForm)
+                                            .Text("审核")
+                                        )
+                                        .DirectEvents(de =>
+                                        {
+                                            de.Command.Url = Url.Action("", "");
+                                            de.Command.ExtraParams.Add(new Parameter("", "record.data.", ParameterMode.Raw));
+                                        });
+                                    w.Add(zz);
+
+
+                                }
+                                )
+
+                               )
+
+
+                    )     
+
+    </div>
+</body>
+</html>
+
+

@@ -1,0 +1,308 @@
+﻿@model DeerInformation.Areas.user.Models.WorkPlatform
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+    <script>
+        var template = '<span style="color:{0};">{1}</span>';
+
+        var change = function(value) {
+            return Ext.String.format(template, (value > 0) ? "green" : "red", value);
+        };
+
+        var pctChange = function(value) {
+            return Ext.String.format(template, (value > 0) ? "green" : "red", value + "%");
+        };
+
+        var readMessage=function(record) {
+            workplatform.user.SetRead(record.data.id,
+            {
+                success: function(result) {
+                    App.MessageStore.remove(record);
+                }
+            });
+        }
+
+    </script>
+}
+
+@section content
+{
+    @{
+        var platform = X.Panel()
+                .Flex(1)
+                .Border(false)
+                .Header(false)
+                .TopBar(new Toolbar
+                {
+                    ItemID = "breadcrumb",
+                    Items =
+                     {
+                         X.HyperlinkButton().Text("任务").DirectEvents(de =>
+                                                  {
+                                                      de.Click.Url = Url.Action("TaskCheck");
+                                                  }),
+                         new ToolbarSpacer(),
+                         new ToolbarTextItem {Text = "/"},
+                         new ToolbarSpacer(),
+                         X.HyperlinkButton().Text("消息").DirectEvents(de =>
+                                                  {
+                                                      de.Click.Url = Url.Action("Message");
+                                                  })
+                     },
+                     Hidden = true
+                })
+                .Layout(LayoutType.VBox)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    //X.Container().Hidden(true)
+                    //    .Height(50)
+                    //    .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Middle, })
+                    //    .Items(
+                    //        X.Label()
+                    //            .Text("个人工作平台")
+                    //            .MarginSpec("0 0 0 20")
+                    //            .Height(40)
+                    //            .StyleSpec("color:#333; font-size: 24px;"),
+
+                    //        X.Container().Flex(1),
+
+                    //        X.Button()
+                    //            .Text("个人工作平台设置")
+                    //            .Icon(Icon.Cog)
+                    //            .MarginSpec("0 20 0 0")
+                    //    ),
+
+                    X.Portal()
+                        .Border(false)
+                        .Flex(1)
+                        .Items(
+                            X.PortalColumn()
+                                .Cls("x-column-padding")
+                                .MarginSpec("2 2 0 2")
+                                .Items(
+                                    X.Portlet()
+                                        .Title("工作日历")
+                                        .Closable(false)
+                                        .Layout(LayoutType.Fit)
+                                        .Anchor("100% 50%")
+                                        .Height(370)
+                                        .TopBar(new Toolbar
+                                        {
+                                            Items =
+                                             {
+                                                 new Button
+                                                 {
+                                                     Text = "Reload",
+                                                     Icon = Icon.ArrowRefresh,
+                                                     OnClientClick = "App.Store1.load()"
+                                                 }
+                                             }
+                                        })
+                                        .Items(
+                                            X.GridPanel()
+                                                .Header(false)
+                                                .Border(false)
+                                                .Store(Html.X().Store()
+                                                    .ID("Store1")
+                                                    .Proxy(
+                                                        Html.X().AjaxProxy()
+                                                            .Url(Url.Action("GetCalendarData"))
+                                                            .ActionMethods(actions =>
+                                                            {
+                                                                actions.Read = HttpMethod.POST;
+                                                            })
+                                                            .Reader(
+                                                                Html.X().JsonReader().RootProperty("result")
+                                                            )
+                                                    )
+                                                    .Model(Html.X().Model().Fields("date", "week", "am_pm", "schedule"))
+                                                ).ColumnModel(
+                                                    X.Column().Text("日期").DataIndex("date").Flex(1),
+                                                    X.Column().Text("星期").DataIndex("week").Flex(1),
+                                                    X.Column().Text("AM/PM").DataIndex("am_pm").Flex(1),
+                                                    X.Column().Text("日程").DataIndex("schedule").Flex(1)
+                                                    )
+                                                
+                                        ),
+
+                                    X.Portlet()
+                                        .Title("任务消息")
+                                        .Closable(false)
+                                        .Layout(LayoutType.Fit)
+                                        .Anchor("100% 50%")
+                                        .Height(370)
+                                        .TopBar(new Toolbar
+                                        {
+                                            Items =
+                                             {
+                                                 new Button
+                                                 {
+                                                     Text = "Reload",
+                                                     Icon = Icon.ArrowRefresh,
+                                                     OnClientClick = "App.MessageStore.load();"
+                                                 }
+                                             }
+                                        })
+                                        .Items(
+                                            X.GridPanel()
+                                                .Header(false)
+                                                .Border(false)
+                                                .Store(X.Store()
+                                                    .ID("MessageStore")
+                                                    .AutoLoad(true)
+                                                    .Proxy(
+                                                        X.AjaxProxy()
+                                                            .Url(Url.Action("GetUnreadMessage"))
+                                                            .ActionMethods(actions =>
+                                                            {
+                                                                actions.Read = HttpMethod.POST;
+                                                            })
+                                                            .Reader(
+                                                                X.JsonReader().RootProperty("result")
+                                                            )
+                                                    )
+                                                    .Model(X.Model()
+                                                        .Fields(
+                                                            new ModelField("id"),
+                                                            new ModelField("title"),
+                                                            new ModelField("type"),
+                                                            new ModelField("createtime"),
+                                                            new ModelField("url")
+                                                        )
+                                                    )
+
+                                                )
+                                                .ColumnModel(
+                                                    X.Column().Text("类型").DataIndex("type").Flex(1),
+                                                    X.Column().Text("消息").DataIndex("title").Flex(1),
+                                                    X.DateColumn().Text("时间").DataIndex("createtime").Format("yyyy-MM-dd HH:mm:ss").Width(200),
+                                                    X.CommandColumn().Text("操作").Commands(
+                                                    X.GridCommand().CommandName("Delete").Icon(Icon.Attach).Text("前往处理").ToolTip(tt => tt.Text = "前往处理")
+                                                    ).Listeners(ls =>
+                                                    {
+                                                        ls.Command.Handler = "readMessage(record);";
+                                                    })
+                                                )
+                                        )
+                                ),
+
+                            X.PortalColumn()
+                                .Cls("x-column-padding")
+                                .MarginSpec("2 2 0 2")
+                                .Items(
+                                    X.Portlet()
+                                        .Title("考勤情况")
+                                        .Layout(LayoutType.Fit)
+                                        .Anchor("100% 50%")
+                                        .Height(370)
+                                        .Closable(false)
+                                        .TopBar(new Toolbar
+                                        {
+                                            Items =
+                                                {
+                                                    new Button
+                                                    {
+                                                        Text = "Reload",
+                                                        Icon = Icon.ArrowRefresh,
+                                                        OnClientClick = "App.CheckStore.load();"
+                                                    }
+                                                }
+                                        })
+                                        .Items(
+                                            X.GridPanel()
+                                                .Header(false)
+                                                .Border(false)
+                                                .Store(X.Store().ID("CheckStore")
+                                                    .AutoLoad(true)
+                                                    .Proxy(
+                                                        X.AjaxProxy()
+                                                            .Url(Url.Action("GetCheck"))
+                                                            .ActionMethods(actions =>
+                                                            {
+                                                                actions.Read = HttpMethod.POST;
+                                                            })
+                                                            .Reader(
+                                                                X.JsonReader().RootProperty("result")
+                                                            )
+                                                    )
+                                                    .Model(X.Model()
+                                                        .Fields(
+                                                            new ModelField("AttendDate"),
+                                                            new ModelField("Name"),
+                                                            new ModelField("AbsentSum")
+                                                        )
+                                                    )
+
+                                                )
+                                                .ColumnModel(
+                                                X.DateColumn().Text("日期").DataIndex("AttendDate").Format("yyyy-MM-dd").Flex(1),
+                                                    X.Column().Text("状态").DataIndex("Name").Flex(1),
+                                                    X.Column().Text("缺勤时数").DataIndex("AbsentSum").Flex(1)
+                                                )
+                                        )
+                                        ,
+                                        X.Portlet()                                     
+                                        .Title("工作日报")
+                                        .Layout(LayoutType.Fit)
+                                        .Anchor("100% 50%")
+                                        .Height(370)
+                                        .Closable(false)
+                                        .TopBar(new Toolbar
+                                        {
+                                            Items =
+                                                {
+                                                    new Button
+                                                    {
+                                                        Text = "Reload",
+                                                        Icon = Icon.ArrowRefresh,
+                                                        OnClientClick = "App.WorkReportStore.load();"
+                                                    }
+                                                }
+                                        })
+                                        .Items(
+                                            X.GridPanel()
+                                                .Header(false)
+                                                .Border(false)
+                                                .Store(X.Store().ID("WorkReportStore")
+                                                    .AutoLoad(true)
+                                                    .Proxy(
+                                                        X.AjaxProxy()
+                                                            .Url(Url.Action("GetWorkreport"))
+                                                            .ActionMethods(actions =>
+                                                            {
+                                                                actions.Read = HttpMethod.POST;
+                                                            })
+                                                            .Reader(
+                                                                X.JsonReader().RootProperty("result")
+                                                            )
+                                                    )
+                                                    .Model(X.Model()
+                                                        .Fields(
+                                                            new ModelField("ProjectName"),
+                                                            new ModelField("ProjectSite"),
+                                                            new ModelField("Date"),
+                                                            new ModelField("State")
+                                                        )
+                                                    )
+
+                                                )
+                                                .ColumnModel(
+                                                    X.Column().Text("项目名称").DataIndex("ProjectName").Flex(2),
+                                                    X.Column().Text("考勤归属地").DataIndex("ProjectSite").Flex(2),
+                                                    X.DateColumn().Text("日期").DataIndex("Date").Format("yyyy-MM-dd").Flex(1),
+                                                    X.Column().Text("审核状态").DataIndex("State").Flex(1)
+                                                )
+                                        )
+
+                                )
+                        )
+                );
+    }
+
+    @(platform)
+}

@@ -1,0 +1,202 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var reload = function () {
+        App.direct.person.DepartmentReload();
+    };
+    var onSuccess = function (grid, data) {
+        grid.show();
+        grid.getStore().loadData(data);
+    };
+    var toggleRowSelect = function () {
+        App.SpreadsheetSelectionModel1.setRowSelect(false);
+        App.SpreadsheetSelectionModel1.setRowSelect(true);
+    };
+    var deletejs = function (grid) {
+        var store = grid.store,
+     records = grid.selModel.getSelection();
+        if (records != "") {
+            Ext.MessageBox.confirm("提示", "确认删除该项？", function (but) {
+                if (but == "yes") {
+                    exportData(grid, true);
+                    //store.remove(records);
+                    //store.load(true);
+                }
+            });
+        }
+        else {
+            Ext.Msg.alert("提示", "未选择任何列！");
+        }
+    };
+    function exportData(grid, selectedOnly) {
+        grid.submitData(
+            //serialization config
+            {
+                selectedOnly: selectedOnly
+            },
+
+            //request config
+            {
+                isUpload: true,
+                url: '@Url.Action("JSDeleteDepartment")'
+            }
+       );
+    }
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Department</title>
+</head>
+
+<body>
+    <div>
+        @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+
+        @(X.Viewport().ID("BackViewPort")
+        .Layout(LayoutType.Border)
+        .Items(
+      X.Panel().Region(Region.Center).Layout(LayoutType.Border).Title("部门管理").Items(
+      X.Panel().Region(Region.Center).AutoScroll(true).Items(
+       X.FormPanel().Layout(LayoutType.Column).Items(
+                   X.TextField().ID("No")
+                   .FieldLabel("部门编号"),
+                   X.TextField().ID("Name")
+                   .FieldLabel("部门名称"),
+           X.Button().Text("查询").DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("Getalldata");
+                    de.Click.Success = "onSuccess(App.DepartmentGridPanel, result.data);";
+                    de.Click.ExtraParams.Add(new Parameter("id", "App.No.getValue()", ParameterMode.Raw));
+                    de.Click.ExtraParams.Add(new Parameter("name", "App.Name.getValue()", ParameterMode.Raw));
+                    de.Click.EventMask.ShowMask = true;
+                }),
+                   X.Button().Text("添加")
+                            .DirectEvents(de =>
+                              {
+                                  de.Click.Url = Url.Action("Add");
+                              }),
+                            X.Button().Text("删除").Listeners(l =>
+                        {
+                            l.Click.Handler = "deletejs(App.DepartmentGridPanel);";
+                        })
+       ),
+                       X.GridPanel().ID("DepartmentGridPanel").AutoScroll(true).ColumnLines(true)
+                                      .Store(
+                                         X.Store().ID("DepartmentStore").PageSize(20)
+                                                  .AutoLoad(true)
+                                                  .DataSource(Model)
+                                           .Model(
+                                                     X.Model().IDProperty("ID").Fields("ID", "PreID", "No", "Name", "Level"
+                              , "Dorder",  "Remark", "CreaterName", "CreateTime", "EditorName", "EditeTime","Valid")
+                                                  )
+
+                                                  .Reader(
+                                                              X.JsonReader().RootProperty("data")
+                                                              )
+
+                                  )
+                                      .SelectionModel(
+                                                  X.CheckboxSelectionModel().Mode(SelectionMode.Multi)
+                                       )
+                                        .ViewConfig(X.GridView().TrackOver(false))
+                                                         .BottomBar(
+                                        Html.X().PagingToolbar().HideRefresh(true)
+                                    )
+                                .ColumnModel(
+                                               X.Column()
+                                               .Text("ID")
+                                               .Width(55)
+                                               .DataIndex("ID").Hidden(true),
+
+                                               X.Column()
+                                               .Text("PreID")
+                                               .Width(55)
+                                               .DataIndex("PreID").Hidden(true),
+
+                                               X.Column()
+                                               .Text("部门编号")
+                                               .Width(55)
+                                               .DataIndex("No"),
+
+                                               X.Column()
+                                               .Text("部门名称")
+                                               .Width(55)
+                                               .DataIndex("Name"),
+
+                                               X.Column()
+                                               .Text("层级")
+                                               .Width(55)
+                                               .DataIndex("Level"),
+                                               
+                                               X.Column()
+                                               .Text("序号")
+                                               .Width(55)
+                                               .DataIndex("DOrder"),
+                                               
+                                               
+                                               X.CheckColumn()
+                                               .Text("Valid")
+                                               .Width(55)
+                                               .DataIndex("Valid").Hidden(true),
+
+                                               X.Column()
+                                               .Text("备注")
+                                               .Width(55)
+                                               .DataIndex("Remark"),
+
+                                                      X.Column()
+                                                      .Text("创建人")
+                                                      .Width(55)
+                                                      .DataIndex("CreaterName"),
+
+                                                      X.DateColumn()
+                                                      .Text("创建时间")
+                                                      .Width(55)
+                                                      .Format("yyyy-MM-dd HH:mm:ss")
+                                                      .DataIndex("CreateTime"),
+
+                                                      X.Column()
+                                                      .Text("修改人")
+                                                      .Width(55)
+                                                      .DataIndex("EditorName"),
+
+                                                      X.DateColumn()
+                                                       .Text("修改时间")
+                                                       .Width(55)
+                                                       .Format("yyyy-MM-dd HH:mm:ss")
+                                                       .DataIndex("EditeTime"),
+
+                                      X.CommandColumn()
+                                      .Width(80)
+                                      .Commands(
+                                                 Html.X().GridCommand()
+                                                .CommandName("update")
+                                                .Icon(Icon.UserEdit)
+                                                .Text("修改")
+                                            )
+                                           .DirectEvents(de =>
+                                           {
+                                               de.Command.Url = Url.Action("Update");
+                                               de.Command.ExtraParams.Add(new Parameter("id", "record.data.ID", ParameterMode.Raw));
+                                           })
+
+                                )
+                  )
+         )
+        )
+        )
+
+
+    </div>
+</body>
+</html>
+
+

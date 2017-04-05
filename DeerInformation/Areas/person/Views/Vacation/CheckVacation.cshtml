@@ -1,0 +1,178 @@
+﻿@model DeerInformation.Areas.person.Models.VacationApply
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var closewindow = function () {
+        parent.App.windowVacation.close()
+    };
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CheckVacation</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                   X.FieldSet().ID("OreList").Title("原记录").Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                   X.Panel().Layout(LayoutType.HBox).Items(
+                   X.Panel().Flex(7).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                           X.TextFieldFor(m => m.StaffID).ID("StaffID").FieldLabel("工号").Editable(false),
+                           X.TextFieldFor(m => m.Department).ID("Department").FieldLabel("部门").Editable(false),
+                           X.ComboBoxFor(m => m.VPType).FieldLabel("请假类型").Editable(false).Items(new ListItem("年假"), new ListItem("调休假"),
+                              new ListItem("产假"), new ListItem("婚假"), new ListItem("丧假"), new ListItem("工伤假"), new ListItem("陪产假"), new ListItem("事假"), new ListItem("带薪休假"), new ListItem("其他")).EmptyText("请选择...").Selectable(false),
+                           X.TextFieldFor(m => m.StartTimeStr).FieldLabel("请假开始时间").Editable(false),
+                           X.TextFieldFor(m => m.Remark).FieldLabel("备注").Editable(false),
+                           //X.TextFieldFor(m => m.CreaterName).FieldLabel("申请人").Editable(false),
+                           X.TextFieldFor(m => m.ID).ID("ID").Hidden(true),
+                                   X.HiddenFor(m => m.CreaterName),
+                              X.HiddenFor(m => m.CreateTime),
+                           X.HiddenFor(m => m.Valid),
+                           X.HiddenFor(m => m.StartTime),
+                              X.HiddenFor(m => m.EndTime),
+                              X.HiddenFor(m => m.EditorName),
+                              X.HiddenFor(m => m.EditeTime),
+                              X.HiddenFor(m => m.LastID),
+                              X.HiddenFor(m => m.VPEdit),
+                              X.HiddenFor(m => m.VPDelete),
+                              X.HiddenFor(m => m.EditOrDelete)
+                   ),
+                   X.Panel().Flex(7).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                   X.TextFieldFor(m => m.Name).ID("Name").FieldLabel("姓名").Editable(false),
+                   X.TextFieldFor(m => m.TimeSpan).FieldLabel("请假时长（天）").Editable(false),
+                   X.TextFieldFor(m => m.VPReason).FieldLabel("请假事由").Editable(false),
+                   X.TextFieldFor(m => m.EndTimeStr).FieldLabel("请假结束时间").Editable(false)
+                   //X.TextFieldFor(m => m.CreateTime).FieldLabel("申请时间").Editable(false)
+                   )
+                   ),
+                   X.Panel().Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                   X.ComboBoxFor(m => m.CheckFlowId).FieldLabel("审核流程").Editable(false).Selectable(false)
+                      .DisplayField("name")
+                      .ValueField("id")
+                      .Store(X.Store()
+                      .AutoLoad(true)
+                      .Model(X.Model()
+                      .IDProperty("Id")
+                      .Fields(
+                              new ModelField("id", ModelFieldType.String) { Mapping = "ID" },
+                              new ModelField("name", ModelFieldType.String) { Mapping = "Name" }
+                      )
+                      )
+                      .Proxy(X.AjaxProxy().Url(Url.Action("CheckFlowItems")).Reader(X.JsonReader().RootProperty("data")))
+                      ),
+                      X.ComboBoxFor(m => m.State).FieldLabel("审核意见").Editable(false).Selectable(false)
+                      .DisplayField("name")
+                      .ValueField("id")
+                      .Store(X.Store()
+                      .AutoLoad(true)
+                      .Model(X.Model()
+                      .IDProperty("Id")
+                      .Fields(
+                              new ModelField("id", ModelFieldType.String) { Mapping = "ID" },
+                              new ModelField("name", ModelFieldType.String) { Mapping = "Description" }
+                      )
+                      )
+                      .Proxy(X.AjaxProxy().Url(Url.Action("CheckStateItems")).Reader(X.JsonReader().RootProperty("data")))
+                      ),
+                      X.TextFieldFor(m => m.DescriptionForCheck).FieldLabel("审核备注").Editable(false)
+                   )
+       ),
+
+               X.FieldSet().ID("PreList").Title("销假记录").Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+               X.Panel().ID("PrePanel").Layout(LayoutType.HBox).Items(
+                           X.Panel().ID("PrePanel1").Flex(7).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                   X.TextFieldFor(m => m.PreStaffID).ID("PreStaffID").FieldLabel("工号").Editable(false),
+                           X.TextFieldFor(m => m.PreDepartment).ID("PreDepartment").FieldLabel("部门").Editable(false),
+                           X.ComboBoxFor(m => m.PreVPType).FieldLabel("请假类型").Editable(false).Items(new ListItem("年假"), new ListItem("调休假"),
+                              new ListItem("产假"), new ListItem("婚假"), new ListItem("丧假"), new ListItem("工伤假"), new ListItem("陪产假"), new ListItem("事假"), new ListItem("其他")).EmptyText("请选择...").Selectable(false),
+                           X.TextFieldFor(m => m.PreStartTimeStr).FieldLabel("请假开始时间").Editable(false),
+                           X.TextFieldFor(m => m.PreRemark).FieldLabel("备注").Editable(false),
+                           //X.TextFieldFor(m => m.PreCreaterName).FieldLabel("申请人").Editable(false),
+                           X.TextFieldFor(m => m.PreID).ID("PreID").Hidden(true),
+                          X.HiddenFor(m => m.PreCreaterName),
+                      X.HiddenFor(m => m.PreCreateTime),
+                           X.HiddenFor(m => m.PreValid),
+                           X.HiddenFor(m => m.PreStartTime),
+                              X.HiddenFor(m => m.PreEndTime),
+                              X.HiddenFor(m => m.PreEditorName),
+                              X.HiddenFor(m => m.PreEditeTime),
+                              X.HiddenFor(m => m.PreLastID),
+                              X.HiddenFor(m => m.PreVPEdit),
+                              X.HiddenFor(m => m.PreVPDelete),
+                              X.HiddenFor(m => m.PreEditOrDelete)
+                           ),
+                           X.Panel().ID("PrePanel2").Flex(7).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                           X.TextFieldFor(m => m.PreName).ID("PreName").FieldLabel("姓名").Editable(false),
+                   X.TextFieldFor(m => m.PreTimeSpan).FieldLabel("请假时长（天）").Editable(false),
+                   X.TextFieldFor(m => m.PreVPReason).FieldLabel("请假事由").Editable(false),
+                   X.TextFieldFor(m => m.PreEndTimeStr).FieldLabel("请假结束时间").Editable(false) 
+                   //X.TextFieldFor(m => m.PreCreateTime).FieldLabel("申请时间").Editable(false)
+                           )
+                           ),
+                           X.Panel().Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                           X.ComboBoxFor(m => m.PreCheckFlowId).FieldLabel("审核流程").Editable(false).Selectable(false)
+                              .DisplayField("name")
+                              .ValueField("id")
+                              .Store(X.Store()
+                              .AutoLoad(true)
+                              .Model(X.Model()
+                              .IDProperty("Id")
+                              .Fields(
+                                      new ModelField("id", ModelFieldType.String) { Mapping = "ID" },
+                                      new ModelField("name", ModelFieldType.String) { Mapping = "Name" }
+                              )
+                              )
+                              .Proxy(X.AjaxProxy().Url(Url.Action("CheckFlowItems")).Reader(X.JsonReader().RootProperty("data")))
+                              ),
+                              X.ComboBoxFor(m => m.PreState).FieldLabel("审核意见").AllowBlank(false).Editable(false)
+                              .DisplayField("name")
+                              .ValueField("id")
+                              .Store(X.Store()
+                              .AutoLoad(true)
+                              .Model(X.Model()
+                              .IDProperty("Id")
+                              .Fields(
+                                      new ModelField("id", ModelFieldType.String) { Mapping = "ID" },
+                                      new ModelField("name", ModelFieldType.String) { Mapping = "Description" }
+                              )
+                              )
+                              .Proxy(X.AjaxProxy().Url(Url.Action("CheckStateItems")).Reader(X.JsonReader().RootProperty("data")))
+                              ),
+                              X.TextFieldFor(m => m.PreDescriptionForCheck).FieldLabel("审核备注").AllowBlank(true)
+                           )
+               )
+
+       ),
+        X.Button().Text("Submit").Icon(Icon.Accept).ID("save").FormBind(true).Disable(true)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("CheckSubmit");
+                        de.Click.EventMask.ShowMask = true;
+                    }),
+                    X.Button().Text("查看").Icon(Icon.Accept).ID("see")
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("Search");
+                        de.Click.EventMask.ShowMask = true;
+                        de.Click.ExtraParams.Add(new Parameter("staffid", "App.PreStaffID.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("preid", "App.PreID.getValue()", ParameterMode.Raw));
+                    })
+    )
+</body>
+
+</html>
+
+
+

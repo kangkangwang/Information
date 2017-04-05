@@ -1,0 +1,50 @@
+﻿@model DeerInformation.Models.T_HR_PositionCategory
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var closewindow = function () {
+        parent.App.windowPC.close()
+    };
+
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddPositionCategory</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.Column)
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                   X.FormPanel().Items(
+                      X.TextFieldFor(m => m.PositionCategoryID).FieldLabel("职位类别ID").AllowBlank(false).Editable(false).Text(ViewData["AutoID"].ToString()),
+                      X.TextFieldFor(m => m.PositionCategoryName).FieldLabel("职位类别名称").AllowBlank(false),
+                      X.TextFieldFor(m => m.Remark).FieldLabel("备注").AllowBlank(true),
+                      X.HiddenFor(m=>m.CreaterName),
+                      X.HiddenFor(m=>m.CreateTime),
+                      X.HiddenFor(m=>m.EditorName),
+                      X.HiddenFor(m=>m.EditorTime)
+                   )
+       ),
+        X.Button().Text("保存").Icon(Icon.Accept).ID("save").FormBind(true).Disable(true)
+                    .DirectEvents(de =>
+                    {
+                        //de.Click.Success = "parent.App.windowPC.close()";
+                        de.Click.Url = Url.Action("AddPC");
+                        de.Click.EventMask.ShowMask = true;
+                    })
+    )
+</body>
+
+</html>

@@ -1,0 +1,34 @@
+﻿@model DeerInformation.Models.T_GW_FieldInfoManagement
+
+@{
+    ViewBag.Title = "现场信息添加";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+
+        @( X.FormPanel().ID("BasicForm").Layout(LayoutType.Form).DefaultAnchor("100%")
+           .Listeners(l => l.ValidityChange.Handler = "#{add}.setDisabled(!valid);").Items(
+                
+                          X.ComboBoxFor(m => m.ProjectNo).Editable(false).Items(ViewBag.prono).FieldLabel("项目编号").AllowBlank(false),
+                          X.TextFieldFor(m => m.FieldName).FieldLabel("现场名称").AllowBlank(false).EmptyText("此项为必须填写项"),
+                          X.TextFieldFor(m=>m.FieldPrincipal).FieldLabel("负责人").AllowBlank(false),
+                          X.ComboBoxFor(m=>m.WarehouseID).FieldLabel("仓库").Items(ViewBag.warehouse).AllowBlank(false),
+                
+                          X.TextFieldFor(m=>m.Remark).FieldLabel("备注"),
+                          X.TextFieldFor(m => m.FieldMapName).AllowBlank(false).FieldLabel("地图名称"),
+                          X.FileUploadField().AllowBlank(false).ID("AttachmentPath").EmptyText("附件大小请不要超过20M").Icon(Icon.Attach).LabelWidth(60).FieldLabel("地图").ButtonText("选择地图"))
+                          .Buttons(
+                                  X.Button().Icon(Icon.ApplicationGet).ID("add").Text("提交").Disabled(true)
+                                        .DirectEvents(de =>
+                                        {
+                                            de.Click.Url = Url.Action("FieldInfoAdd");
+                                            de.Click.Success = "parent.App.window1.close()";
+                                            de.Click.EventMask.ShowMask = true;
+                                            de.Click.FormID = "FormPanel1";
+                                        }),
+                                      X.Button().Icon(Icon.ApplicationGet).ID("cancel").Text("取消")
+                                      .Listeners(l => l.Click.Handler = "parent.App.window1.close()"))               
+                            )
+}

@@ -1,0 +1,237 @@
+﻿@model DeerInformation.Areas.person.Models.StaffDetail
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var closewindow = function () {
+        parent.App.windowStaff.close()
+    };
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>StaffDetail</title>
+</head>
+<body>
+    @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+    @X.FormPanel().ID("FormPanel1").Frame(true).Items(
+       X.FormPanel().Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+       .ModelValidation(true)
+                .Listeners(l =>
+                {
+                    l.ValidityChange.Handler = "#{add}.setDisabled(!valid);";
+                })
+                   .Items(
+                   X.FieldSet().ID("BaseList").Title("基本信息").Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                   X.Panel().Layout(LayoutType.HBox).Items(
+                           X.Panel().Flex(3).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                   X.TextFieldFor(m => m.ID).FieldLabel("工号").Editable(false),
+                                   X.TextFieldFor(m => m.Department).FieldLabel("部门").Editable(false),
+                          X.TextFieldFor(m => m.Urgencyperson).FieldLabel("紧急联系人").Editable(false)
+
+                           ),
+                           X.Panel().Flex(3).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                   X.TextFieldFor(m => m.Name).FieldLabel("姓名").Editable(false),
+                                   X.TextFieldFor(m => m.TelNum).FieldLabel("电话").Editable(false),
+                          X.TextFieldFor(m => m.UPTelNum).FieldLabel("紧急联系人电话").Editable(false)
+                              
+                           ),
+                           X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                              X.Image().ID("UserImage").ImageUrl(TempData["s_image"].ToString()).Height(80)
+                           )
+                   ),
+                   X.Panel().Layout(LayoutType.HBox).Items(
+                   X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                   X.ComboBoxFor(m => m.HireState).FieldLabel("雇佣状态").Editable(false).Items(new ListItem("在职"), new ListItem("离职"), new ListItem("停职")).EmptyText("请选择...").Selectable(false),      
+                   X.ComboBoxFor(m => m.StaffType).FieldLabel("员工类型").Editable(false).Items(new ListItem("间接员工"), new ListItem("直接员工")).EmptyText("请选择...").Selectable(false), 
+                           X.TextFieldFor(m => m.Nation).FieldLabel("民族").Editable(false),
+                           X.TextFieldFor(m => m.CertificateNum).FieldLabel("证件号码").Editable(false),
+                           X.TextFieldFor(m => m.Nativeplace).FieldLabel("籍贯").Editable(false),
+                           X.ComboBoxFor(m => m.Sex).FieldLabel("性别").Editable(false).Items(new ListItem("男"), new ListItem("女")).EmptyText("请选择...").Selectable(false),
+                           X.TextFieldFor(m => m.Area).FieldLabel("区域").Editable(false),
+                           X.TextFieldFor(m => m.BankType).FieldLabel("银行类型").Editable(false),
+                           X.ComboBoxFor(m => m.Education).FieldLabel("学历").Editable(false).Items(new ListItem("初中及以下"), new ListItem("高中"), new ListItem("中专"), new ListItem("大专"), new ListItem("本科"), new ListItem("硕士"), new ListItem("博士")).EmptyText("请选择...").Selectable(false),
+                           X.TextFieldFor(m => m.Major).FieldLabel("专业").Editable(true), 
+                           X.DateFieldFor(m => m.EntryTime).FieldLabel("入职时间").Editable(false).Selectable(false)
+                   ),
+                   X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                   X.ComboBoxFor(m => m.NoAttend).FieldLabel("是否打卡").Editable(false).Items(new ListItem("打卡"), new ListItem("免卡")).AllowBlank(true).Selectable(false),
+                           X.TextFieldFor(m => m.Email).FieldLabel("邮箱").Editable(false),
+                          X.ComboBoxFor(m => m.CertificateType).FieldLabel("证件类型").Editable(false).Items(new ListItem("身份证"), new ListItem("护照"), new ListItem("台胞证"), new ListItem("港澳通行证")).EmptyText("请选择...").Selectable(false),
+                          X.TextFieldFor(m => m.IdCardAddress).FieldLabel("身份证地址").Editable(false),
+                          X.DateFieldFor(m => m.Birthday).FieldLabel("出生日期").Editable(false).Selectable(false),
+                          X.ComboBoxFor(m => m.MaritalStatus).FieldLabel("婚姻状况").Editable(false).Items(new ListItem("已婚"), new ListItem("未婚")).EmptyText("请选择...").Selectable(false),
+                          X.TextFieldFor(m => m.WorkAddress).FieldLabel("工作地点").Editable(false),
+                          X.TextFieldFor(m => m.BankAccount).FieldLabel("银行账号").Editable(false),
+                          X.TextFieldFor(m => m.GraduationSchool).FieldLabel("毕业学校").Editable(false),
+                          X.TextFieldFor(m => m.Craft).FieldLabel("工种").Editable(false),
+                          X.TextFieldFor(m => m.Remark).FieldLabel("备注").Editable(false)
+                   )
+                   )
+       ),
+
+               X.FieldSet().ID("JobList").Title("职位信息").Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+               X.Panel().ID("JobPanel").Layout(LayoutType.HBox).Items(
+                           X.Panel().ID("JobPanel1").Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                   X.ComboBoxFor(m => m.PositionCategoryID).ID("PCName").FieldLabel("职位类型").Editable(false).PageSize(3)
+                                   .DisplayField("name").Selectable(false)
+                                   .ValueField("id")
+                                   .EmptyText("请选择...")
+                                   .Store(X.Store().ID("PCStore")
+                                   .AutoLoad(true)
+                                   .Model(X.Model()
+                                   .IDProperty("Id")
+                                   .Fields(
+                                      new ModelField("id", ModelFieldType.String) { Mapping = "PositionCategoryID" },
+                                      new ModelField("name", ModelFieldType.String) { Mapping = "PositionCategoryName" }
+                                   )
+                                   )
+                                   .Proxy(X.AjaxProxy().Url(Url.Action("GetPC")).Reader(X.JsonReader().RootProperty("data")))
+                                   )
+                                  .Listeners(l => l.Select.Handler = "App.Duty.clearValue();App.Duty.getStore().load();App.Job.clearValue();"),
+                                   X.ComboBoxFor(m => m.JobID).ID("Job").FieldLabel("职位").Editable(false)
+                                   .DisplayField("name").Selectable(false)
+                                   .ValueField("id")
+                                   .EmptyText("请选择...")
+                                   .Store(X.Store().ID("JobStore")
+                                   .AutoLoad(true)
+                                   .Model(X.Model()
+                                   .IDProperty("Id")
+                                   .Fields(
+                                      new ModelField("id", ModelFieldType.String) { Mapping = "JobID" },
+                                      new ModelField("name", ModelFieldType.String) { Mapping = "JobName" }
+                                   )
+                                   )
+                                   .Proxy(X.AjaxProxy().Url(Url.Action("GetJob")).Reader(X.JsonReader().RootProperty("data")))
+                                   .Parameters(ps => ps.Add(new StoreParameter("dutyid", "App.Duty.getValue()", ParameterMode.Raw)))
+                                   )
+                           ),
+                           X.Panel().ID("JobPanel2").Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                   X.ComboBoxFor(m => m.DutyID).ID("Duty").FieldLabel("职务").Editable(false)
+                                           .DisplayField("name").Selectable(false)
+                                           .ValueField("id")
+                                           .EmptyText("请选择...")
+                                           .Store(X.Store().ID("DutyStore")
+                                           .AutoLoad(true)
+                                           .Model(X.Model()
+                                           .IDProperty("Id")
+                                           .Fields(
+                                              new ModelField("id", ModelFieldType.String) { Mapping = "DutyID" },
+                                              new ModelField("name", ModelFieldType.String) { Mapping = "DutyName" }
+                                           )
+                                           )
+                                           .Proxy(X.AjaxProxy().Url(Url.Action("GetDuty")).Reader(X.JsonReader().RootProperty("data")))
+                                           .Parameters(ps => ps.Add(new StoreParameter("pcid", "App.PCName.getValue()", ParameterMode.Raw)))
+                                           )
+                                          .Listeners(l => l.Select.Handler = "App.Job.clearValue();App.Job.getStore().load();App.direct.person.SetDT(App.Duty.getValue());"),
+                                          X.ComboBoxFor(m => m.DutyType).ID("DutyType").FieldLabel("职务类型").Editable(false).Items(new ListItem("间接员工"), new ListItem("直接员工")).EmptyText("请选择...").Selectable(false)
+                           )
+                           )
+               ),
+
+               X.FieldSet().ID("SSList").Title("社保").Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+               X.Panel().Layout(LayoutType.HBox).Items(
+                           X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                   X.ComboBoxFor(m => m.SocialInsuranceType).FieldLabel("社保类型").Editable(false).Items(new ListItem("全保东莞德尔"), new ListItem("全保东莞斯玛特"), new ListItem("全保合肥布拉特"), new ListItem("全保合肥德尔"), new ListItem("全保苏州分公司"), new ListItem("全保芜湖分公司"), new ListItem("未参（入职次月全保）"), new ListItem("只参工伤"), new ListItem("只参工伤医疗"), new ListItem("只参团险"), new ListItem("全保青海分公司")).EmptyText("请选择...").Selectable(false),
+                                   X.DateFieldFor(m => m.SSStartdate).FieldLabel("参保日期").Editable(false).Selectable(false)
+                           ),
+                           X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                   X.DateFieldFor(m => m.SSEnddate).FieldLabel("停保日期").Editable(false).Selectable(false)
+                           )
+                           )
+               ),
+
+               X.FieldSet().ID("ProList").Title("试用期").Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+               X.Panel().Layout(LayoutType.HBox).Items(
+                           X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                   X.CheckboxFor(m => m.ProbationValid).FieldLabel("是否试用期").Selectable(false),
+                                   X.NumberFieldFor(m => m.Probation).FieldLabel("试用期（月）").MaxValue(30).MinValue(0).Value(1).Editable(false).Selectable(false)
+                           ),
+                           X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                   X.DateFieldFor(m => m.ProbationDate).FieldLabel("试用期到期日").Editable(false).Selectable(false)
+                           )
+                           )
+               ),
+
+               X.FieldSet().ID("DiList").Title("离职信息").Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+               X.Panel().Layout(LayoutType.HBox).Items(
+                           X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                   X.DateFieldFor(m => m.PreDimissionDate).FieldLabel("预离职日期").Editable(false).Selectable(false),
+                                   X.TextFieldFor(m => m.DimissionReason).FieldLabel("离职原因").Editable(false)
+                           ),
+                           X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                           X.ComboBoxFor(m => m.DimissionType).FieldLabel("离职类型").Editable(false).Items(new ListItem("辞职"), new ListItem("辞退"),
+                              new ListItem("解除劳动关系"), new ListItem("自离"), new ListItem("试用期不合格"), new ListItem("经济型裁员"), new ListItem("法定退休"), new ListItem("合同到期")).EmptyText("请选择...").Selectable(false)
+                           )
+                           )
+               ),
+
+               X.FieldSet().ID("CoList").Title("合同信息").Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+               X.Panel().Layout(LayoutType.HBox).Items(
+                           X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                   X.TextFieldFor(m => m.Num).FieldLabel("第几次签订").Editable(false),
+                                   X.DateFieldFor(m => m.EndTime).FieldLabel("合同结束日期").Editable(false).Selectable(false)
+                           ),
+                           X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                           X.DateFieldFor(m => m.StartTime).FieldLabel("合同开始日期").Editable(false).Selectable(false),
+                                           X.TextFieldFor(m => m.Years).FieldLabel("合同年限").Editable(false)
+                           )
+                           )
+               ),
+
+               X.FieldSet().ID("FundList").Title("基金信息").Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+               X.Panel().Layout(LayoutType.HBox).Items(
+                           X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                   X.CheckboxFor(m => m.FundValid).FieldLabel("是否购买基金").Selectable(false),
+                                   X.DateFieldFor(m => m.EndDate).FieldLabel("基金结束日期").Editable(false).Selectable(false)
+                           ),
+                           X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                           X.DateFieldFor(m => m.StartDate).FieldLabel("基金开始日期").Editable(false).Selectable(false),
+                                           X.TextFieldFor(m => m.Months).FieldLabel("已存月份").Editable(false)
+                           )
+                           )
+               ),
+
+               X.FieldSet().ID("ReList").Title("推荐人信息").Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+               X.Panel().Layout(LayoutType.HBox).Items(
+                           X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                   X.TextFieldFor(m => m.ReStaffID).FieldLabel("推荐人工号").Editable(true),
+                                   X.TextFieldFor(m => m.Relation).FieldLabel("关系").Editable(true),
+                                   X.DateFieldFor(m => m.YearMonth).FieldLabel("应发放月份").Editable(false).Selectable(false)
+                           ),
+                           X.Panel().Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+                                   X.TextFieldFor(m => m.ReName).FieldLabel("推荐人姓名").Editable(true),
+                                   X.TextFieldFor(m => m.Money).FieldLabel("奖金").Editable(true),
+                                   X.CheckboxFor(m => m.IsDe).FieldLabel("是否已发  ").Selectable(false)
+                           )
+                           )
+               ),
+
+               X.FieldSet().ID("CeList").Title("证书信息").Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch }).Items(
+               X.Panel().Layout(LayoutType.HBox).Items(
+                           X.Panel().ID("Certificate").Height(120).Flex(1).Layout(LayoutType.VBox).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                                           .Loader(X.ComponentLoader()
+                            .Url(Url.Action("CertificateInfo", "Staff", new {id=TempData["s_staffid"] }))
+                            .Mode(LoadMode.Frame)
+                            .LoadMask(lm => lm.ShowMask = true)
+                        )
+                           )
+               )
+
+       ),
+        X.Button().Text("确定").Icon(Icon.Accept).ID("save")
+                    .Listeners(l =>
+                        {
+                            l.Click.Handler = "closewindow();";
+                        })
+    )
+</body>
+
+</html>
+
+
+

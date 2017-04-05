@@ -1,0 +1,40 @@
+﻿@model DeerInformation.Models.T_GW_FieldSchedule
+
+@{
+    ViewBag.Title = "现场计划进度表";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+
+    @X.Viewport().Layout(LayoutType.Border).Items(
+        X.FormPanel().Border(false).Layout(LayoutType.Form).Flex(1).Region(Region.Center	).Frame(true).Items(
+            X.Container().MarginSpec("5 3 5 3").Layout(LayoutType.HBox).Items(
+                X.TextFieldFor(m => m.ProjectNo).FieldLabel("项目编号").ReadOnly(true),
+                X.ToolbarFill().Flex(1),
+                X.TextFieldFor(m => m.ProProcess).FieldLabel("项目总体进度").ReadOnly(true)),
+
+            X.Panel().Frame(true ).Layout(LayoutType.HBox).Items(
+                X.FieldSet().Flex(1).Title("计划").Layout(LayoutType.Anchor)
+                    .DefaultAnchor("100%").MarginSpec("0 5 0 5").Items(
+                        X.DateFieldFor(m => m.ProStartPlanTime).FieldLabel("计划开工日期").ReadOnly(true),
+                        X.DateFieldFor(m => m.ProHalfPlanTime).FieldLabel("计划完工过半日期").ReadOnly(true),
+                        X.DateFieldFor(m => m.ProEndPlanTime).FieldLabel("计划完工日期").ReadOnly(true),
+                        X.DateFieldFor(m => m.ProAcceptPlanTime).FieldLabel("计划验收日期").ReadOnly(true),
+                        X.DateFieldFor(m => m.ProWarePlanTime).FieldLabel("计划客户入库日期").ReadOnly(true)
+                    ),
+
+                X.FieldSet().Flex(1).Title("实际").Layout(LayoutType.Anchor)
+                    .DefaultAnchor("100%").MarginSpec("0 5 0 5").Items(
+                        X.DateFieldFor(m => m.ProStartRealTime).FieldLabel("实际开工日期").ReadOnly(true),
+                        X.DateFieldFor(m => m.ProHalfRealTime).FieldLabel("实际完工过半日期").ReadOnly(true),
+                        X.DateFieldFor(m => m.ProEndRealTime).FieldLabel("实际完工日期").ReadOnly(true),
+                        X.DateFieldFor(m => m.ProAcceptRealTime).FieldLabel("实际验收日期").ReadOnly(true),
+                        X.DateFieldFor(m => m.ProWareRealTime).FieldLabel("实际客户入库日期").ReadOnly(true)
+                    )
+                )).Buttons(
+                    X.Button().Icon(Icon.ApplicationGet).ID("cancel").Text("确定")
+                        .Listeners(l => l.Click.Handler = "parent.App.window3.close()"))                                             
+        )
+}

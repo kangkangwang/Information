@@ -1,0 +1,181 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = null;
+    var X = Html.X();
+}
+
+<!DOCTYPE html>
+<script>
+    var reload = function () {
+        App.direct.person.Job1Reload();
+    };
+    var onSuccess = function (grid, data) {
+        grid.show();
+        grid.getStore().loadData(data);
+    };
+    var toggleRowSelect = function () {
+        App.SpreadsheetSelectionModel1.setRowSelect(false);
+        App.SpreadsheetSelectionModel1.setRowSelect(true);
+    };
+    var deletejs = function (selecteddata) {
+        if (selecteddata != "") {
+            Ext.MessageBox.confirm("提示", "确认删除该项？", function (but) {
+                if (but == "yes") {
+                    App.direct.person.JSDeleteJob(selecteddata);
+                    App.SpreadsheetSelectionModel1.setRowSelect(false);
+                    App.SpreadsheetSelectionModel1.setRowSelect(true);
+                    App.direct.person.Job1Reload();
+                    App.JobGridPanal.show();
+                    App.JobGridPanal.getStore().loadData(result.data);
+                }
+            });
+        }
+        else {
+            Ext.Msg.alert("提示", "未选择任何列！");
+        }
+    }
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Job</title>
+</head>
+
+<body>
+    <div>
+        @Html.X().ResourceManager(ViewBag.ManagerConfig as MvcResourceManagerConfig).Theme(Theme.Default)
+
+        @(X.Viewport().ID("BackViewPort")
+        .Layout(LayoutType.Border)
+        .Items(
+      X.Panel().AutoScroll(true).Region(Region.Center).Title("职位管理").Items(
+       X.FormPanel().Layout(LayoutType.Column).Items(
+                   X.TextField().ID("JobID")
+                   .FieldLabel("职位ID"),
+                   X.TextField().ID("JobName")
+                   .FieldLabel("职位名称"),
+           X.Button().Text("查询").DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("Getalldata");
+                    de.Click.Success = "onSuccess(App.JobGridPanal, result.data);";
+                    de.Click.ExtraParams.Add(new Parameter("id", "App.JobID.getValue()", ParameterMode.Raw));
+                    de.Click.ExtraParams.Add(new Parameter("name", "App.JobName.getValue()", ParameterMode.Raw));
+                    de.Click.EventMask.ShowMask = true;
+                }),
+                   X.Button().Text("添加")
+                            .DirectEvents(de =>
+                              {
+                                  de.Click.Url = Url.Action("Add");
+                              }),
+                            X.Button().Text("删除").Listeners(l =>
+                        {
+                            l.Click.Handler = "deletejs(App.SpreadsheetSelectionModel1.getSubmitData());";
+                        })
+       ),
+                       X.GridPanel().ID("JobGridPanal").AutoScroll(true).ColumnLines(true)
+                                      .Store(
+                                         X.Store().ID("JobStore")
+                                                  .AutoLoad(true)
+                                                  .DataSource(Model)
+                                           .Model(
+                                                     X.Model().Fields(
+                                                             new ModelField("JobID", ModelFieldType.String),
+                                                             new ModelField("JobName", ModelFieldType.String),
+                                                             new ModelField("DutyID", ModelFieldType.String),
+                                                             new ModelField("DutyName", ModelFieldType.String),
+                                                             new ModelField("Remark", ModelFieldType.String),
+                                                             new ModelField("CreaterName", ModelFieldType.String),
+                                                             new ModelField("CreateTime", ModelFieldType.Date),
+                                                             new ModelField("EditorName", ModelFieldType.String),
+                                                             new ModelField("EditorTime", ModelFieldType.Date)
+                                                     )
+                                                  )
+                                          .Reader(
+                                                      X.JsonReader().RootProperty("data")
+                                                      )
+
+                                  )
+                                      .SelectionModel(
+                                          X.SpreadsheetSelectionModel()
+                                           .ID("SpreadsheetSelectionModel1")
+                                           .ColumnSelect(true)
+                                           .CheckboxSelect(true)
+                                           .PruneRemoved(false)
+                                           .Extensible(SpreadsheetExtensible.Y)
+                                           .CellSelect(false)
+                                           .ColumnSelect(false)
+                                       )
+                                        .ViewConfig(X.GridView().TrackOver(false))
+                                .ColumnModel(
+                                        X.Column()
+                                        .Text("职位ID")
+                                        .Width(80)
+                                        .DataIndex("JobID"),
+
+                                        X.Column()
+                                       .Text("职位名称")
+                                       .Width(155)
+                                       .DataIndex("JobName"),
+
+                                       X.Column()
+                                       .Text("职务ID")
+                                       .Width(155)
+                                       .DataIndex("DutyID").Hidden(true),
+
+                                       X.Column()
+                                       .Text("职务名称")
+                                       .Width(155)
+                                       .DataIndex("DutyName"),
+
+                                      X.Column()
+                                      .Text("备注")
+                                      .Width(155)
+                                      .DataIndex("Remark"),
+
+                                      X.Column()
+                                      .Text("创建人")
+                                      .Width(155)
+                                      .DataIndex("CreaterName"),
+
+                                      X.Column()
+                                      .Text("创建时间")
+                                      .Width(155)
+                                      .Renderer(RendererFormat.Date, new string[] { "'Y-m-d H:m:s'" })
+                                      .DataIndex("CreateTime"),
+
+                                      X.Column()
+                                      .Text("修改人")
+                                      .Width(155)
+                                      .DataIndex("EditorName"),
+
+                                      X.Column()
+                                      .Text("修改时间")
+                                      .Width(155)
+                                      .Renderer(RendererFormat.Date, new string[] { "'Y-m-d H:m:s'" })
+                                      .DataIndex("EditorTime"),
+
+                                      X.CommandColumn()
+                                      .Width(80)
+                                      .Commands(
+                                                 Html.X().GridCommand()
+                                                .CommandName("update")
+                                                .Icon(Icon.UserEdit)
+                                                .Text("修改")
+                                            )
+                                           .DirectEvents(de =>
+                                           {
+                                               de.Command.Url = Url.Action("Update");
+                                               de.Command.ExtraParams.Add(new Parameter("id", "record.data.JobID", ParameterMode.Raw));
+                                           })
+
+                                )
+         )
+        )
+        )
+
+
+    </div>
+</body>
+</html>

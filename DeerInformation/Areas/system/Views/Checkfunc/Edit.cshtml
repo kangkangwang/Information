@@ -1,0 +1,57 @@
+﻿@model DeerInformation.Models.T_CH_Checkfunc
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+
+}
+
+@section content
+{
+    @(X.Viewport().Layout(LayoutType.Border).Items(
+    X.FormPanel()
+    .Layout(LayoutType.Form)
+    .Frame(true)
+    .Region(Region.Center)
+    .ModelValidation(true)
+    .Flex(1)
+    .Items(
+    X.TextFieldFor(m => m.ID),
+    X.TextFieldFor(m => m.Name),
+    X.ComboBox().Name("MenuID").FieldLabel("MenuID"),
+    //X.DropDownField().Name("MenuID").FieldLabel("MenuID")  ,
+    X.CheckboxFor(m => m.Disable),
+    X.TextFieldFor(m => m.Description),
+    X.TextAreaFor(m => m.AfterTask),
+    X.Container().Layout(LayoutType.Column).Items(
+    X.Label().Text("请使用：m_OperationId代替输入操作id参数。").Width(300))
+
+    )
+    .Buttons(
+    Html.X().Button()
+        .Text("Cancel")
+        .DirectEvents(de =>
+        {
+            de.Click.Action = "Cancel";
+            de.Click.Success = string.Format("parent.App.{0}.close()", "win");
+            de.Click.EventMask.ShowMask = true;
+        }
+        ),
+    Html.X().Button()
+        .Text("Submit")
+        .DirectEvents(de =>
+        {   
+            de.Click.Action = "Edit";
+            de.Click.Success = string.Format("parent.refresh();parent.App.{0}.close();", "win");
+            de.Click.Failure = string.Format("alert('数据保存失败！');parent.App.{0}.close()", "win");
+            de.Click.EventMask.ShowMask = true;
+        }
+        )
+    )
+    )
+)
+}

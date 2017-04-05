@@ -1,0 +1,113 @@
+﻿@model DeerInformation.Areas.person.Models.PunchedExceptionModle
+@{
+    ViewBag.Title = "Attend";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+
+}
+
+@section content
+{
+    @{
+        var head = X.Toolbar().Layout(LayoutType.HBox)
+            .Shadow(true)
+            .LayoutConfig(new HBoxLayoutConfig {Align = HBoxAlign.Middle, Pack = BoxPack.Center})
+            .Items(
+            X.Label().Text("工号："+Model.EmployeeId).Flex(1),
+            X.Label().Text("姓名：" + Model.Employee.Name).Flex(1),
+            X.Label().Text("员工类型：" + Model.Employee.StaffType).Flex(1)
+            );
+        
+
+        var grid=X.GridPanel()
+            .ID("grid")
+            .AutoScroll(true)
+            .Store(X.Store()
+                .ID("storedata")
+                .Model(X.Model()
+                .IDProperty("ID")
+                .Fields("ID", "UserId", "AttendTime", "AttendState", "AttendArea", "AttendMachineId"))
+                .Reader(X.JsonReader().RootProperty("data"))
+                .DataSource(Model.AttendRecords)
+                )
+            .ColumnModel(
+
+
+                X.Column()
+                    .Text("工号")
+                    .Flex(1)
+                    .DataIndex("UserId"),
+
+                X.DateColumn()
+                    .Text("打卡时间")
+                    .Flex(1)
+                    .DataIndex("AttendTime")
+                    .Format("HH:mm:ss"),
+
+                X.Column()
+                    .Text("状态")
+                    .Flex(1)
+                    .DataIndex("AttendState"),
+
+
+                X.Column()
+                    .Text("区域")
+                    .Flex(1)
+                    .DataIndex("AttendArea"),
+                        
+                X.Column()
+                    .Text("区域")
+                    .Flex(1)
+                    .DataIndex("AttendMachineId")
+                    
+                    )
+                    .SelectionModel(X.CheckboxSelectionModel().Mode(SelectionMode.Single))
+                    .BottomBar(
+                        Html.X().PagingToolbar()
+                                .DisplayInfo(true)
+                                .DisplayMsg("当前 {0} - {1} 总共： {2}")
+                                .EmptyMsg("没有数据可以显示")
+                                .HideRefresh(true)
+                    );
+
+        var content =
+            X.FormPanel().ID("form1").Layout(LayoutType.Column).Frame(true).Items(l =>
+            {
+                l.Add(X.Container().ColumnWidth(1).Layout(LayoutType.Form).Items(grid.Height(200)));
+
+                var punchedreocrd = X.Panel().ColumnWidth(1).Layout(LayoutType.Form)
+                    .Items(ls =>
+                    {
+
+                    ls.Add(X.ComboBoxFor(m=>m.AttendTime).Regex(@"^(([0-1]?[0-9])|([2][0-3])):([0-5]?[0-9])(:([0-5]?[0-9]))?$").RegexText("请输入正确的时间").Items(Model.AttendTimesItems).FieldLabel(string.Format("第{0}次卡", Model.AttendValidRecords.PunchedOrder)));
+                    ls.Add(X.TextAreaFor(m => m.Remark));
+                    
+                    }
+                    );
+                l.Add(punchedreocrd);
+
+            }).Buttons(X.Button().Text("关闭").Handler("parent.App.win.close();"),
+            X.Button().Text("提交").FormBind(true).ID("Submit").DirectEvents(l =>
+            {
+                l.Click.Action = "Submit";
+                l.Click.ExtraParams.Add(new Parameter() { Name = "id", Value =Model.Id , Mode = ParameterMode.Value });
+                l.Click.Confirmation.ConfirmRequest = true;
+                l.Click.Confirmation.Message = "确定更改当前用户的考勤记录！";
+                l.Click.Before = @"if (!#{form1}.getForm().isValid()) { return false; }
+                            Ext.Msg.wait('正在提交你的申请...', '上传中');";
+                l.Click.FormID = "form1";
+            })
+            );
+
+    }
+
+    @( X.Viewport().Layout(LayoutType.Border).Items(
+                X.FormPanel().ID("Filter").Region(Region.North).Border(false).PaddingSpec("1,2,1,2").Items(head),
+                    content.Region(Region.Center)
+                )
+)
+}

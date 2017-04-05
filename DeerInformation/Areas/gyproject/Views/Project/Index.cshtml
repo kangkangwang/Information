@@ -1,0 +1,123 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+    <script>
+
+        var onSuccess = function (grid, data) {
+            grid.show();
+            grid.getStore().loadData(data);
+        };
+
+    </script>
+}
+
+@section content{
+    @X.Viewport().Layout(LayoutType.Border).AutoScroll(true).Items(
+        X.Container().Border(false).Region(Region.Center	).Layout(LayoutType.Auto).Items(
+                    X.Toolbar().Border(false).Frame(true).Layout(LayoutType.HBox).Items(
+                X.TextField().ID("ClientName").FieldLabel("客户名称"),
+
+                X.TextField().ID("ProjectName").FieldLabel("项目名称"),
+
+                X.Button().Icon(Icon.ApplicationGo).Text("查询").DirectEvents(de =>
+                {
+                    de.Click.Url = Url.Action("SelectProject");
+                    de.Click.Success = "onSuccess(App.GridPanel1, result.data);";
+                    de.Click.ExtraParams.Add(new Parameter("clientname", "App.ClientName.getValue()", ParameterMode.Raw));
+                    de.Click.ExtraParams.Add(new Parameter("projectname", "App.ProjectName.getValue()", ParameterMode.Raw));
+                    de.Click.EventMask.ShowMask = true;
+                })),
+
+                X.FormPanel().Border(false).Layout(LayoutType.Auto).Items(
+                X.GridPanel().ID("GridPanel1")
+                    .BottomBar(X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true)).Store(
+                        X.Store().ID("BudgetSelect").DataSource(Model).PageSize(10).Model(
+                            X.Model().IDProperty("UID").Fields(
+                                "UID", "CustomerNo", "ProjectNo", "ProjectName", "ClientName",
+                                "OfferDate", "OfferMoney", "Name", "OfferStatus","BudgetStatus"
+                                ))
+                            .Reader(X.JsonReader().RootProperty("data")))
+                    .ColumnModel(
+                        X.Column().DataIndex("UID").Hidden(true),
+                        X.Column()
+                            .Text("客户订单号")
+                            .Flex(3)
+                            .DataIndex("CustomerNo"),
+                        X.Column()
+                            .Text("项目编号")
+                            .Flex(3)
+                            .DataIndex("ProjectNo"),
+                        X.Column()
+                            .Text("项目名称")
+                            .Flex(2)
+                            .DataIndex("ProjectName"),
+                        X.Column()
+                            .Text("客户名称")
+                            .Flex(2)
+                            .DataIndex("ClientName"),
+
+                        X.Column()
+                            .Text("报价日期").Flex(3)
+                            .Renderer(RendererFormat.Date, new string[] { "'Y-n-j'" })
+                            .DataIndex("OfferDate"),
+
+                        X.Column()
+                            .Text("报价总额").Flex(3)
+                            .DataIndex("OfferMoney"),
+
+                        X.Column()
+                            .Text("经办人")
+                            .Flex(2)
+                            .DataIndex("Name"),
+
+                        X.Column()
+                            .Text("订单收到")
+                            .Flex(3)
+                            .DataIndex("OfferStatus"),
+                        
+                        X.Column()
+                            .Text("项目状态")
+                            .Flex(3)
+                            .DataIndex("BudgetStatus"),
+
+                        Html.X().CommandColumn().Flex(2).Text("查看进度").Commands(
+                            Html.X().GridCommand().CommandName("see").Icon(Icon.ApplicationViewDetail).Text("明细"))
+                            .DirectEvents(de =>
+                            {
+                                de.Command.Url = Url.Action("SeeFieldSchedule");
+                                de.Command.ExtraParams.Add(new Parameter("id", "record.data.UID", ParameterMode.Raw));
+                            }),
+
+                        Html.X().CommandColumn().Flex(2).Text("查看项目已付金额").Commands(
+                            Html.X().GridCommand().CommandName("update").Icon(Icon.ApplicationViewDetail).Text("明细"))
+                            .DirectEvents(de =>
+                            {
+                                de.Command.Url = Url.Action("SeePaid");
+                                de.Command.ExtraParams.Add(new Parameter("id", "record.data.UID", ParameterMode.Raw));
+                            }),
+                                            
+                        X.CommandColumn().Text("导出汇总单").Flex(2).Commands(
+                            X.GridCommand().CommandName("detail").Icon(Icon.ApplicationCascade).Text("导出"))
+                            .DirectEvents(de =>
+                            {
+                                de.Command.Url = Url.Action("GatherM", "Purchase", new { area = "reportforms" });
+                                de.Command.ExtraParams.Add(new Parameter("id", "record.data.ProjectNo", ParameterMode.Raw));
+                                de.Command.ExtraParams.Add(new Parameter("format", "Excel", ParameterMode.Value));
+                                de.Command.IsUpload = true;
+                            }),
+                        Html.X().CommandColumn().Hidden(true).Flex(2).Text("查看退回物料金额").Commands(
+                            X.GridCommand().CommandName("delete").Icon(Icon.ApplicationViewDetail).Text("明细"))
+                            .DirectEvents(de =>
+                            {
+                                de.Command.Url = Url.Action("SeeBack");
+                                de.Command.ExtraParams.Add(new Parameter("id", "record.data.UID", ParameterMode.Raw));
+                            }))
+                )
+            )
+        )
+}

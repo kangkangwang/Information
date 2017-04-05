@@ -1,0 +1,117 @@
+﻿@{
+    ViewBag.Title = "Warehouse";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag
+{
+    <script>
+
+        var select = function (store) {
+            var proxy = store.getProxy();
+            proxy.extraParams = {
+                "key": App.key.getValue()
+            };
+            store.reload();
+        }
+    </script>
+}
+
+@section content
+{
+    @X.Viewport().Layout(LayoutType.Border).Items(
+
+        X.FormPanel().Region(Region.North).Items(
+            X.Toolbar().Region(Region.Center).Layout(LayoutType.HBox)
+                .Border(false).Items(
+
+                    X.TextField().FieldLabel("名称").LabelWidth(50).ID("key"),
+                    X.Button().Text("查询").Icon(Icon.Magnifier).Handler("select(App.WarehouseStore)"),
+                    X.ToolbarFill().Flex(1),
+                    X.Button().Text("新建").Icon(Icon.PageAdd).DirectEvents(l =>
+                    {
+                        l.Click.Action = "WarehouseOperation";
+                        l.Click.ExtraParams.Add(new Parameter() { Name = "action", Value = "create", Mode = ParameterMode.Value });
+                        l.Click.ExtraParams.Add(new Parameter() { Name = "title", Value = "新建仓库", Mode = ParameterMode.Value });
+                    })
+                )
+            ),
+        X.Container().Region(Region.Center)
+            .Items(
+                X.GridPanel()
+                    .ID("GridPanel1")
+                    .Store(
+                        X.Store().ID("WarehouseStore")
+                            .PageSize(20)
+                            .Proxy(
+                                X.AjaxProxy().Url(Url.Action("WarehouseFilter")).Reader(X.JsonReader().RootProperty("data"))
+                            )
+                            .Model(
+                                X.Model()
+                                    .IDProperty("UID")
+                                    .Fields(
+                                        new ModelField("UID", ModelFieldType.String),
+                                        new ModelField("WarehouseID", ModelFieldType.String),
+                                        new ModelField("WarehouseName", ModelFieldType.String),
+                                        new ModelField("Location", ModelFieldType.String),
+                                        new ModelField("Manager", ModelFieldType.String)
+                                    )
+                            )
+
+                    )
+                    .ColumnModel(
+
+                        X.Column()
+                            .Text("仓库编号")
+                            .Width(154).Flex(1)
+                            .DataIndex("WarehouseID"),
+
+                        X.Column()
+                            .Text("仓库")
+                            .Width(154).Flex(1)
+                            .DataIndex("WarehouseName"),
+
+                        X.Column()
+                            .Text("仓库地址")
+                            .Width(154).Flex(1)
+                            .DataIndex("Location"),
+
+                        X.Column()
+                            .Text("管理员")
+                            .Width(154)
+                            .DataIndex("Name"),
+
+                        X.Column()
+                            .Text("电话")
+                            .Width(154)
+                            .DataIndex("TelNum"),
+
+                        X.CommandColumn()
+                            .Text("操作")
+                            .Width(156).Flex(1)
+                            .Commands(
+                                Html.X().GridCommand()
+                                    .CommandName("update")
+                                    .Icon(Icon.CalendarEdit)
+                                    .Text("库存信息修改")
+                            )
+                            .DirectEvents(de =>
+                            {
+                                de.Command.Url = Url.Action("WarehouseOperation", "Material");
+                                de.Command.ExtraParams.Add(new Parameter("id", "record.data.UID", ParameterMode.Raw));
+                                de.Command.ExtraParams.Add(new Parameter("action", "edit", ParameterMode.Value));
+                                de.Command.ExtraParams.Add(new Parameter("title", "编辑仓库", ParameterMode.Value));
+                            })
+                    )
+                    .SelectionModel(
+                        X.RowSelectionModel()
+                    ).BottomBar(
+                        Html.X().PagingToolbar()
+                                .DisplayInfo(true)
+                                .DisplayMsg("当前 {0} - {1} 总共： {2}")
+                                .EmptyMsg("没有数据可以显示")
+                    )
+            )
+        )
+}

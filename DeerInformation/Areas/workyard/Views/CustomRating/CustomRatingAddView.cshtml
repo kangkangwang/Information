@@ -1,0 +1,29 @@
+﻿@model DeerInformation.Models.T_GW_CustomRating
+@{
+    ViewBag.Title = "CustomRatingAddView";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+    @(X.Viewport().Layout(LayoutType.Auto).Items(
+    X.FormPanel().Layout(LayoutType.Form).ID("BasicForm").Listeners(l => l.ValidityChange.Handler = "#{add}.setDisabled(!valid);").Items(
+                            X.TextFieldFor(m => m.AppNo).LabelWidth(80).FieldLabel("客户订单号").Flex(1).AllowBlank(false),
+                            X.NumberFieldFor(m => m.ServiceQuality).LabelWidth(80).FieldLabel("服务质量").Flex(1).AllowBlank(false).AllowDecimals(true).MaxValue(5).MinValue(1).Value(1),
+                            X.NumberFieldFor(m => m.ServiceSpeed).LabelWidth(80).FieldLabel("服务速度").Flex(1).AllowBlank(false).AllowDecimals(true).MaxValue(5).MinValue(1).Value(1),
+                            X.NumberFieldFor(m => m.ServiceAttitude).LabelWidth(80).FieldLabel("服务态度").Flex(1).AllowBlank(false).AllowDecimals(true).MaxValue(5).MinValue(1).Value(1),
+                            X.TextAreaFor(m => m.ServiceAdvice).LabelWidth(80).FieldLabel("服务建议").Flex(1).AllowBlank(false)
+                            )
+                            .Buttons(
+                                    X.Button().Icon(Icon.ApplicationGet).ID("add").Text("提交").Disabled(true)
+                                        .DirectEvents(de =>
+                                        {
+                                            de.Click.Url = Url.Action("CRSubmit");
+                                            de.Click.Success = "parent.App.window2.close()";
+                                            de.Click.EventMask.ShowMask = true;
+                                        }),
+
+                                      X.Button().Icon(Icon.ApplicationGet).ID("cancel").Text("取消")
+                                              .Listeners(l => l.Click.Handler = "parent.App.window2.close()")
+                            )))
+}

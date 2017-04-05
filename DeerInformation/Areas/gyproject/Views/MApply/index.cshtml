@@ -1,0 +1,153 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    ViewBag.Title = "申请单界面";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section headtag{
+    <script>
+        var deleteapplymaterial = function (id) {
+            Ext.MessageBox.confirm("提示", "确认删除该项？", function (but) {
+                if (but == "yes") {
+                    App.direct.gyproject.DeleteApplyMaterial(id);
+                    App.direct.gyproject.MApplyReload();
+                }
+            });
+        };
+       
+        var onSuccess = function (grid, data) {
+            grid.show();
+            grid.getStore().loadData(data);
+        };
+    </script>
+}
+
+@section content{
+
+    @(X.Viewport().Layout(LayoutType.Auto).AutoScroll(true).Items(
+            X.Toolbar().Layout(LayoutType.HBox).Border(false).Frame(true).Items(
+                X.TextField().FieldLabel("项目编号").ID("no"),
+                X.TextField().FieldLabel("申请单号").ID("field"),
+                X.Button().Text("查询").ID("btninquire").Icon(Icon.ApplicationGo).DirectEvents(de =>
+                        {
+                            de.Click.Url = Url.Action("MApplyInquire");
+                            de.Click.Success = "onSuccess(App.GridPanel1, result.data);";
+                            de.Click.ExtraParams.Add(new Parameter("addno", "App.no.getValue()", ParameterMode.Raw));
+                            de.Click.ExtraParams.Add(new Parameter("addfield", "App.field.getValue()", ParameterMode.Raw));
+                            de.Click.EventMask.ShowMask = true;
+                        }),
+                        X.ToolbarFill().Flex(1),
+               X.Button().Icon(Icon.ApplicationAdd).Text("添加特殊申请单").DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("MApplyAddButton");
+                        de.Click.EventMask.ShowMask = true;
+                    }),
+
+                X.Button().Icon(Icon.ApplicationAdd).Text("添加普通申请单").DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("OrdinaryMApplyAddButton");
+                        de.Click.EventMask.ShowMask = true;
+                    })),
+
+            X.FormPanel().Layout(LayoutType.Auto).Items(
+                            X.GridPanel().ID("GridPanel1").Border(false)
+                    .BottomBar(X.PagingToolbar().DisplayInfo(true).DisplayMsg("当前 {0} - {1} 总共： {2}").EmptyMsg("没有数据可以显示").HideRefresh(true)).Store(
+                        X.Store().ID("MApplyStore").DataSource(Model).PageSize(10).Model(
+                                        X.Model().IDProperty("GID").Fields(
+                                                    new ModelField("GID", ModelFieldType.String),
+                                                    new ModelField("ApplyMaterialNo", ModelFieldType.String),
+                                                    new ModelField("ProjectNo", ModelFieldType.String),
+                                                    new ModelField("ApplyMState", ModelFieldType.String),
+                                                    new ModelField("FieldName", ModelFieldType.String),
+                                                    new ModelField("Name", ModelFieldType.String),
+                                                    new ModelField("ApplyTime", ModelFieldType.String),
+                                                    new ModelField("PrepaidDay", ModelFieldType.String),
+                                                    new ModelField("IsEnableNo", ModelFieldType.String),
+                                                    new ModelField("CheckProcess", ModelFieldType.String)))
+                                            .Reader(X.JsonReader().RootProperty("data"))) 
+                                            .ColumnModel(
+
+                                            X.Column().DataIndex("GID").Hidden(true),
+
+                                            X.Column()
+                                            .Text("项目编号")
+                                            .Flex(3)
+                                            .DataIndex("ProjectNo"),
+
+                                            X.Column()
+                                            .Text("申请单号")
+                                            .Flex(3)
+                                            .DataIndex("ApplyMaterialNo"),
+
+                                            X.Column()
+                                            .Text("申请单状态")
+                                            .Flex(2)
+                                            .DataIndex("ApplyMState"),
+
+                                            X.Column()
+                                            .Text("审核状态")
+                                            .Flex(2)
+                                            .DataIndex("IsEnableNo"),
+
+                                            X.Column()
+                                            .Text("收货地点")
+                                            .Flex(2)
+                                            .DataIndex("FieldName"),
+
+                                            X.Column()
+                                            .Text("申请人")
+                                            .Flex(2)
+                                            .DataIndex("Name"),
+
+                                            X.Column()
+                                            .Text("申请时间")
+                                            .Flex(3).Renderer(RendererFormat.Date, new string[] { "'Y-n-j'" })
+                                            .DataIndex("ApplyTime"),
+
+                                            X.Column()
+                                            .Text("预交日")
+                                            .Flex(3).Renderer(RendererFormat.Date, new string[] { "'Y-n-j'" })
+                                            .DataIndex("PrepaidDay"),
+                                            X.Column()
+                                            .Text("审核流程")
+                                            .Flex(2)
+                                            .DataIndex("CheckProcess"),
+
+                                            X.CommandColumn().Text("查看物料详情").Flex(2).Commands(
+                                                            X.GridCommand().CommandName("detail").Icon(Icon.ApplicationCascade).Text("明细"))
+                                                                .DirectEvents(de =>
+                                                                {
+                                                                    de.Command.Url = Url.Action("MDetail","Share");
+                                                                    de.Command.ExtraParams.Add(new Parameter("gid", "record.data.GID", ParameterMode.Raw));
+                                                                    de.Command.ExtraParams.Add(new Parameter("title", "申请单物料明细", ParameterMode.Value));
+                                                                }),
+
+                                            X.CommandColumn().Text("导出请购单").Flex(2).Commands(
+                                                            X.GridCommand().CommandName("detail").Icon(Icon.ApplicationCascade).Text("导出"))
+                                                                .DirectEvents(de =>
+                                                                {
+                                                                    de.Command.Url = Url.Action("MaterialResult", "Purchase", new { area = "reportforms" });
+                                                                    de.Command.ExtraParams.Add(new Parameter("id", "record.data.GID", ParameterMode.Raw));
+                                                                    de.Command.ExtraParams.Add(new Parameter("format", "Excel", ParameterMode.Value));
+                                                                    de.Command.IsUpload = true;
+                                                                }),
+
+                                            X.CommandColumn().Text("修改申请单").Flex(2).Commands(
+                                                            X.GridCommand().CommandName("modify").Icon(Icon.ApplicationEdit).Text("修改"))
+                                                                .DirectEvents(de =>
+                                                                {
+                                                                    de.Command.Url = Url.Action("ShareModify", "Share");
+                                                                    de.Command.ExtraParams.Add(new Parameter("gid", "record.data.GID", ParameterMode.Raw));
+                                                                    de.Command.ExtraParams.Add(new Parameter("controllername", "MApply", ParameterMode.Value));
+
+                                                                }),
+
+                                            X.CommandColumn().Text("删除记录").Flex(2).Hidden(true).Commands(
+                                                        X.GridCommand().CommandName("delete").Icon(Icon.ApplicationDelete).Text("删除"))
+                                                        .Listeners(l =>l.Command.Handler = "deleteapplymaterial(record.data.GID);")
+                                    )
+                                    )
+                                    ))
+}

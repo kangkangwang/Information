@@ -1,0 +1,33 @@
+﻿@model DeerInformation.Models.T_GM_CustomerInfo
+
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var X = Html.X();
+}
+
+@section content{
+     @(X.FormPanel().ID("FormPanel1").Layout(LayoutType.Form).Items(
+           X.HiddenFor(m=>m.UID),
+           X.TextFieldFor(m => m.CustomerID).FieldLabel("客户ID").Hidden(true),
+           X.TextFieldFor(m => m.CustomerName).FieldLabel("客户名称").ReadOnly(true),
+           X.TextFieldFor(m=>m.CustomerAbbreviation).FieldLabel("客户简称").ReadOnly(true),
+           X.TextFieldFor(m=>m.SubsidiaryNumber).FieldLabel("子公司编号").ReadOnly(true),
+           X.TextFieldFor(m => m.Cooperation).FieldLabel("合作方向"),
+           X.TextFieldFor(m=>m.Contact).FieldLabel("联系人"),
+           X.TextFieldFor(m=>m.Tel).FieldLabel("电话"),
+           X.TextFieldFor(m=>m.Fax).FieldLabel("传真"),
+           X.TextFieldFor(m=>m.Address).FieldLabel("地址"),
+            X.TextFieldFor(m => m.BankType).FieldLabel("开户行"),
+            X.TextFieldFor(m => m.BankAccount).FieldLabel("银行账户"),
+            X.TextFieldFor(m => m.TaxNo).FieldLabel("纳税识别号"),
+           X.TextFieldFor(m=>m.Remark).FieldLabel("备注"))
+        .Buttons(
+           X.Button().Icon(Icon.ApplicationGet).Text("确认").DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("CustomerInfoEdit");
+                        de.Click.Success = "parent.App.window2.close()";
+                        de.Click.EventMask.ShowMask = true;
+                    }))
+
+)
+}
